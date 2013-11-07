@@ -6,11 +6,15 @@ module.exports = (grunt) ->
             build:
                 options:
                     pretty: true
+                    data: 
+                        debug: true
                 files:
                     "./dist/index.html": ["./dev/index.jade"]
             release:
                 options:
                     pretty: false
+                    data: 
+                        debug: false
                 files:
                     "./dist/index.html": ["./dev/index.jade"]
 
@@ -53,7 +57,8 @@ module.exports = (grunt) ->
 
         clean:
             build: ["./dist/media"]
-            release: ["./dist"]
+            before_release: ["./dist"]
+            after_release: ['./dist/js/main.js']
 
         watch:
             options:
@@ -77,8 +82,6 @@ module.exports = (grunt) ->
         # jshint:
         #     compile: ["./dev/js/**/*.js"]
         
-
-
     
     grunt.loadNpmTasks "grunt-contrib-less"
     grunt.loadNpmTasks "grunt-contrib-jade"
@@ -88,5 +91,6 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks "grunt-contrib-clean"
     grunt.loadNpmTasks "grunt-browserify2"
     # grunt.loadNpmTasks "grunt-contrib-jshint"
-    
-    grunt.registerTask "default", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy"]
+
+    grunt.registerTask "release", ["clean:before_release", "jade:release", "less:release", "browserify2", "uglify", "copy", "clean:after_release"]
+    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "uglify", "copy"]
