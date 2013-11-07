@@ -1,8 +1,13 @@
-// Core Extentions
-require('./core/class');
+require('./core/class.js');
 require('./core/requestAnimFrame');
 
-var config = require('./config');
-var game = require('./game');
+var media = require('./data/media');
+var Assets = require('./engine/assets');
 
-new game(config);
+var game = require('./game.js');
+
+window.addEventListener('load', function(event) {
+    Assets.loadAll(media);
+    window.b = Assets;
+    new game();
+})
