@@ -1,18 +1,24 @@
 ;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
-require('./core/class.js');
-require('./core/requestAnimFrame');
+require('./lib/class.js');
+require('./lib/requestAnimFrame');
+
+window.Stats = require('./lib/stats.js');
 
 var media = require('./data/media');
 var Assets = require('./engine/assets');
 
 var game = require('./game.js');
 
+window.Input = require('./engine/input');
+window.Keys = require('./engine/keys');
+
+Input.bind('a', [Keys.A]);
+
 window.addEventListener('load', function(event) {
     Assets.loadAll(media);
-    window.b = Assets;
     new game();
 })
-},{"./core/class.js":2,"./game.js":3,"./core/requestAnimFrame":4,"./engine/assets":5,"./data/media":6}],2:[function(require,module,exports){
+},{"./lib/class.js":2,"./lib/stats.js":3,"./game.js":4,"./lib/requestAnimFrame":5,"./engine/assets":6,"./data/media":7,"./engine/input":8,"./engine/keys":9}],2:[function(require,module,exports){
 (function() {
     var initializing = false,
         fnTest = /xyz/.test(function() {
@@ -45,7 +51,103 @@ window.addEventListener('load', function(event) {
     }
 })();
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+var Stats = function() {
+    var l = Date.now(),
+        m = l,
+        g = 0,
+        n = Infinity,
+        o = 0,
+        h = 0,
+        p = Infinity,
+        q = 0,
+        r = 0,
+        s = 0,
+        f = document.createElement("div");
+    f.id = "stats";
+    f.addEventListener("mousedown", function(b) {
+        b.preventDefault();
+        t(++s % 2)
+    }, !1);
+    f.style.cssText = "width:80px;opacity:0.9;cursor:pointer";
+    var a = document.createElement("div");
+    a.id = "fps";
+    a.style.cssText = "padding:0 0 3px 3px;text-align:left;background-color:#002";
+    f.appendChild(a);
+    var i = document.createElement("div");
+    i.id = "fpsText";
+    i.style.cssText = "color:#0ff;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:bold;line-height:15px";
+    i.innerHTML = "FPS";
+    a.appendChild(i);
+    var c = document.createElement("div");
+    c.id = "fpsGraph";
+    c.style.cssText = "position:relative;width:74px;height:30px;background-color:#0ff";
+    for (a.appendChild(c); 74 > c.children.length;) {
+        var j = document.createElement("span");
+        j.style.cssText = "width:1px;height:30px;float:left;background-color:#113";
+        c.appendChild(j)
+    }
+    var d = document.createElement("div");
+    d.id = "ms";
+    d.style.cssText = "padding:0 0 3px 3px;text-align:left;background-color:#020;display:none";
+    f.appendChild(d);
+    var k = document.createElement("div");
+    k.id = "msText";
+    k.style.cssText = "color:#0f0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:bold;line-height:15px";
+    k.innerHTML = "MS";
+    d.appendChild(k);
+    var e = document.createElement("div");
+    e.id = "msGraph";
+    e.style.cssText = "position:relative;width:74px;height:30px;background-color:#0f0";
+    for (d.appendChild(e); 74 > e.children.length;) j = document.createElement("span"), j.style.cssText = "width:1px;height:30px;float:left;background-color:#131", e.appendChild(j);
+    var t = function(b) {
+        s = b;
+        switch (s) {
+            case 0:
+                a.style.display =
+                    "block";
+                d.style.display = "none";
+                break;
+            case 1:
+                a.style.display = "none", d.style.display = "block"
+        }
+    };
+    return {
+        REVISION: 11,
+        domElement: f,
+        setMode: t,
+        begin: function() {
+            l = Date.now()
+        },
+        end: function() {
+            var b = Date.now();
+            g = b - l;
+            n = Math.min(n, g);
+            o = Math.max(o, g);
+            k.textContent = g + " MS (" + n + "-" + o + ")";
+            var a = Math.min(30, 30 - 30 * (g / 200));
+            e.appendChild(e.firstChild).style.height = a + "px";
+            r++;
+            b > m + 1E3 && (h = Math.round(1E3 * r / (b - m)), p = Math.min(p, h), q = Math.max(q, h), i.textContent = h + " FPS (" + p + "-" + q + ")", a = Math.min(30, 30 - 30 * (h / 100)), c.appendChild(c.firstChild).style.height =
+                a + "px", m = b, r = 0);
+            return b
+        },
+        update: function() {
+            l = this.end()
+        }
+    }
+};
+
+var stats = new Stats();
+
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.left = '0px';
+stats.domElement.style.top = '0px';
+
+document.body.appendChild( stats.domElement );
+
+module.exports = stats;
+},{}],5:[function(require,module,exports){
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame       ||
           window.webkitRequestAnimationFrame ||
@@ -54,7 +156,7 @@ window.requestAnimFrame = (function(){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var media = {
     img: {
         abc: {
@@ -81,15 +183,163 @@ var media = {
 
 module.exports = media;
 
-},{}],3:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+var Input = Input || {
+
+    reset: function() {
+        this.pressed = {};
+        this.down = {};
+    },
+
+    update: function() {
+        this.pressed = {};
+    },
+
+    keydown: function(e) {
+        var kc = e.keyCode;
+
+        if (!this.down[kc]) {
+            this.down[kc] = true;
+            this.pressed[kc] = true;
+        }
+
+        e.stopPropagation();
+        e.preventDefault();
+    },
+
+    keyup: function(e) {
+        var kc = e.keyCode;
+        if (this.down[kc]) {
+            this.down[kc] = false;
+        }
+    },
+
+    pressed: function(k) {
+        if (isNaN(k)) {
+            var keys = this.bind[k];
+            for (var i = keys.length; i--;) {
+                if (this.pressed[keys[i]]) return true;
+            }
+            return false;
+        }
+        return this.pressed[k];
+    },
+
+    down: function(k) {
+        if (isNaN(k)) {
+            var keys = this.bind[k];
+            for (var i = keys.length; i--;) {
+                if (this.down[keys[i]]) return true;
+            }
+            return false;
+        }
+        return this.down[k];
+    },
+
+    bind: function(name, keys) {
+        this.bind[name] = keys;
+    }
+
+};
+
+document.addEventListener('keydown', Input.keydown.bind(Input));
+document.addEventListener('keyup', Input.keyup.bind(Input));
+
+module.exports = Input;
+
+},{}],9:[function(require,module,exports){
+ var Key = {
+    'BACKSPACE': 8,
+    'TAB': 9,
+    'ENTER': 13,
+    'SHIFT': 16,
+    'CTRL': 17,
+    'ALT': 18,
+    'PAUSE': 19,
+    'CAPS': 20,
+    'ESC': 27,
+    'SPACE': 32,
+    'PAGE_UP': 33,
+    'PAGE_DOWN': 34,
+    'END': 35,
+    'HOME': 36,
+    'LEFT_ARROW': 37,
+    'UP_ARROW': 38,
+    'RIGHT_ARROW': 39,
+    'DOWN_ARROW': 40,
+    'INSERT': 45,
+    'DELETE': 46,
+    '_0': 48,
+    '_1': 49,
+    '_2': 50,
+    '_3': 51,
+    '_4': 52,
+    '_5': 53,
+    '_6': 54,
+    '_7': 55,
+    '_8': 56,
+    '_9': 57,
+    'A': 65,
+    'B': 66,
+    'C': 67,
+    'D': 68,
+    'E': 69,
+    'F': 70,
+    'G': 71,
+    'H': 72,
+    'I': 73,
+    'J': 74,
+    'K': 75,
+    'L': 76,
+    'M': 77,
+    'N': 78,
+    'O': 79,
+    'P': 80,
+    'Q': 81,
+    'R': 82,
+    'S': 83,
+    'T': 84,
+    'U': 85,
+    'V': 86,
+    'W': 87,
+    'X': 88,
+    'Y': 89,
+    'Z': 90,
+    'NUMPAD_0': 96,
+    'NUMPAD_1': 97,
+    'NUMPAD_2': 98,
+    'NUMPAD_3': 99,
+    'NUMPAD_4': 100,
+    'NUMPAD_5': 101,
+    'NUMPAD_6': 102,
+    'NUMPAD_7': 103,
+    'NUMPAD_8': 104,
+    'NUMPAD_9': 105,
+    'MULTIPLY': 106,
+    'F1': 112,
+    'F2': 113,
+    'F3': 114,
+    'F4': 115,
+    'F5': 116,
+    'F6': 117,
+    'F7': 118,
+    'F8': 119,
+    'F9': 120,
+    'F10': 121,
+    'F11': 122,
+    'F12': 123
+}
+
+module.exports = Key;
+},{}],4:[function(require,module,exports){
 var Engine = require('./engine/engine');
 var Assets = require('./engine/assets');
+
+var config = require('./config');
 
 var Game = Engine.extend({
     init: function() {
         this.parent();
-
-        this.tick();
     },
 
     update: function() {
@@ -99,7 +349,7 @@ var Game = Engine.extend({
 
 module.exports = Game;
 
-},{"./engine/engine":7,"./engine/assets":5}],5:[function(require,module,exports){
+},{"./engine/engine":10,"./config":11,"./engine/assets":6}],6:[function(require,module,exports){
 var config = require('../config');
 var Graphic = require('./graphic');
 
@@ -134,7 +384,7 @@ Object.$set = function(o, path, val) {
 };
 
 
-Assets = {
+var Assets = {
     Graphics: {},
     Sounds: {},
     Data: {},
@@ -234,7 +484,121 @@ Assets = {
 };
 
 module.exports = Assets;
-},{"../config":8,"./graphic":9}],9:[function(require,module,exports){
+},{"./graphic":12,"../config":11}],11:[function(require,module,exports){
+var Config = {
+
+    assetsPath: 'media/',
+    defaultExt: {
+        img: "png"
+    },
+
+    test: 1,
+
+    display: {
+        clearColor: "#111",
+        width: 480,
+        height: 320,
+        scale: 2,
+        get realWidth() {
+            return this.width * this.scale;
+        },
+        get realHeight() {
+            return this.height * this.scale;
+        }
+    }
+
+};
+
+module.exports = Config;
+
+},{}],10:[function(require,module,exports){
+var config = require('../config');
+
+var Engine = Class.extend({
+    init: function() {
+        this.paused = false;
+
+        this.layers = [];
+        this.draws = 0;
+
+        this.canvas = null;
+        this.context = null;
+
+        this.initCanvas();
+        this.tick();
+    },
+
+    initCanvas: function() {
+        var c = document.getElementById('canvas');
+        if (!c) {
+            c = document.createElement('canvas');
+            c.id = 'canvas';
+            c.width = config.display.width * config.display.scale;
+            c.height = config.display.height * config.display.scale;
+            var container = document.getElementById(config.display.container) || document.body;
+            container.appendChild(c);
+        }
+        c.style.imageRendering = '-moz-crisp-edges';
+        c.style.imageRendering = '-o-crisp-edges';
+        c.style.imageRendering = '-webkit-optimize-contrast';
+        c.style.imageRendering = 'crisp-edges';
+        c.style.msInterpolationMode = 'nearest-neighbor';
+
+        this.canvas = c;
+
+        this.context = c.getContext('2d');
+        this.context.imageSmoothingEnabled = false;
+        this.context.webkitImageSmoothingEnabled = false;
+        this.context.mozImageSmoothingEnabled = false;
+    },
+
+    update: function() {
+
+    },
+
+    clear: function() {
+        if (!config.display.clearColor) {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            this.context.fillStyle = config.display.clearColor;
+            this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    },
+
+    draw: function() {
+        this.draws = 0;
+        this.clear();
+    },
+
+    togglePause: function() {
+        this.paused = !this.paused;
+
+        if (!this.paused) {
+            this.tick();
+        }
+    },
+
+    tick: function() {
+        if (this.paused) return
+
+        Stats.begin();
+
+        this.update();
+
+        requestAnimFrame(this.tick.bind(this));
+        this.draw();
+
+        Stats.end();
+
+    }
+});
+
+
+module.exports = Engine;
+
+},{"../config":11}],12:[function(require,module,exports){
+var config = require('../config');
+
 var Graphic = Class.extend({
 
     loaded: false,
@@ -258,6 +622,18 @@ var Graphic = Class.extend({
         this._load();
     },
 
+    draw: function(ctx, x, y, scale) {
+        if (!this.loaded) return;
+
+        var data = this.scaled[scale] || this.image;
+
+        ctx.drawImage(
+            data,
+            0, 0, data.width, data.height,
+            x, y, data.width, data.height
+        );
+    },
+
     _load: function() {
         if (this.loaded) return;
 
@@ -275,7 +651,7 @@ var Graphic = Class.extend({
 
         if (this.scale) {
             if (this.scale.length == 1) {
-                if(this.scale[0] != 1)
+                if (this.scale[0] != 1)
                     this.image = this.resize(this.image, this.scale[0]);
             } else {
                 for (var i = 0; i < this.scale.length; i++) {
@@ -284,35 +660,41 @@ var Graphic = Class.extend({
                 }
                 this.image = this.scaled[this.scale[0]];
             }
+        } else {
+            if (config.display.scale != 1) {
+                this.image = this.resize(this.image, 1);
+            }
         }
 
         this._onloadCallback(this.path);
     },
 
     _onerror: function(event) {
-        throw('An error happened while loading ' + this.path);
+        throw ('An error happened while loading ' + this.path);
     },
 
     resize: function(img, scale) {
+        scale = scale * config.display.scale;
+
         var sCanvas = document.createElement('canvas');
         sCanvas.width = img.width;
         sCanvas.height = img.height;
-    
+
         var sCtx = sCanvas.getContext('2d');
         sCtx.drawImage(img, 0, 0);
-        var src_data = sCtx.getImageData(0, 0, img.width, img.height).data;
-    
+        var sData = sCtx.getImageData(0, 0, img.width, img.height).data;
+
         var dw = img.width * scale;
         var dh = img.height * scale;
-    
+
         var dCanvas = document.createElement('canvas');
         dCanvas.width = dw;
         dCanvas.height = dh;
         var dCtx = dCanvas.getContext('2d');
-    
+
         var dImgData = dCtx.getImageData(0, 0, dw, dh);
         var dData = dImgData.data;
-    
+
         var src_p = 0;
         var dst_p = 0;
         for (var y = 0; y < this.height; ++y) {
@@ -321,15 +703,15 @@ var Graphic = Class.extend({
                     src_p = 4 * (y * this.width + x);
                     for (var j = 0; j < scale; ++j) {
                         var tmp = src_p;
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
                     }
                 }
             }
         }
-    
+
         dCtx.putImageData(dImgData, 0, 0);
 
         return dCanvas;
@@ -339,98 +721,6 @@ var Graphic = Class.extend({
 
 
 module.exports = Graphic;
-},{}],8:[function(require,module,exports){
-var Config = {
 
-    assetsPath: 'media/',
-    defaultExt: {
-        img: "png"
-    },
-
-    base: {
-        width: 480,
-        height: 320,
-        scale: 20,
-        clearColor: '#000000'
-    },
-    height: {
-        abc: 123
-    }
-
-};
-
-module.exports = Config;
-},{}],7:[function(require,module,exports){
-var config = require('../config');
-
-var Engine = Class.extend({
-    init: function() {
-        this.paused = false;
-
-        this.screens = [];
-        this.draws = 0;
-
-        this.canvas = null;
-        this.context = null;
-
-        this.initCanvas();
-    }
-});
-
-Engine.prototype.initCanvas = function() {
-    var c = document.getElementById('canvas');
-    if (!c) {
-        c.width = config.base.width;
-        c.height = config.base.height;
-        var container = document.getElementById(config.base.container) || document.body;
-        container.appendChild(c);
-    }
-    c.style.imageRendering = '-moz-crisp-edges';
-    c.style.imageRendering = '-o-crisp-edges';
-    c.style.imageRendering = '-webkit-optimize-contrast';
-    c.style.imageRendering = 'crisp-edges';
-    c.style.msInterpolationMode = 'nearest-neighbor';
-
-    this.canvas = c;
-
-    this.context = c.getContext('2d');
-    this.context.imageSmoothingEnabled = false;
-    this.context.webkitImageSmoothingEnabled = false;
-    this.context.mozImageSmoothingEnabled = false;
-};
-
-Engine.prototype.update = function() {};
-
-Engine.prototype.draw = function() {
-    this.draws = 0;
-    for (var i = this.screens.length; i; i--) {
-        this.screens[i].clear(config.base.clearColor);
-    }
-};
-
-Engine.prototype.togglePause = function() {
-    this.paused = !this.paused;
-
-    if (!this.paused) {
-        this.tick();
-    }
-};
-
-Engine.prototype.tick = function() {
-    if (this.paused) return
-
-    this.update();
-
-    requestAnimFrame(this.tick.bind(this));
-    this.draw();
-
-};
-
-
-
-
-
-module.exports = Engine;
-
-},{"../config":8}]},{},[1])
+},{"../config":11}]},{},[1])
 ;
