@@ -5,14 +5,19 @@ var Config = {
         img: "png"
     },
 
-    base: {
+    test: 1,
+
+    display: {
+        clearColor: "#111",
         width: 480,
         height: 320,
-        scale: 20,
-        clearColor: '#000000'
-    },
-    height: {
-        abc: 123
+        scale: 2,
+        get realWidth() {
+            return this.width * this.scale;
+        },
+        get realHeight() {
+            return this.height * this.scale;
+        }
     }
 
 };

@@ -32,7 +32,7 @@ Object.$set = function(o, path, val) {
 };
 
 
-Assets = {
+var Assets = {
     Graphics: {},
     Sounds: {},
     Data: {},
