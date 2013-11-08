@@ -61,8 +61,10 @@ module.exports = (grunt) ->
             after_release: ['./dist/js/main.js']
 
         watch:
-            options:
-                livereload: true
+            dist:
+                options:
+                    livereload: true
+                files: ["./dist/**/*"]
             css:
                 files: ["./dev/css/**/*.less"]
                 tasks: ["less:build"]
