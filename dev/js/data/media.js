@@ -1,16 +1,6 @@
 var media = {
     img: {
-        abc: {
-            file: 'test'
-        },
-        def: {
-            file: 'test2',
-            scale: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        },
-        test: {
-            file: 'test'
-        },
-        items: {},
+        sprites: {},
         tilesets: {},
         fonts: {},
         other: {}

@@ -18,9 +18,15 @@ var Graphic = Class.extend({
 
     init: function(path, options, callback) {
         this.path = path;
-        this.scale = options ? options.scale : null;
+        this.scale = (options && options.scale) ? options.scale : [1];
+        this.scaled = {};
+
         this._onloadCallback = callback;
         this._load();
+    },
+
+    applyScale: function(p) {
+        return Math.round(p * config.display.scale);
     },
 
     draw: function(ctx, x, y, scale) {
@@ -31,7 +37,7 @@ var Graphic = Class.extend({
         ctx.drawImage(
             data,
             0, 0, data.width, data.height,
-            x, y, data.width, data.height
+            this.applyScale(x), this.applyScale(y), data.width, data.height
         );
     },
 
@@ -50,21 +56,8 @@ var Graphic = Class.extend({
         this.width = this.image.width;
         this.height = this.image.height;
 
-        if (this.scale) {
-            if (this.scale.length == 1) {
-                if (this.scale[0] != 1)
-                    this.image = this.resize(this.image, this.scale[0]);
-            } else {
-                for (var i = 0; i < this.scale.length; i++) {
-                    var scale = this.scale[i];
-                    this.scaled[scale] = this.resize(this.image, scale);
-                }
-                this.image = this.scaled[this.scale[0]];
-            }
-        } else {
-            if (config.display.scale != 1) {
-                this.image = this.resize(this.image, 1);
-            }
+        for (var i = 0; i < this.scale.length; i++) {
+            this.scaled[this.scale[i]] = this.resize(this.image, this.scale[i]);
         }
 
         this._onloadCallback(this.path);
@@ -75,7 +68,11 @@ var Graphic = Class.extend({
     },
 
     resize: function(img, scale) {
-        scale = scale * config.display.scale;
+        if(this.scale === 1 && config.display.scale === 1 ) {
+            return img;
+        }
+
+        scale = this.applyScale(scale);
 
         var sCanvas = document.createElement('canvas');
         sCanvas.width = img.width;
@@ -91,6 +88,7 @@ var Graphic = Class.extend({
         var dCanvas = document.createElement('canvas');
         dCanvas.width = dw;
         dCanvas.height = dh;
+
         var dCtx = dCanvas.getContext('2d');
 
         var dImgData = dCtx.getImageData(0, 0, dw, dh);

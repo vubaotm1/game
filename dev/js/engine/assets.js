@@ -1,5 +1,6 @@
 var config = require('../config');
 var Graphic = require('./graphic');
+var Tilesheet = require('./tilesheet');
 
 Object.$get = function(o, path) {
     if (!path) return o;
@@ -59,7 +60,7 @@ var Assets = {
             this._stack.items = {};
             this._stack.total = 0;
         }
-        console.log(path+' loaded '+(new Date()).getTime()+' - Completion: %c'+this.completion+' %', 'color: green; font-size: 14px;');
+        console.info(path+' loaded '+(new Date()).getTime()+' - Completion: %c'+this.completion+' %', 'color: green; font-size: 14px;');
         
     },
 
@@ -74,7 +75,12 @@ var Assets = {
         path = path.join('/');
         path = config.assetsPath + path + '/' + resource.file;
 
-        var obj = new Graphic(path, resource, this._doneLoading.bind(this));
+        var obj;
+        if(resource.tilesize || (resource.tileheight && resource.tilewidth)) {
+            obj = new Tilesheet(path, resource, this._doneLoading.bind(this));
+        } else {
+            obj = new Graphic(path, resource, this._doneLoading.bind(this));
+        }
 
         Object.$set(Assets.Graphics, p, obj);
     },

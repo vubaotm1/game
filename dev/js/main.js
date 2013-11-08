@@ -4,7 +4,7 @@ require('./lib/requestAnimFrame');
 window.Stats = require('./lib/stats.js');
 
 var media = require('./data/media');
-var Assets = require('./engine/assets');
+window.Assets = require('./engine/assets');
 
 var game = require('./game.js');
 

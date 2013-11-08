@@ -5,7 +5,7 @@ require('./lib/requestAnimFrame');
 window.Stats = require('./lib/stats.js');
 
 var media = require('./data/media');
-var Assets = require('./engine/assets');
+window.Assets = require('./engine/assets');
 
 var game = require('./game.js');
 
@@ -18,7 +18,7 @@ window.addEventListener('load', function(event) {
     Assets.loadAll(media);
     new game();
 })
-},{"./lib/class.js":2,"./lib/stats.js":3,"./game.js":4,"./lib/requestAnimFrame":5,"./engine/assets":6,"./data/media":7,"./engine/input":8,"./engine/keys":9}],2:[function(require,module,exports){
+},{"./lib/class.js":2,"./lib/stats.js":3,"./game.js":4,"./lib/requestAnimFrame":5,"./data/media":6,"./engine/assets":7,"./engine/input":8,"./engine/keys":9}],2:[function(require,module,exports){
 (function() {
     var initializing = false,
         fnTest = /xyz/.test(function() {
@@ -141,8 +141,8 @@ var Stats = function() {
 var stats = new Stats();
 
 stats.domElement.style.position = 'absolute';
+stats.domElement.style.bottom = '0px';
 stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
 
 document.body.appendChild( stats.domElement );
 
@@ -156,20 +156,10 @@ window.requestAnimFrame = (function(){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var media = {
     img: {
-        abc: {
-            file: 'test'
-        },
-        def: {
-            file: 'test2',
-            scale: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        },
-        test: {
-            file: 'test'
-        },
-        items: {},
+        sprites: {},
         tilesets: {},
         fonts: {},
         other: {}
@@ -333,25 +323,32 @@ module.exports = Input;
 module.exports = Key;
 },{}],4:[function(require,module,exports){
 var Engine = require('./engine/engine');
-var Assets = require('./engine/assets');
-
 var config = require('./config');
 
 var Game = Engine.extend({
     init: function() {
-        this.parent();
+        this.parent(this);
+
+        this.tick();
     },
 
     update: function() {
         this.parent();
+
+    },
+
+    draw: function() {
+        this.parent();
+
     }
 });
 
 module.exports = Game;
 
-},{"./engine/engine":10,"./config":11,"./engine/assets":6}],6:[function(require,module,exports){
+},{"./engine/engine":10,"./config":11}],7:[function(require,module,exports){
 var config = require('../config');
 var Graphic = require('./graphic');
+var Tilesheet = require('./tilesheet');
 
 Object.$get = function(o, path) {
     if (!path) return o;
@@ -411,7 +408,7 @@ var Assets = {
             this._stack.items = {};
             this._stack.total = 0;
         }
-        console.log(path+' loaded '+(new Date()).getTime()+' - Completion: %c'+this.completion+' %', 'color: green; font-size: 14px;');
+        console.info(path+' loaded '+(new Date()).getTime()+' - Completion: %c'+this.completion+' %', 'color: green; font-size: 14px;');
         
     },
 
@@ -426,7 +423,12 @@ var Assets = {
         path = path.join('/');
         path = config.assetsPath + path + '/' + resource.file;
 
-        var obj = new Graphic(path, resource, this._doneLoading.bind(this));
+        var obj;
+        if(resource.tilesize || (resource.tileheight && resource.tilewidth)) {
+            obj = new Tilesheet(path, resource, this._doneLoading.bind(this));
+        } else {
+            obj = new Graphic(path, resource, this._doneLoading.bind(this));
+        }
 
         Object.$set(Assets.Graphics, p, obj);
     },
@@ -484,7 +486,7 @@ var Assets = {
 };
 
 module.exports = Assets;
-},{"./graphic":12,"../config":11}],11:[function(require,module,exports){
+},{"../config":11,"./graphic":12,"./tilesheet":13}],11:[function(require,module,exports){
 var Config = {
 
     assetsPath: 'media/',
@@ -492,7 +494,7 @@ var Config = {
         img: "png"
     },
 
-    test: 1,
+    test: 2,
 
     display: {
         clearColor: "#111",
@@ -515,17 +517,20 @@ module.exports = Config;
 var config = require('../config');
 
 var Engine = Class.extend({
-    init: function() {
-        this.paused = false;
+    paused: false,
 
-        this.layers = [];
-        this.draws = 0;
+    canvas: null,
+    context: null,
 
-        this.canvas = null;
-        this.context = null;
+    draws: 0,
+    layers: [],
+
+    self: null,
+
+    init: function(self) {
+        this.self = self;
 
         this.initCanvas();
-        this.tick();
     },
 
     initCanvas: function() {
@@ -585,7 +590,7 @@ var Engine = Class.extend({
 
         this.update();
 
-        requestAnimFrame(this.tick.bind(this));
+        requestAnimFrame(this.tick.bind(this.self));
         this.draw();
 
         Stats.end();
@@ -617,9 +622,15 @@ var Graphic = Class.extend({
 
     init: function(path, options, callback) {
         this.path = path;
-        this.scale = options ? options.scale : null;
+        this.scale = (options && options.scale) ? options.scale : [1];
+        this.scaled = {};
+
         this._onloadCallback = callback;
         this._load();
+    },
+
+    applyScale: function(p) {
+        return Math.round(p * config.display.scale);
     },
 
     draw: function(ctx, x, y, scale) {
@@ -630,7 +641,7 @@ var Graphic = Class.extend({
         ctx.drawImage(
             data,
             0, 0, data.width, data.height,
-            x, y, data.width, data.height
+            this.applyScale(x), this.applyScale(y), data.width, data.height
         );
     },
 
@@ -649,21 +660,8 @@ var Graphic = Class.extend({
         this.width = this.image.width;
         this.height = this.image.height;
 
-        if (this.scale) {
-            if (this.scale.length == 1) {
-                if (this.scale[0] != 1)
-                    this.image = this.resize(this.image, this.scale[0]);
-            } else {
-                for (var i = 0; i < this.scale.length; i++) {
-                    var scale = this.scale[i];
-                    this.scaled[scale] = this.resize(this.image, scale);
-                }
-                this.image = this.scaled[this.scale[0]];
-            }
-        } else {
-            if (config.display.scale != 1) {
-                this.image = this.resize(this.image, 1);
-            }
+        for (var i = 0; i < this.scale.length; i++) {
+            this.scaled[this.scale[i]] = this.resize(this.image, this.scale[i]);
         }
 
         this._onloadCallback(this.path);
@@ -674,7 +672,11 @@ var Graphic = Class.extend({
     },
 
     resize: function(img, scale) {
-        scale = scale * config.display.scale;
+        if(this.scale === 1 && config.display.scale === 1 ) {
+            return img;
+        }
+
+        scale = this.applyScale(scale);
 
         var sCanvas = document.createElement('canvas');
         sCanvas.width = img.width;
@@ -690,6 +692,7 @@ var Graphic = Class.extend({
         var dCanvas = document.createElement('canvas');
         dCanvas.width = dw;
         dCanvas.height = dh;
+
         var dCtx = dCanvas.getContext('2d');
 
         var dImgData = dCtx.getImageData(0, 0, dw, dh);
@@ -722,5 +725,72 @@ var Graphic = Class.extend({
 
 module.exports = Graphic;
 
-},{"../config":11}]},{},[1])
+},{"../config":11}],13:[function(require,module,exports){
+var Graphic = require('./graphic');
+var config = require('../config');
+
+var Tilesheet = Graphic.extend({
+
+    tileheight: 0,
+    tilewidth: 0,
+
+    init: function(path, options, callback) {
+        this.parent(path, options, callback);
+
+        this.tileheight = options.tileheight || options.tilesize;
+        this.tilewidth = options.tilewidth || options.tilesize;
+    },
+
+    drawTile: function(ctx, x, y, tile, scale, flip) {
+        if (!this.loaded) return;
+
+        var rect = this.getRect(tile || 0, scale);
+        var data = this.scaled[scale] || this.image;
+
+
+        var sx = flip.x ? -1 : 1;
+        var sy = flip.y ? -1 : 1;
+        x = this.applyScale(x) * sx - ((flip.x) ? rect.width : 0);
+        y = this.applyScale(y) * sy - ((flip.y) ? rect.height : 0);
+
+        if (flip) {
+            ctx.save();
+            ctx.scale(sx, sy);
+        }
+
+        ctx.drawImage(
+            data,
+            rect.x, rect.y, rect.width, rect.height,
+            x, y, rect.width, rect.height
+        );
+
+        if (flip) ctx.restore();
+    },
+
+    getRect: function(tile, scale) {
+        scale = scale || 1;
+
+
+        var w = (tile >= 0) ? this.tilewidth : this.width;
+        var h = (tile >= 0) ? this.tileheight : this.height;
+
+        if (tile <= 0) tile = 0;
+
+        var x = ~~ (tile * this.tilewidth) % this.width;
+        var y = ~~ (tile * this.tilewidth / this.width) * this.tileheight;
+
+
+        return {
+            x: this.applyScale(x * scale),
+            y: this.applyScale(y * scale),
+            width: this.applyScale(w * scale),
+            height: this.applyScale(h * scale)
+        };
+    }
+});
+
+
+module.exports = Tilesheet;
+
+},{"./graphic":12,"../config":11}]},{},[1])
 ;

@@ -1,17 +1,20 @@
 var config = require('../config');
 
 var Engine = Class.extend({
-    init: function() {
-        this.paused = false;
+    paused: false,
 
-        this.layers = [];
-        this.draws = 0;
+    canvas: null,
+    context: null,
 
-        this.canvas = null;
-        this.context = null;
+    draws: 0,
+    layers: [],
+
+    self: null,
+
+    init: function(self) {
+        this.self = self;
 
         this.initCanvas();
-        this.tick();
     },
 
     initCanvas: function() {
@@ -71,7 +74,7 @@ var Engine = Class.extend({
 
         this.update();
 
-        requestAnimFrame(this.tick.bind(this));
+        requestAnimFrame(this.tick.bind(this.self));
         this.draw();
 
         Stats.end();

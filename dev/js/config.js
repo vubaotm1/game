@@ -5,7 +5,7 @@ var Config = {
         img: "png"
     },
 
-    test: 1,
+    test: 2,
 
     display: {
         clearColor: "#111",
