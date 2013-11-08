@@ -1,3 +1,5 @@
+var config = require('../config');
+
 var Graphic = Class.extend({
 
     loaded: false,
@@ -21,6 +23,18 @@ var Graphic = Class.extend({
         this._load();
     },
 
+    draw: function(ctx, x, y, scale) {
+        if (!this.loaded) return;
+
+        var data = this.scaled[scale] || this.image;
+
+        ctx.drawImage(
+            data,
+            0, 0, data.width, data.height,
+            x, y, data.width, data.height
+        );
+    },
+
     _load: function() {
         if (this.loaded) return;
 
@@ -38,7 +52,7 @@ var Graphic = Class.extend({
 
         if (this.scale) {
             if (this.scale.length == 1) {
-                if(this.scale[0] != 1)
+                if (this.scale[0] != 1)
                     this.image = this.resize(this.image, this.scale[0]);
             } else {
                 for (var i = 0; i < this.scale.length; i++) {
@@ -47,35 +61,41 @@ var Graphic = Class.extend({
                 }
                 this.image = this.scaled[this.scale[0]];
             }
+        } else {
+            if (config.display.scale != 1) {
+                this.image = this.resize(this.image, 1);
+            }
         }
 
         this._onloadCallback(this.path);
     },
 
     _onerror: function(event) {
-        throw('An error happened while loading ' + this.path);
+        throw ('An error happened while loading ' + this.path);
     },
 
     resize: function(img, scale) {
+        scale = scale * config.display.scale;
+
         var sCanvas = document.createElement('canvas');
         sCanvas.width = img.width;
         sCanvas.height = img.height;
-    
+
         var sCtx = sCanvas.getContext('2d');
         sCtx.drawImage(img, 0, 0);
-        var src_data = sCtx.getImageData(0, 0, img.width, img.height).data;
-    
+        var sData = sCtx.getImageData(0, 0, img.width, img.height).data;
+
         var dw = img.width * scale;
         var dh = img.height * scale;
-    
+
         var dCanvas = document.createElement('canvas');
         dCanvas.width = dw;
         dCanvas.height = dh;
         var dCtx = dCanvas.getContext('2d');
-    
+
         var dImgData = dCtx.getImageData(0, 0, dw, dh);
         var dData = dImgData.data;
-    
+
         var src_p = 0;
         var dst_p = 0;
         for (var y = 0; y < this.height; ++y) {
@@ -84,15 +104,15 @@ var Graphic = Class.extend({
                     src_p = 4 * (y * this.width + x);
                     for (var j = 0; j < scale; ++j) {
                         var tmp = src_p;
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
-                        dData[dst_p++] = src_data[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
+                        dData[dst_p++] = sData[tmp++];
                     }
                 }
             }
         }
-    
+
         dCtx.putImageData(dImgData, 0, 0);
 
         return dCanvas;
