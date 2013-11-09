@@ -1,14 +1,12 @@
 var media = {
     img: {
-        sprites: {},
-        tilesets: {},
-        fonts: {},
-        other: {}
+        player: {
+            file: 'tileset_16_16.jpg',
+            scale: [2],
+            tilesize: 16
+        }
     },
-    sfx: {
-        sounds: {},
-        music: {}
-    },
+    sfx: {},
     data: {}
 }
 

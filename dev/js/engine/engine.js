@@ -1,5 +1,7 @@
 var config = require('../config');
 
+var world = require('../lib/physics').world;
+
 var Engine = Class.extend({
     paused: false,
 
@@ -9,12 +11,16 @@ var Engine = Class.extend({
     draws: 0,
     layers: [],
 
+    entities: [],
+
     self: null,
 
     init: function(self) {
         this.self = self;
+        var self = self;
 
         this.initCanvas();
+        world.startPhysics(self);
     },
 
     initCanvas: function() {
@@ -42,7 +48,9 @@ var Engine = Class.extend({
     },
 
     update: function() {
-
+        for(var i = 0; i < this.entities.length; i++) {
+            this.entities[i].update();
+        }
     },
 
     clear: function() {
@@ -57,6 +65,15 @@ var Engine = Class.extend({
     draw: function() {
         this.draws = 0;
         this.clear();
+
+
+        for(var i = 0; i < this.entities.length; i++) {
+            this.entities[i].draw(this.context);
+        }
+    },
+
+    addEntity: function(entity) {
+        this.entities.push(entity);
     },
 
     togglePause: function() {
@@ -78,7 +95,6 @@ var Engine = Class.extend({
         this.draw();
 
         Stats.end();
-
     }
 });
 

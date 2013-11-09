@@ -2,18 +2,18 @@ require('./lib/class.js');
 require('./lib/requestAnimFrame');
 
 window.Stats = require('./lib/stats.js');
+window.Input = require('./engine/input');
+window.Keys = require('./engine/keys');
+Input.bind('a', [Keys.A]);
 
-var media = require('./data/media');
-window.Assets = require('./engine/assets');
 
 var game = require('./game.js');
 
-window.Input = require('./engine/input');
-window.Keys = require('./engine/keys');
-
-Input.bind('a', [Keys.A]);
 
 window.addEventListener('load', function(event) {
+    var media = require('./data/media');
+    var Assets = require('./engine/assets');
+
     Assets.loadAll(media);
     new game();
 })
