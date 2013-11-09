@@ -2,9 +2,9 @@ node_modules
 
 # dist - gh-pages subtree..
 
-dist/js/main.js
+build
 
-
+dev/js/lib/physicsjs
 
 *.psd
 

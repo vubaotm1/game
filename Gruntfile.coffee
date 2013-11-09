@@ -9,7 +9,7 @@ module.exports = (grunt) ->
                     data: 
                         debug: true
                 files:
-                    "./dist/index.html": ["./dev/index.jade"]
+                    "./build/index.html": ["./dev/index.jade"]
             release:
                 options:
                     pretty: false
@@ -23,7 +23,7 @@ module.exports = (grunt) ->
                 paths: ["./dev/css"]
             build:
                 files:
-                    "./dist/css/main.css": "./dev/css/main.less"
+                    "./build/css/main.css": "./dev/css/main.less"
 
             release:
                 options:
@@ -36,35 +36,41 @@ module.exports = (grunt) ->
         browserify2:
             build:
                 entry: "./dev/js/main.js"
-                compile: "./dist/js/main.js"
+                compile: "./build/js/main.js"
 
         uglify:
             options:
                 banner: "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('yyyy-mm-dd') %> */\n"
 
             release:
-                src: "./dist/js/main.js"
+                src: "./build/js/main.js"
                 dest: "./dist/js/main.min.js"
 
         copy: 
-            media: 
+            build: 
                 files: [
                     expand: true
                     cwd: "./dev/media/"
                     src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*","**"]
+                    dest: "./build/media/"
+                ]
+            release: 
+                files: [
+                    expand: true
+                    cwd: "./build/media/"
+                    src: ["**"]
                     dest: "./dist/media/"
                 ]
 
         clean:
-            build: ["./dist/media"]
-            before_release: ["./dist"]
-            after_release: ['./dist/js/main.js']
+            build: ["./build/media"]
+            release: ["./dist"]
 
         watch:
-            dist:
+            build:
                 options:
                     livereload: true
-                files: ["./dist/**/*"]
+                files: ["./build/**"]
             css:
                 files: ["./dev/css/**/*.less"]
                 tasks: ["less:build"]
@@ -79,7 +85,7 @@ module.exports = (grunt) ->
 
             media: 
                 files: ["./dev/media/**/*"]
-                tasks: ["clean:build", "copy"]
+                tasks: ["clean:build", "copy:build"]
 
         # jshint:
         #     compile: ["./dev/js/**/*.js"]
@@ -94,5 +100,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks "grunt-browserify2"
     # grunt.loadNpmTasks "grunt-contrib-jshint"
 
-    grunt.registerTask "release", ["clean:before_release", "jade:release", "less:release", "browserify2", "uglify", "copy", "clean:after_release"]
-    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "uglify", "copy"]
+    grunt.registerTask "release", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy:release"]
+    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "copy:build"]
