@@ -13,11 +13,6 @@ var Engine = Class.extend({
     context: null,
 
     draws: 0,
-    maps: [],
-
-    entities: [],
-
-    physicsDebug: false,
 
     init: function(gameConst) {
         this.initCanvas();
@@ -104,12 +99,11 @@ var Engine = Class.extend({
         this.draws = 0;
         this.clear();
 
-        this.game.draw();
-        if (config.physics.debug) p.draw();
-    },
-
-    addEntity: function(entity) {
-        this.entities.push(entity);
+        if (!config.physics.debug) {
+            this.game.draw();
+        } else {
+            p.draw();
+        }
     },
 
     togglePause: function() {

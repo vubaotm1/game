@@ -9,9 +9,12 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2EdgeShape = Box2D.Collision.Shapes.b2EdgeShape,
     b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
     b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
-    b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+    b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
+    b2Listener = Box2D.Dynamics.b2ContactListener;
 
 var b2Sep = require('../lib/box_2d_separator');
+
+
 
 var Physics = {
     world: new b2World(new b2Vec2(0, 9.8), true),
@@ -42,6 +45,7 @@ var Physics = {
         bd.position.Set(x, y);
         bd.type = b2Body.b2_dynamicBody;
         var body = this.world.CreateBody(bd);
+        body.SetFixedRotation(true);
 
         var shape = new b2PolygonShape();
         shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
@@ -50,13 +54,27 @@ var Physics = {
         var fd = new b2FixtureDef();
         fd.shape = shape;
         fd.density = 4;
+        fd.friction = 0.5;
         fd.restitution = 0.1;
         body.CreateFixture(fd);
-        //body.SetFixedRotation(true);
+
+        fd.friction = 0;
+        shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(0, h/2), 0);
+        body.CreateFixture(fd);
+        shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(w, h/2), 0);
+        body.CreateFixture(fd);
+
+        shape.SetAsOrientedBox(0.3, 0.3, new b2Vec2(w/2, h), 0);
+        fd.isSensor = true;
+
+        var footSensor = body.CreateFixture(fd);
+        footSensor.SetUserData({id: 'foot'});
+        body.SetUserData({footContacts: 0});
+
+        window.world = this.world;
 
         return body;
     },
-
 
     createCollisionBody: function(x, y) {
         var bd = new b2BodyDef();
@@ -71,10 +89,19 @@ var Physics = {
     createCollisionFixture: function() {
         var fd = new b2FixtureDef();
         fd.restitution = 0.2;
-        fd.friction = 0.1;
+        fd.friction = 0.5;
         fd.density = 4;
 
         return fd;
+    },
+
+    accelerate: function(body, speed) {
+        var vel = body.GetLinearVelocity();
+
+        var changeX = speed - vel.x,
+            impulseX = body.GetMass()*changeX;
+
+        body.ApplyLinearImpulse(new b2Vec2(impulse, 0), body.GetWorldCenter());
     },
 
     createCollisionBox: function(x, y, w, h) {
@@ -200,5 +227,34 @@ var Physics = {
         });
     }
 };
+
+var listener = new b2Listener;
+
+listener.BeginContact = function(contact) {
+    var fixtureData = contact.GetFixtureA().GetUserData();
+    if (fixtureData && fixtureData.id == 'foot') {
+        contact.GetFixtureA().m_body.m_userData.footContacts++;
+    }
+    
+    fixtureData = contact.GetFixtureB().GetUserData();
+    if (fixtureData && fixtureData.id == 'foot') {
+        contact.GetFixtureB().m_body.m_userData.footContacts++;
+    }
+}
+
+listener.EndContact = function(contact) {
+    var fixtureData = contact.GetFixtureA().GetUserData();
+    if (fixtureData && fixtureData.id == 'foot') {
+        contact.GetFixtureA().m_body.m_userData.footContacts--;
+    }
+    
+    fixtureData = contact.GetFixtureB().GetUserData();
+    if (fixtureData && fixtureData.id == 'foot') {
+        contact.GetFixtureB().m_body.m_userData.footContacts--;
+    }
+}
+
+Physics.world.SetContactListener(listener);
+
 
 module.exports = Physics;

@@ -16,11 +16,11 @@ var Config = {
     },
 
     physics: {
-        debug: false
+        debug: true
     },
 
     display: {
-        clearColor: 'rgba(24, 17, 23, .62)',
+        clearColor: 'rgba(24, 17, 23, 1)',
         fullscreen: true,
         width: 200,
         height: 320,

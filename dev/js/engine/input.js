@@ -12,7 +12,7 @@ var Input = Input || {
         this.pressed = {};
     },
 
-    keydown: function(e) {
+    _down: function(e) {
         var kc = e.keyCode;
 
         if (!this.down[kc]) {
@@ -24,7 +24,7 @@ var Input = Input || {
         //e.preventDefault();
     },
 
-    keyup: function(e) {
+    _up: function(e) {
         var kc = e.keyCode;
         if (this.down[kc]) {
             this.down[kc] = false;
