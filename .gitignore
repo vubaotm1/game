@@ -1,12 +1,22 @@
 node_modules
+build
+tasks
 
 # dist - gh-pages subtree..
-
-build
 
 dev/js/lib/physicsjs
 
 *.psd
+
+
+
+# TILED
+
+*.tmx
+*.tsx
+rules.txt
+
+# SUBLIME
 
 *.sublime-workspace
 *.sublime-project

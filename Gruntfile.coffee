@@ -51,14 +51,14 @@ module.exports = (grunt) ->
                 files: [
                     expand: true
                     cwd: "./dev/media/"
-                    src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*","**"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*"]
                     dest: "./build/media/"
                 ]
             release: 
                 files: [
                     expand: true
                     cwd: "./build/media/"
-                    src: ["**"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*"]
                     dest: "./dist/media/"
                 ]
 
@@ -66,11 +66,19 @@ module.exports = (grunt) ->
             build: ["./build/media"]
             release: ["./dist"]
 
+        cleanlevel:
+            all:
+                src: ["./dev/media/data/levels/*.json"]
+                dest: "./build/media/data/levels"
+
         watch:
             build:
                 options:
                     livereload: true
                 files: ["./build/**"]
+            cleanlevel:
+                files: ["./dev/media/data/levels/*.json"]
+                tasks: ["cleanlevel"]
             css:
                 files: ["./dev/css/**/*.less"]
                 tasks: ["less:build"]
@@ -85,7 +93,7 @@ module.exports = (grunt) ->
 
             media: 
                 files: ["./dev/media/**/*"]
-                tasks: ["clean:build", "copy:build"]
+                tasks: ["copy:build", "cleanlevel:all"]
 
         # jshint:
         #     compile: ["./dev/js/**/*.js"]
@@ -100,5 +108,7 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks "grunt-browserify2"
     # grunt.loadNpmTasks "grunt-contrib-jshint"
 
-    grunt.registerTask "release", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy:release"]
-    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "copy:build"]
+    grunt.loadTasks "./tasks"
+
+    grunt.registerTask "release", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy:release", "cleanlevel:all"]
+    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "copy:build", "cleanlevel:all"]
