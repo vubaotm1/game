@@ -146,6 +146,11 @@ var Physics = {
         this.world.SetDebugDraw(this.debugDraw);
     },
 
+    resizeDebug: function(scale) {
+        this.scale = scale;
+        this.debugDraw.SetDrawScale(scale);
+    },
+
     dragNDrop: function(element) {
         var self = this;
         var obj = null;

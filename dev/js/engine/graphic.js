@@ -56,11 +56,15 @@ var Graphic = Class.extend({
         this.width = this.image.width;
         this.height = this.image.height;
 
+        this.resizeAll();
+
+        this._onloadCallback(this.path);
+    },
+
+    resizeAll: function() {
         for (var i = 0; i < this.scale.length; i++) {
             this.scaled[this.scale[i]] = this.resize(this.image, this.scale[i]);
         }
-
-        this._onloadCallback(this.path);
     },
 
     _onerror: function(event) {

@@ -8,6 +8,7 @@ var Assets = {
     Data: {},
 
     callback: null,
+    callbackscope: null,
 
     _stack: {
         unloaded: 0,
@@ -140,14 +141,30 @@ var Assets = {
         }
     },
 
-    onReady: function(callback) {
+    resizeAll: function(path) {
+        var self = Assets;
+
+        var obj = Object.$get(Assets.Graphics, path);
+        for(var o in obj) {
+            var p = (path) ? path + '.' + o : o;
+
+            if(obj[o] instanceof Graphic) {
+                obj[o].resizeAll();
+            } else {
+                self.resizeAll(p);
+            }
+        }
+    },
+
+    onReady: function(callback, scope) {
         this.callback = callback;
+        this.callbackscope = scope;
         this.tick();
     },
 
     tick: function() {
         if(this.ready) {
-            this.callback();
+            this.callback.call(this.callbackscope);
             return;
         }
 

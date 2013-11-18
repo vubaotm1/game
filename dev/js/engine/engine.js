@@ -1,10 +1,13 @@
 var config = require('../config');
 var Input = require('./input');
 var p = require('./physics');
-
+var media = require('../data/media');
+var Assets = require('./assets');
+var game = require('../game');
 
 var Engine = Class.extend({
     paused: false,
+    game: null,
 
     canvas: null,
     context: null,
@@ -14,20 +17,15 @@ var Engine = Class.extend({
 
     entities: [],
 
-    self: null,
-
     physicsDebug: false,
 
-    init: function(self) {
-        this.self = self;
-        var self = self;
-
+    init: function(gameConst) {
         this.initCanvas();
-
-        this.tick();
 
         p.initDebug(this.context, config.display.scale);
         p.dragNDrop(this.canvas);
+
+        this.tick();
     },
 
     initCanvas: function() {
@@ -38,23 +36,59 @@ var Engine = Class.extend({
             var container = document.getElementById(config.display.container) || document.body;
             container.appendChild(c);
         }
-        c.width = (config.display.fullscreen) ? window.innerWidth : config.display.width * config.display.scale;
-        c.height = (config.display.fullscreen) ? window.innerHeight : config.display.height * config.display.scale;
-        c.style.imageRendering = '-moz-crisp-edges';
-        c.style.imageRendering = '-o-crisp-edges';
-        c.style.imageRendering = '-webkit-optimize-contrast';
-        c.style.imageRendering = 'crisp-edges';
-        c.style.msInterpolationMode = 'nearest-neighbor';
 
         this.canvas = c;
 
-        this.context = c.getContext('2d');
+        this.canvas.style.imageRendering = '-moz-crisp-edges';
+        this.canvas.style.imageRendering = '-o-crisp-edges';
+        this.canvas.style.imageRendering = '-webkit-optimize-contrast';
+        this.canvas.style.imageRendering = 'crisp-edges';
+        this.canvas.style.msInterpolationMode = 'nearest-neighbor';
+
+        this.context = this.canvas.getContext('2d');
         this.context.imageSmoothingEnabled = false;
         this.context.webkitImageSmoothingEnabled = false;
         this.context.mozImageSmoothingEnabled = false;
+
+        this.resize();
+    },
+
+    resize: function() {
+        var self = this;
+
+        this.canvas.width = (config.display.fullscreen) ? window.innerWidth : config.display.width * config.display.scale;
+        this.canvas.height = (config.display.fullscreen) ? window.innerHeight : config.display.height * config.display.scale;
+
+        if (config.display.fullscreen) {
+            var w = window.innerWidth, s = 1;
+            if(w > 600) s = 2;
+            if(w > 1080) s = 3;
+            if(w > 1700) s = 4; 
+
+            if (!this.game) {
+                config.display.scale = s;
+
+                Assets.loadAll(media);
+                Assets.onReady(function() {
+                    if (!this.game) {
+                        this.game = new game(this.context);
+                    }
+                }, this);
+            }
+
+            if(this.game && config.display.scale != s) {
+                p.resizeDebug(s);
+                config.display.scale = s;
+                Assets.resizeAll();
+            }
+        }
     },
 
     update: function() {
+        p.step();
+        this.game.update();
+
+        Input.update();
     },
 
     clear: function() {
@@ -69,6 +103,9 @@ var Engine = Class.extend({
     draw: function() {
         this.draws = 0;
         this.clear();
+
+        this.game.draw();
+        if (config.physics.debug) p.draw();
     },
 
     addEntity: function(entity) {
@@ -84,21 +121,15 @@ var Engine = Class.extend({
     },
 
     tick: function() {
-        if (this.paused) return
+        if (this.paused || !this.game) return requestAnimFrame(this.tick.bind(this));
 
         Stats.begin();
 
-        p.step();
-        this.self.update.call(this.self);
-
-        requestAnimFrame(this.tick.bind(this.self));
-
-        this.self.draw.call(this.self);
-        if(config.physics.debug) p.draw();
+        this.update();
+        requestAnimFrame(this.tick.bind(this));
+        this.draw();
 
         Stats.end();
-        
-        Input.update();
     }
 });
 

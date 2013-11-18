@@ -1,34 +1,26 @@
-var Engine = require('./engine/engine');
 var config = require('./config');
-
 var Level = require('./engine/level');
-
-var Entity = require('./entities/entity');
 
 var Input = require('./engine/input');
 var Keys = require('./engine/keys');
 
-
-var Game = Engine.extend({
+var Game = Class.extend({
     player: null,
-
     level: null,
 
+    context: null,
 
-    init: function() {
+    init: function(context) {
         Input.bind("right", [Keys.D]);
         Input.bind("left", [Keys.Q]);
         Input.bind("up", [Keys.Z]);
         Input.bind("down", [Keys.S]);
 
+        this.context = context;
         this.level = new Level(Assets.Data.levels.first);
-
-        this.parent(this);
     },
 
     update: function() {
-        this.parent();
-
         if(Input.isPressed('a')) {
             config.perspective.flip = !config.perspective.flip;
         }
@@ -40,8 +32,6 @@ var Game = Engine.extend({
     },
 
     draw: function() {
-        this.parent();
-
         this.level.draw(this.context);
     }
 });
