@@ -47,8 +47,8 @@ var Animation = Class.extend({
         this.tile = this.sequence[this.frame];
     },
 
-    draw: function(ctx, x, y) {
-        this.tilesheet.drawTile(ctx, x, y, this.tile, this.scale, this.flip);
+    draw: function(ctx, x, y, angle) {
+        this.tilesheet.drawTile(ctx, x, y, this.tile, this.scale, this.flip, angle);
     }
 
 });

@@ -1,11 +1,8 @@
 var Assets = require('../engine/assets');
 var Animation = require('../engine/animation');
 
-
 var Input = require('../engine/input');
-var world = require('../lib/physics').world;
-
-
+var p = require('../engine/physics');
 
 var Entity = Class.extend({
     width: 16,
@@ -23,6 +20,8 @@ var Entity = Class.extend({
     animations: {},
     animation: null,
 
+    angle: 0,
+
     init: function(x, y, scale) {
         this.pos = {
             x: x,
@@ -32,7 +31,7 @@ var Entity = Class.extend({
         this.scale = scale;
 
         this.animations = {};
-        this.body = world.addBox(this.pos.x, this.pos.y, this.width*this.scale, this.height*this.scale);
+        this.body = p.addBoxEntity(this.pos.x, this.pos.y, this.width*this.scale, this.height*this.scale);
     },
 
     addAnimation: function(name, animation) {
@@ -44,18 +43,16 @@ var Entity = Class.extend({
             this.animation.update();
         }
         
-        this.pos.x = Math.floor(this.body.aabb().pos.x - 16);
-        this.pos.y = Math.floor(this.body.aabb().pos.y - 16);
-    },
+        var pos = this.body.GetPosition();
+        this.pos.x = pos.x;
+        this.pos.y = pos.y;
 
-    endPhysics: function() {
-        this.body.onFloor = false;
-        this.body.touchingWall = false;
+        this.angle = this.body.GetAngle();
     },
 
     draw: function(ctx) {
         if(this.animation) {
-            this.animation.draw(ctx);
+            this.animation.draw(ctx, this.pos.x, this.pos.y, this.angle);
         }
     }
 

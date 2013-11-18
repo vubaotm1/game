@@ -13,21 +13,27 @@ var Tilesheet = Graphic.extend({
         this.tilewidth = options.tilewidth || options.tilesize;
     },
 
-    drawTile: function(ctx, x, y, tile, scale, flip) {
+    drawTile: function(ctx, x, y, tile, scale, flip, angle) {
         if (!this.loaded) return;
 
         var rect = this.getRect(tile || 0, scale);
         var data = this.scaled[scale] || this.image;
 
+        flip = flip || {};
 
         var sx = flip.x ? -1 : 1;
         var sy = flip.y ? -1 : 1;
         x = this.applyScale(x) * sx - ((flip.x) ? rect.width : 0);
         y = this.applyScale(y) * sy - ((flip.y) ? rect.height : 0);
 
-        if (flip) {
-            ctx.save();
-            ctx.scale(sx, sy);
+
+        ctx.save();
+
+        if (flip) ctx.scale(sx, sy);
+        if (angle) {
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            x = 0; y = 0; //pivot
         }
 
         ctx.drawImage(
@@ -36,7 +42,7 @@ var Tilesheet = Graphic.extend({
             x, y, rect.width, rect.height
         );
 
-        if (flip) ctx.restore();
+        ctx.restore();
     },
 
     getRect: function(tile, scale) {

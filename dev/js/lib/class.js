@@ -28,4 +28,43 @@
         i.extend = arguments.callee;
         return i
     }
+
+    Object.$get = function(o, path) {
+        if (!path) return o;
+
+        var a = path.split('.');
+        while (a.length) {
+            var n = a.shift();
+            if (n in o) {
+                o = o[n];
+            } else {
+                return;
+            }
+        }
+        return o;
+    };
+
+    Object.$set = function(o, path, val) {
+        if (!path) return;
+
+        var a = path.split('.');
+        while (a.length) {
+            var n = a.shift();
+            if (a.length > 0) {
+                o[n] = {};
+                o = o[n];
+            } else {
+                o[n] = val;
+            }
+        }
+    };
+
+    Object.$merge = function(obj, other) {
+        if(!obj || !other) return;
+
+        for(var prop in other) {
+            if(!obj[prop]) obj[prop] = other[prop];
+        }
+    }
 })();
+

@@ -1,6 +1,7 @@
 var config = require('../config');
+var Input = require('./input');
+var p = require('./physics');
 
-var world = require('../lib/physics').world;
 
 var Engine = Class.extend({
     paused: false,
@@ -9,18 +10,24 @@ var Engine = Class.extend({
     context: null,
 
     draws: 0,
-    layers: [],
+    maps: [],
 
     entities: [],
 
     self: null,
+
+    physicsDebug: false,
 
     init: function(self) {
         this.self = self;
         var self = self;
 
         this.initCanvas();
-        world.startPhysics(self);
+
+        this.tick();
+
+        p.initDebug(this.context, config.display.scale);
+        p.dragNDrop(this.canvas);
     },
 
     initCanvas: function() {
@@ -28,11 +35,11 @@ var Engine = Class.extend({
         if (!c) {
             c = document.createElement('canvas');
             c.id = 'canvas';
-            c.width = config.display.width * config.display.scale;
-            c.height = config.display.height * config.display.scale;
             var container = document.getElementById(config.display.container) || document.body;
             container.appendChild(c);
         }
+        c.width = (config.display.fullscreen) ? window.innerWidth : config.display.width * config.display.scale;
+        c.height = (config.display.fullscreen) ? window.innerHeight : config.display.height * config.display.scale;
         c.style.imageRendering = '-moz-crisp-edges';
         c.style.imageRendering = '-o-crisp-edges';
         c.style.imageRendering = '-webkit-optimize-contrast';
@@ -48,9 +55,6 @@ var Engine = Class.extend({
     },
 
     update: function() {
-        for(var i = 0; i < this.entities.length; i++) {
-            this.entities[i].update();
-        }
     },
 
     clear: function() {
@@ -65,11 +69,6 @@ var Engine = Class.extend({
     draw: function() {
         this.draws = 0;
         this.clear();
-
-
-        for(var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.context);
-        }
     },
 
     addEntity: function(entity) {
@@ -89,12 +88,17 @@ var Engine = Class.extend({
 
         Stats.begin();
 
-        this.update();
+        p.step();
+        this.self.update.call(this.self);
 
         requestAnimFrame(this.tick.bind(this.self));
-        this.draw();
+
+        this.self.draw.call(this.self);
+        if(config.physics.debug) p.draw();
 
         Stats.end();
+        
+        Input.update();
     }
 });
 

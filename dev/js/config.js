@@ -2,16 +2,29 @@ var Config = {
 
     assetsPath: 'media/',
     defaultExt: {
-        img: "png"
+        img: 'png',
+        data: 'json'
     },
 
-    test: 2,
+    perspective: {
+        flip: false,
+        pWidth: 22,
+        pHeight: 21,
+        asset: 'tilesets.main',
+        align: 'b-r',
+        depth: 0
+    },
+
+    physics: {
+        debug: false
+    },
 
     display: {
-        clearColor: "#111",
-        width: 480,
+        clearColor: 'rgba(24, 17, 23, .62)',
+        fullscreen: true,
+        width: 200,
         height: 320,
-        scale: 2,
+        scale: 3,
         get realWidth() {
             return this.width * this.scale;
         },

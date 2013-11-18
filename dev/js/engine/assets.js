@@ -2,41 +2,12 @@ var config = require('../config');
 var Graphic = require('./graphic');
 var Tilesheet = require('./tilesheet');
 
-Object.$get = function(o, path) {
-    if (!path) return o;
-
-    var a = path.split('.');
-    while (a.length) {
-        var n = a.shift();
-        if (n in o) {
-            o = o[n];
-        } else {
-            return;
-        }
-    }
-    return o;
-};
-
-Object.$set = function(o, path, val) {
-    if (!path) return;
-
-    var a = path.split('.');
-    while (a.length) {
-        var n = a.shift();
-        if (a.length > 0) {
-            o[n] = {};
-            o = o[n];
-        } else {
-            o[n] = val;
-        }
-    }
-};
-
-
 var Assets = {
     Graphics: {},
     Sounds: {},
     Data: {},
+
+    callback: null,
 
     _stack: {
         unloaded: 0,
@@ -49,19 +20,32 @@ var Assets = {
     },
 
     get completion() {
-        return 100-(~~((this._stack.unloaded / this._stack.total)*100));
+        return 100 - (~~((this._stack.unloaded / this._stack.total) * 100));
     },
 
     _doneLoading: function(path) {
         this._stack.unloaded--;
 
-        if(this._stack.unloaded <= 0) {
+        if (this._stack.unloaded <= 0) {
             this._stack.unloaded = 0;
             this._stack.items = {};
             this._stack.total = 0;
         }
-        console.info(path+' loaded '+(new Date()).getTime()+' - Completion: %c'+this.completion+' %', 'color: green; font-size: 14px;');
-        
+        console.info(path + ' loaded ' + (new Date()).getTime() + ' - Completion: %c' + this.completion + ' %', 'color: green; font-size: 14px;');
+
+    },
+
+    _errorLoading: function(path) {
+        console.warn(path + 'could not be loaded!');
+    },
+
+    _getPath: function(path, file) {
+        path = path.split('.');
+        path.pop();
+        path = path.join('/');
+        path = config.assetsPath + path + '/' + file;
+
+        return path;
     },
 
     _loadImage: function(path, resource) {
@@ -70,13 +54,10 @@ var Assets = {
         }
 
         var p = path.replace('img.', '');
-        path = path.split('.');
-        path.pop();
-        path = path.join('/');
-        path = config.assetsPath + path + '/' + resource.file;
+        path = this._getPath(path, resource.file)
 
         var obj;
-        if(resource.tilesize || (resource.tileheight && resource.tilewidth)) {
+        if (resource.tilesize || (resource.tileheight && resource.tilewidth)) {
             obj = new Tilesheet(path, resource, this._doneLoading.bind(this));
         } else {
             obj = new Graphic(path, resource, this._doneLoading.bind(this));
@@ -90,7 +71,28 @@ var Assets = {
     },
 
     _loadData: function(path, resource) {
+        var self = this;
+        if (resource.file.indexOf('.') == -1) {
+            resource.file += "." + config.defaultExt.data;
+        }
 
+        var p = path.replace('data.', '');
+        path = this._getPath(path, resource.file);
+
+        try {
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if(req.readyState == 4) {
+                    var data = JSON.parse(req.responseText);
+                    Object.$set(Assets.Data, p, data);
+                    self._doneLoading(path);
+                }                           
+            };
+            req.open('GET', path, true);
+            req.send(null);
+        } catch (e) {
+            throw(e);
+        }
     },
 
     _load: function(obj, path) {
@@ -98,6 +100,8 @@ var Assets = {
 
         var self = Assets;
         var resource = Object.$get(obj, path);
+
+        if (!resource) return;
 
         var type = path.split('.')[0];
         switch (type) {
@@ -129,11 +133,25 @@ var Assets = {
             }
         }
 
-        if(!path) {
-            for(var a in this._stack.items) {
+        if (!path) {
+            for (var a in this._stack.items) {
                 this._load(data, a);
             }
         }
+    },
+
+    onReady: function(callback) {
+        this.callback = callback;
+        this.tick();
+    },
+
+    tick: function() {
+        if(this.ready) {
+            this.callback();
+            return;
+        }
+
+        requestAnimFrame(this.tick.bind(this));
     }
 };
 
