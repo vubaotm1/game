@@ -55,16 +55,17 @@ var Physics = {
         fd.shape = shape;
         fd.density = 4;
         fd.friction = 0.5;
-        fd.restitution = 0.1;
+        fd.restitution = 0.2;
         body.CreateFixture(fd);
 
         fd.friction = 0;
+        fd.restitution = 0.05;
         shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(0, h/2), 0);
         body.CreateFixture(fd);
         shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(w, h/2), 0);
         body.CreateFixture(fd);
 
-        shape.SetAsOrientedBox(0.3, 0.3, new b2Vec2(w/2, h), 0);
+        shape.SetAsOrientedBox((w/2)-0.6, 0.2, new b2Vec2(w/2, h), 0);
         fd.isSensor = true;
 
         var footSensor = body.CreateFixture(fd);
@@ -88,7 +89,7 @@ var Physics = {
 
     createCollisionFixture: function() {
         var fd = new b2FixtureDef();
-        fd.restitution = 0.2;
+        fd.restitution = 0;
         fd.friction = 0.5;
         fd.density = 4;
 

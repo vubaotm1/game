@@ -20,7 +20,7 @@ var Config = {
     },
 
     display: {
-        clearColor: 'rgba(24, 17, 23, 1)',
+        clearColor: 'rgba(24, 17, 23, 0.9)',
         fullscreen: true,
         width: 200,
         height: 320,
