@@ -1,5 +1,8 @@
 var Input = Input || {
 
+    down: {},
+    pressed: {},
+
     reset: function() {
         this.pressed = {};
         this.down = {};
@@ -17,8 +20,8 @@ var Input = Input || {
             this.pressed[kc] = true;
         }
 
-        e.stopPropagation();
-        e.preventDefault();
+        //e.stopPropagation();
+        //e.preventDefault();
     },
 
     keyup: function(e) {
@@ -28,9 +31,10 @@ var Input = Input || {
         }
     },
 
-    pressed: function(k) {
+    isPressed: function(k) {
         if (isNaN(k)) {
             var keys = this.bind[k];
+            if(!keys) return;
             for (var i = keys.length; i--;) {
                 if (this.pressed[keys[i]]) return true;
             }
@@ -39,9 +43,10 @@ var Input = Input || {
         return this.pressed[k];
     },
 
-    down: function(k) {
+    isDown: function(k) {
         if (isNaN(k)) {
             var keys = this.bind[k];
+            if(!keys) return;
             for (var i = keys.length; i--;) {
                 if (this.down[keys[i]]) return true;
             }
@@ -55,8 +60,5 @@ var Input = Input || {
     }
 
 };
-
-document.addEventListener('keydown', Input.keydown.bind(Input));
-document.addEventListener('keyup', Input.keyup.bind(Input));
 
 module.exports = Input;
