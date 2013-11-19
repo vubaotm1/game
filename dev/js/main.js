@@ -7,14 +7,18 @@ window.Keys = require('./engine/keys');
 Input.bind('a', [Keys.A]);
 Input.bind('physDebugToggle', [Keys.P]);
 
-
 window.Assets = require('./engine/assets');
 
-
+var config = require('./config');
+window.debug = {
+    draws: 0
+}
 var dat = require('./lib/dat.gui');
 var gui = new dat.GUI();
-window.t = {}
-//gui.add(t, 'speed', 0, 500);
+gui.add(debug, 'draws').listen();
+gui.add(config.physics, 'debug').listen();
+gui.add(config.display.offset, 'x', -300, 600);
+gui.add(config.display.offset, 'y', -300, 600);
 
 
 var engine;

@@ -6,6 +6,11 @@ var Tilesheet = Graphic.extend({
     tileheight: 0,
     tilewidth: 0,
 
+    pivot: {
+        x: 0,
+        y: 0
+    },
+
     init: function(path, options, callback) {
         this.parent(path, options, callback);
 
@@ -33,14 +38,18 @@ var Tilesheet = Graphic.extend({
         if (angle) {
             ctx.translate(x, y);
             ctx.rotate(angle);
-            x = 0; y = 0; //pivot
+            x = this.pivot.x; y = this.pivot.y; //pivot
         }
 
+        this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height);
+/*
         ctx.drawImage(
             data,
             rect.x, rect.y, rect.width, rect.height,
             x, y, rect.width, rect.height
         );
+
+*/
 
         ctx.restore();
     },

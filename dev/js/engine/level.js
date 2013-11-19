@@ -1,8 +1,7 @@
 var PerspectiveLayer = require('./perspective-layer');
 var CollisionLayer = require('./collision-layer');
 var Animation = require('./animation');
-
-
+var config = require('../config');
 var Player = require('../entities/player');
 
 var p = require('./physics');
@@ -20,6 +19,8 @@ var Level = Class.extend({
     realwidth: 16,
     realheight: 16,
 
+    player: null,
+
     init: function(data) {
         this.height = data.height;
         this.width = data.width;
@@ -32,12 +33,21 @@ var Level = Class.extend({
         this.initLayers(data.layers);
 
 
-        var player = new Player(30, 30);
-        player.addAnimation('normal', new Animation(Assets.Graphics.player, 1, .1, [1]));
-        player.animation = player.animations['normal'];
+        this.player = new Player(30, 30);
+        this.player.addAnimation('normal', new Animation(Assets.Graphics.player, 1, .1, [1]));
+        this.player.animation = this.player.animations['normal'];
 
 
-        this.entities.push(player);
+        this.entities.push(this.player);
+    },
+
+    applyScale: function(p) {
+        return Math.round(p * config.display.scale);
+    },
+
+    centerAround: function(entity) {
+        // config.display.offset.x = config.display.width - this.applyScale(entity.pos.x);
+        // config.display.offset.y = config.display.height - this.applyScale(entity.pos.y);
     },
 
     initLayer: function(layer) {
@@ -61,6 +71,8 @@ var Level = Class.extend({
         for(var i = 0; i < this.entities.length; i++) {
             this.entities[i].update();
         }
+
+        this.centerAround(this.player);
     },
 
     draw: function(ctx) {

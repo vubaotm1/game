@@ -29,16 +29,53 @@ var Graphic = Class.extend({
         return Math.round(p * config.display.scale);
     },
 
+    drawArea: function(ctx, data, x, y, xs, ys, w, h) {
+        x = x + ~~config.display.offset.x;
+        y = y + ~~config.display.offset.y;
+
+        if (x + w < 0 || x > config.display.width || y + h < 0 || y > config.display.height) return;
+
+        if (x < 0 && x + w > 0) {
+            w = w + x;
+            xs = xs - x;
+            x = 0;
+        }
+
+        if (x < config.display.width && x + w > config.display.width) {
+            w = w - (x + w - config.display.width);
+        }
+
+        if (y < 0 && y + h > 0) {
+            h = h + y;
+            ys = ys - y;
+            y = 0;
+        }
+
+        if (y < config.display.height && y + h > config.display.height) {
+            h = h - (y + h - config.display.height);
+        }
+
+        debug.draws++;
+        ctx.drawImage(
+            data,
+            xs, ys, w, h,
+            x, y, w, h
+        );
+    },
+
     draw: function(ctx, x, y, scale) {
         if (!this.loaded) return;
 
         var data = this.scaled[scale] || this.image;
 
+        this.drawArea(ctx, data, this.applyScale(x), this.applyScale(y), 0, 0, data.width, data.height);
+        /*
         ctx.drawImage(
             data,
             0, 0, data.width, data.height,
             this.applyScale(x), this.applyScale(y), data.width, data.height
         );
+*/
     },
 
     _load: function() {
@@ -72,7 +109,7 @@ var Graphic = Class.extend({
     },
 
     resize: function(img, scale) {
-        if(this.scale === 1 && config.display.scale === 1 ) {
+        if (this.scale === 1 && config.display.scale === 1) {
             return img;
         }
 

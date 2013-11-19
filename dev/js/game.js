@@ -19,7 +19,6 @@ var Game = Class.extend({
         this.context = context;
         this.level = new Level(Assets.Data.levels.first);
     },
-
     update: function() {
         if(Input.isPressed('a')) {
             config.perspective.flip = !config.perspective.flip;

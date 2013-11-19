@@ -55,10 +55,12 @@ var Engine = Class.extend({
         this.canvas.height = (config.display.fullscreen) ? window.innerHeight : config.display.height * config.display.scale;
 
         if (config.display.fullscreen) {
+            config.display.width = this.canvas.width;
+            config.display.height = this.canvas.height;
             var w = window.innerWidth, s = 1;
             if(w > 600) s = 2;
             if(w > 1080) s = 3;
-            if(w > 1700) s = 4; 
+            //if(w > 1700) s = 4; 
 
             if (!this.game) {
                 config.display.scale = s;
@@ -96,7 +98,7 @@ var Engine = Class.extend({
     },
 
     draw: function() {
-        this.draws = 0;
+        debug.draws = 1;
         this.clear();
 
         if (!config.physics.debug) {

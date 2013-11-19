@@ -8,8 +8,6 @@ var config = require('../config');
 
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
-
-
 var SPEED = 25;
 var JUMP = 110;
 
@@ -24,9 +22,7 @@ var Player = Entity.extend({
     update: function() {
         this.parent();
 
-
         if (!Input.isDown(0)) this.handleMovement();
-
     },
 
     canJump: function() {
@@ -72,8 +68,5 @@ var Player = Entity.extend({
     }
 
 });
-
-
-
 
 module.exports = Player;

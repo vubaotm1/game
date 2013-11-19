@@ -31,8 +31,8 @@ var PerspectiveLayer = Layer.extend({
         var a = data.properties.align;
         if (a) {
             a = a.split('-');
-            this.orrX = (a[1] == 'l') ? 0 : tw - this.pWidth+1;
-            this.orrY = (a[0] == 't') ? 0 : th - this.pHeight+1;
+            this.orrX = (a[1] == 'l') ? 0 : tw - this.pWidth + 1;
+            this.orrY = (a[0] == 't') ? 0 : th - this.pHeight + 1;
         }
 
         this.offsetX = this.orrX + this.orrX * this.depth;
@@ -46,21 +46,42 @@ var PerspectiveLayer = Layer.extend({
 
     draw: function(ctx) {
         var f = config.perspective.flip;
-        for (var x = this.width-1; x >= 0; x--) {
-            for (var y = this.height-1; y >= 0; y--) {
-                var xf = f ? (this.width-1) - x : x;
 
-                var xx = (xf * this.tilewidth + (f ? -this.orrX*this.depth : this.offsetX)) * this.scale;
+
+        var rtw = this.tilewidth * this.scale * config.display.scale;
+        var rth = this.tileheight * this.scale * config.display.scale;
+
+        var sx = ((config.display.offset.x / rtw) << 0),
+            sy = ((config.display.offset.y / rth) << 0),
+            ew = ((config.display.width / rtw) << 0) - sx,
+            eh = ((config.display.height / rth) << 0) - sy;
+
+        sx = Math.max(0, -sx);
+        sy = Math.max(0, -sy);
+        ew = Math.min(this.width - 1, ew);
+        eh = Math.min(this.height - 1, eh);
+
+        /* 
+
+            TODO: blocky view 
+
+        */
+
+        for (var x = ew; x >= sx; x--) {
+            for (var y = eh; y >= sy; y--) {
+                var xf = f ? ew - (x - sx) : x;
+
+                var xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
                 var yy = (y * this.tileheight + this.offsetY) * this.scale;
 
-                var tile = this.data[xf + y * this.width]-1;
-                if(tile < 0) continue;
+                var tile = this.data[xf + y * this.width] - 1;
+                if (tile < 0) continue;
 
                 tile += f ? 7 : 0;
 
                 this.asset.drawTile(ctx, xx, yy, tile, this.scale);
             }
-        } 
+        }
     }
 
 });

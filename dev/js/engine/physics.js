@@ -13,8 +13,7 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2Listener = Box2D.Dynamics.b2ContactListener;
 
 var b2Sep = require('../lib/box_2d_separator');
-
-
+var config = require('../config');
 
 var Physics = {
     world: new b2World(new b2Vec2(0, 9.8), true),
@@ -159,13 +158,18 @@ var Physics = {
 
     draw: function() {
         if (this.debugDraw) {
+            var ctx = this.debugDraw.m_ctx;
+            ctx.save();
+            ctx.translate(config.display.offset.x, config.display.offset.y);
             this.world.DrawDebugData();
+            ctx.restore();
         }
     },
 
     initDebug: function(context, scale) {
         this.scale = scale;
         this.debugDraw = new b2DebugDraw();
+        console.log(this.debugDraw);
         this.debugDraw.SetSprite(context);
         this.debugDraw.SetDrawScale(scale);
         this.debugDraw.SetFillAlpha(0.3);
@@ -186,8 +190,8 @@ var Physics = {
 
         function calculateWorldPosition(e) {
             return point = {
-                x: (e.offsetX || e.layerX) / self.scale,
-                y: (e.offsetY || e.layerY) / self.scale
+                x: ((e.offsetX || e.layerX)-config.display.offset.x) / self.scale,
+                y: ((e.offsetY || e.layerY)-config.display.offset.y) / self.scale
             };
         }
 
