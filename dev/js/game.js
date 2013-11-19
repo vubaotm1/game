@@ -17,8 +17,14 @@ var Game = Class.extend({
         Input.bind("down", [Keys.S]);
 
         this.context = context;
+
+        this.loadLevel(Assets.Data.levels.first);
+    },
+
+    loadLevel: function(level) {
         this.level = new Level(Assets.Data.levels.first);
     },
+
     update: function() {
         if(Input.isPressed('a')) {
             config.perspective.flip = !config.perspective.flip;

@@ -42,14 +42,6 @@ var Tilesheet = Graphic.extend({
         }
 
         this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height);
-/*
-        ctx.drawImage(
-            data,
-            rect.x, rect.y, rect.width, rect.height,
-            x, y, rect.width, rect.height
-        );
-
-*/
 
         ctx.restore();
     },

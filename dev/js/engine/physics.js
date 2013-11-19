@@ -169,7 +169,6 @@ var Physics = {
     initDebug: function(context, scale) {
         this.scale = scale;
         this.debugDraw = new b2DebugDraw();
-        console.log(this.debugDraw);
         this.debugDraw.SetSprite(context);
         this.debugDraw.SetDrawScale(scale);
         this.debugDraw.SetFillAlpha(0.3);

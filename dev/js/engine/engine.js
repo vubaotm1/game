@@ -45,39 +45,39 @@ var Engine = Class.extend({
         this.context.webkitImageSmoothingEnabled = false;
         this.context.mozImageSmoothingEnabled = false;
 
+
         this.resize();
     },
 
     resize: function() {
         var self = this;
 
-        this.canvas.width = (config.display.fullscreen) ? window.innerWidth : config.display.width * config.display.scale;
-        this.canvas.height = (config.display.fullscreen) ? window.innerHeight : config.display.height * config.display.scale;
+        var w = window.innerWidth, s = 1;
+        if(w > 840) s = 2;
+        if(w > 1260) s = 3;
 
-        if (config.display.fullscreen) {
-            config.display.width = this.canvas.width;
-            config.display.height = this.canvas.height;
-            var w = window.innerWidth, s = 1;
-            if(w > 600) s = 2;
-            if(w > 1080) s = 3;
-            //if(w > 1700) s = 4; 
+        this.canvas.width = config.display.width * s;
+        this.canvas.height = config.display.height * s; 
+        config.display.realwidth = this.canvas.width;
+        config.display.realheight = this.canvas.height;   
 
-            if (!this.game) {
-                config.display.scale = s;
 
-                Assets.loadAll(media);
-                Assets.onReady(function() {
-                    if (!this.game) {
-                        this.game = new game(this.context);
-                    }
-                }, this);
-            }
+        //if(w > 1700) s = 4; 
 
-            if(this.game && config.display.scale != s) {
-                p.resizeDebug(s);
-                config.display.scale = s;
-                Assets.resizeAll();
-            }
+        if (!this.game) {
+            config.display.scale = s;
+            Assets.loadAll(media);
+            Assets.onReady(function() {
+                if (!this.game) {
+                    this.game = new game(this.context);
+                }
+            }, this);
+        }
+
+        if(this.game && config.display.scale != s) {
+            p.resizeDebug(s);
+            config.display.scale = s;
+            Assets.resizeAll();
         }
     },
 

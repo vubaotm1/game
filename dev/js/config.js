@@ -16,21 +16,35 @@ var Config = {
     },
 
     physics: {
-        debug: true
+        debug: false
+    },
+
+    fog: {
+        enabled: true,
+        x: 0,
+        y: 0,
+        area: {
+            x: 30,
+            y: 0
+        }
     },
 
     display: {
-        clearColor: 'rgba(24, 17, 23, 0.9)',
-        fullscreen: true,
-        width: 200,
-        height: 320,
-        scale: 3,
-        get realWidth() {
-            return this.width * this.scale;
+        clearColor: 'rgb(0, 17, 23)',
+
+        offset: {
+            x: 0,
+            y: 0
         },
-        get realHeight() {
-            return this.height * this.scale;
-        }
+
+        fullscreen: false,
+
+        realwidth: 1,
+        realheight: 1,
+        scale: 1,
+
+        width: 420,
+        height: 200
     }
 
 };

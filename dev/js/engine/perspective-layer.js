@@ -47,34 +47,29 @@ var PerspectiveLayer = Layer.extend({
     draw: function(ctx) {
         var f = config.perspective.flip;
 
+        var rtw = this.tilewidth * this.scale;
+        var rth = this.tileheight * this.scale;
 
-        var rtw = this.tilewidth * this.scale * config.display.scale;
-        var rth = this.tileheight * this.scale * config.display.scale;
+        var sx = ((config.display.offset.x / (rtw * config.display.scale)) << 0),
+            sy = ((config.display.offset.y / (rth * config.display.scale)) << 0),
+            ew = (((config.display.width + this.orrX * 2) / rtw) << 0) - sx,
+            eh = (((config.display.height + this.orrY * 2) / rth) << 0) - sy;
 
-        var sx = ((config.display.offset.x / rtw) << 0),
-            sy = ((config.display.offset.y / rth) << 0),
-            ew = ((config.display.width / rtw) << 0) - sx,
-            eh = ((config.display.height / rth) << 0) - sy;
 
         sx = Math.max(0, -sx);
         sy = Math.max(0, -sy);
         ew = Math.min(this.width - 1, ew);
         eh = Math.min(this.height - 1, eh);
 
-        /* 
-
-            TODO: blocky view 
-
-        */
-
+        var xf, xx, yy, tile;
         for (var x = ew; x >= sx; x--) {
             for (var y = eh; y >= sy; y--) {
-                var xf = f ? ew - (x - sx) : x;
+                xf = f ? ew - (x - sx) : x;
 
-                var xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
-                var yy = (y * this.tileheight + this.offsetY) * this.scale;
+                xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
+                yy = (y * this.tileheight + this.offsetY) * this.scale;
 
-                var tile = this.data[xf + y * this.width] - 1;
+                tile = this.data[xf + y * this.width] - 1;
                 if (tile < 0) continue;
 
                 tile += f ? 7 : 0;

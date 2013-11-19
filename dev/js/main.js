@@ -16,9 +16,10 @@ window.debug = {
 var dat = require('./lib/dat.gui');
 var gui = new dat.GUI();
 gui.add(debug, 'draws').listen();
-gui.add(config.physics, 'debug').listen();
-gui.add(config.display.offset, 'x', -300, 600);
-gui.add(config.display.offset, 'y', -300, 600);
+gui.add(config.display.offset, 'x', -300, 300);
+gui.add(config.display.offset, 'y', -300, 300);
+gui.add(config.fog.area, 'x', -300, 300);
+gui.add(config.fog.area, 'y', -300, 300);
 
 
 var engine;

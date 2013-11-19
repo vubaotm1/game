@@ -46,8 +46,10 @@ var Level = Class.extend({
     },
 
     centerAround: function(entity) {
-        // config.display.offset.x = config.display.width - this.applyScale(entity.pos.x);
-        // config.display.offset.y = config.display.height - this.applyScale(entity.pos.y);
+        config.fog.x = entity.pos.x;
+        config.fog.y = entity.pos.y;
+        config.display.offset.x = config.display.realwidth/2 - this.applyScale(entity.pos.x);
+        config.display.offset.y = config.display.realheight/2 - this.applyScale(entity.pos.y);
     },
 
     initLayer: function(layer) {

@@ -33,7 +33,14 @@ var Graphic = Class.extend({
         x = x + ~~config.display.offset.x;
         y = y + ~~config.display.offset.y;
 
-        if (x + w < 0 || x > config.display.width || y + h < 0 || y > config.display.height) return;
+        var rw = config.display.realwidth;
+        var rh = config.display.realheight;
+
+        if (x + w < 0 || x > rw || y + h < 0 || y > rh) return;
+        if (config.fog.enabled && 
+            (x < config.fog.area.x || x + w > rw - config.fog.area.x ||
+             y < config.fog.area.y || y + h > rh - config.fog.area.y)) 
+            return;
 
         if (x < 0 && x + w > 0) {
             w = w + x;
@@ -41,8 +48,8 @@ var Graphic = Class.extend({
             x = 0;
         }
 
-        if (x < config.display.width && x + w > config.display.width) {
-            w = w - (x + w - config.display.width);
+        if (x < rw && x + w > rw) {
+            w = w - (x + w - rw);
         }
 
         if (y < 0 && y + h > 0) {
@@ -51,8 +58,8 @@ var Graphic = Class.extend({
             y = 0;
         }
 
-        if (y < config.display.height && y + h > config.display.height) {
-            h = h - (y + h - config.display.height);
+        if (y < rh && y + h > rh) {
+            h = h - (y + h - rh);
         }
 
         debug.draws++;
@@ -69,13 +76,6 @@ var Graphic = Class.extend({
         var data = this.scaled[scale] || this.image;
 
         this.drawArea(ctx, data, this.applyScale(x), this.applyScale(y), 0, 0, data.width, data.height);
-        /*
-        ctx.drawImage(
-            data,
-            0, 0, data.width, data.height,
-            this.applyScale(x), this.applyScale(y), data.width, data.height
-        );
-*/
     },
 
     _load: function() {
