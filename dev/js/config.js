@@ -1,5 +1,7 @@
 var Config = {
 
+    tick: 0,
+
     assetsPath: 'media/',
     defaultExt: {
         img: 'png',
@@ -21,8 +23,10 @@ var Config = {
 
     fog: {
         enabled: true,
-        x: 0,
-        y: 0,
+        pos: {
+            x: 0,
+            y: 0
+        },
         area: {
             x: 30,
             y: 0
@@ -30,7 +34,7 @@ var Config = {
     },
 
     display: {
-        clearColor: 'rgb(0, 17, 23)',
+        clearColor: 'rgb(24, 17, 23)',
 
         offset: {
             x: 0,

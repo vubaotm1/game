@@ -3,6 +3,7 @@ var CollisionLayer = require('./collision-layer');
 var Animation = require('./animation');
 var config = require('../config');
 var Player = require('../entities/player');
+var Camera = require('./camera');
 
 var p = require('./physics');
 
@@ -20,6 +21,7 @@ var Level = Class.extend({
     realheight: 16,
 
     player: null,
+    camera: null,
 
     init: function(data) {
         this.height = data.height;
@@ -33,23 +35,25 @@ var Level = Class.extend({
         this.initLayers(data.layers);
 
 
-        this.player = new Player(30, 30);
+        this.player = new Player(260, 30);
         this.player.addAnimation('normal', new Animation(Assets.Graphics.player, 1, .1, [1]));
         this.player.animation = this.player.animations['normal'];
 
-
+        this.camera = new Camera(config.display.width/2+this.tilewidth*3, config.display.height/2, 5);
+        this.camera.trap.size.x = config.display.width/5;
+        this.camera.trap.size.y = config.display.height/3;
+        this.camera.lookAhead.y = 10;
+        this.camera.min.x = -config.perspective.pWidth;
+        this.camera.min.y = -config.perspective.pHeight;
+        this.camera.max.x = this.realwidth;
+        this.camera.max.y = this.realheight;
+        this.camera.set(this.player);
+    
         this.entities.push(this.player);
     },
 
     applyScale: function(p) {
         return Math.round(p * config.display.scale);
-    },
-
-    centerAround: function(entity) {
-        config.fog.x = entity.pos.x;
-        config.fog.y = entity.pos.y;
-        config.display.offset.x = config.display.realwidth/2 - this.applyScale(entity.pos.x);
-        config.display.offset.y = config.display.realheight/2 - this.applyScale(entity.pos.y);
     },
 
     initLayer: function(layer) {
@@ -74,7 +78,7 @@ var Level = Class.extend({
             this.entities[i].update();
         }
 
-        this.centerAround(this.player);
+        this.camera.follow(this.player);
     },
 
     draw: function(ctx) {
@@ -89,6 +93,8 @@ var Level = Class.extend({
         for(var i = 0; i < this.layers.length; i++) {
             if(this.layers[i].foreground) this.layers[i].draw(ctx);
         }
+
+        //this.camera.draw(ctx);
     }
 });
 

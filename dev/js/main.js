@@ -14,12 +14,10 @@ window.debug = {
     draws: 0
 }
 var dat = require('./lib/dat.gui');
-var gui = new dat.GUI();
+window.gui = new dat.GUI();
 gui.add(debug, 'draws').listen();
-gui.add(config.display.offset, 'x', -300, 300);
-gui.add(config.display.offset, 'y', -300, 300);
-gui.add(config.fog.area, 'x', -300, 300);
-gui.add(config.fog.area, 'y', -300, 300);
+gui.add(config.display.offset, 'x').listen();
+gui.add(config.display.offset, 'y').listen();
 
 
 var engine;

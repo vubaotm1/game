@@ -14,6 +14,8 @@ var Engine = Class.extend({
 
     draws: 0,
 
+    lastUpdate: 16,
+
     init: function(gameConst) {
         this.initCanvas();
 
@@ -120,6 +122,9 @@ var Engine = Class.extend({
         if (this.paused || !this.game) return requestAnimFrame(this.tick.bind(this));
 
         Stats.begin();
+
+        config.tick = (new Date()).getTime() - this.lastUpdate; 
+        this.lastUpdate = this.lastUpdate + config.tick;
 
         this.update();
         requestAnimFrame(this.tick.bind(this));
