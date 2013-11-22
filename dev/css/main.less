@@ -7,42 +7,318 @@ html, body {
     height: 100%;
     width: 100%;
 }
-
-
 body {
-    background-color: #181117;
+    background-color: #261C25;
     overflow: hidden;
-
     display: -webkit-box;
-
     -webkit-box-orient: horizontal;
-
     -webkit-box-pack: center;
-
     -webkit-box-align: center;
-
-    
-
-    
-
-    display: -o-box;
-
-    -o-box-orient: horizontal;
-
-    -o-box-pack: center;
-
-    -o-box-align: center;
-
-    
-
-    
-
     display: -moz-box;
-
     -moz-box-orient: horizontal;
-
     -moz-box-pack: center;
-
     -moz-box-align: center;
-
+    display: -o-box;
+    -o-box-orient: horizontal;
+    -o-box-pack: center;
+    -o-box-align: center;
+    display: box;
+    box-orient: horizontal;
+    box-pack: center;
+    box-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+canvas {
+    position: relative;
+    opacity: .05;
+}
+#container {
+    position: relative;
+}
+#container.big {
+    margin: 0 auto;
+    width: 1260px;
+}
+.scalelevel(@size: 30px;
+ @margin: 20px;
+ @font-size: 26pt) {
+    width: @size;
+    height: @size;
+    margin-right: @margin;
+    margin-bottom: @margin;
+    font-size: @font-size;
+    line-height: @size;
+}
+#ui {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    #play, #github {
+        .button;
+    }
+    #menu {
+        position: absolute;
+    }
+    #icons-top div, #icons-menu div {
+        background-image: url('../media/img/UI.png');
+        cursor: pointer;
+        &.pause {
+            background-position: (-54px*4) 0;
+            &.paused {
+                background-position: (-54px*5) 0;
+            }
+        }
+        &.play {
+            background-position: (-54px*5) 0;
+        }
+        &.mute {
+            background-position: (-54px*2) 0;
+            &.muted {
+                background-position: (-54px*3) 0;
+            }
+        }
+        &.restart {
+            background-position: (-54px*1) 0;
+        }
+        &.menu {
+            background-position: (-54px*0) 0;
+        }
+        &:hover {
+            background-position-y: -54px;
+        }
+    }
+    #icons-top, #icons-menu, #levels {
+        display: none;
+    }
+    #icons-top div {
+        position: absolute;
+        top: 20px;
+        &.mute {
+            right: 54*2px;
+        }
+        &.restart {
+            left: 54*4+10*2px;
+        }
+        &.pause {
+            left: 54*3+10px;
+        }
+        &.menu {
+            left: 54*2px;
+        }
+    }
+    #icons-menu {
+        position: absolute;
+        div {
+            position: absolute;
+            &.mute {
+                left: 54*3+40+50px;
+            }
+            &.play {
+                left: 54*2+40+10px;
+            }
+            &.restart {
+                left: 54+40px;
+            }
+            &.menu {
+                left: 0px;
+            }
+        }
+    }
+    .button {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-color: #00768b;
+        -webkit-box-shadow: 5px -5px 0px #00434F;
+        -moz-box-shadow: 5px -5px 0px #00434F;
+        box-shadow: 5px -5px 0px #00434F;
+        border: 2px solid #fff;
+        border-radius: 7px;
+        padding: 10px;
+        font-family: Verdana, Geneva, sans-serif;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        &:hover {
+            background-color: #8c4da2;
+            -webkit-box-shadow: 2px -2px 0px #583065;
+            -moz-box-shadow: 2px -2px 0px #583065;
+            box-shadow: 2px -2px 0px #583065;
+        }
+        &:active {
+            background-color: #B484C4;
+            -webkit-box-shadow: 2px -2px 0px #7D458F;
+            -moz-box-shadow: 2px -2px 0px #7D458F;
+            box-shadow: 2px -2px 0px #7D458F;
+        }
+    }
+    #levels {
+        margin: 0 auto;
+        clear: both;
+        position: absolute;
+        overflow-y: scroll;
+        height: 160px;
+        padding-top: 10px;
+        .level {
+            float: left;
+            .button;
+        }
+        .level:nth-child(5n) {
+            margin-right: 0px;
+        }
+        .level.locked {
+            background-color: #455558;
+            -webkit-box-shadow: 5px -5px 0px #202728;
+            -moz-box-shadow: 5px -5px 0px #202728;
+            box-shadow: 5px -5px 0px #202728;
+            &:hover {
+                background-color: #455558;
+                -webkit-box-shadow: 5px -5px 0px #202728;
+                -moz-box-shadow: 5px -5px 0px #202728;
+                box-shadow: 5px -5px 0px #202728;
+            }
+        }
+    }
+    &.small {
+        width: 420px;
+        height: 200px;
+        #play, #github {
+            margin: 10px auto;
+            width: 100px;
+            height: 20px;
+            line-height: 20px;
+        }
+        #play {
+            width: 290px;
+        }
+        #icons div {
+            width: 40px;
+            height: 40px;
+            background-position-y: (-54px*2);
+        }
+        #icons div:hover {
+            background-position-y: (-54px*3);
+        }
+        #icons-top div {
+            position: absolute;
+            top: -20px;
+            &.mute {
+                right: 20px;
+            }
+            &.restart {
+                left: 20+40*2+10*2px;
+            }
+            &.pause {
+                left: 20+40*1+10px;
+            }
+            &.menu {
+                left: 20px;
+            }
+        }
+        #icons-menu {
+            top: 180px;
+            left: 80px;
+            div {
+                &.mute {
+                    left: 40*3+20+30px;
+                }
+                &.play {
+                    left: 40*2+20+10px;
+                }
+                &.restart {
+                    left: 40+20px;
+                }
+                &.menu {
+                    left: 0px;
+                }
+            }
+        }
+        #menu {
+            top: 50px;
+            left: (420-300)/2px;
+        }
+        #levels {
+            height: 110px;
+            width: 320px;
+        }
+        .level {
+            .scalelevel(20px;
+            15px;
+            12pt);
+        }
+    }
+    &.normal {
+        width: 840px;
+        height: 400px;
+        #play, #github {
+            margin: 20px auto;
+            width: 200px;
+            height: 30px;
+            line-height: 30px;
+        }
+        #play {
+            width: 360px;
+        }
+        #icons-menu {
+            top: 260px;
+            left: 245px;
+        }
+        #icons div {
+            width: 54px;
+            height: 54px;
+        }
+        #menu {
+            top: 100px;
+            left: (840-400)/2px;
+        }
+        #levels {
+            width: 390px;
+            height: 130px;
+        }
+        .level {
+            .scalelevel(30px;
+            20px;
+            18pt);
+        }
+    }
+    &.big {
+        width: 1260px;
+        height: 600px;
+        #play, #github {
+            margin: 25px auto;
+            width: 300px;
+            height: 35px;
+            line-height: 35px;
+        }
+        #play {
+            width: 460px;
+        }
+        #icons-menu {
+            top: 400px;
+            left: 480px;
+        }
+        #icons div {
+            width: 54px;
+            height: 54px;
+        }
+        #menu {
+            top: 200px;
+            left: (1260-450)/2px;
+        }
+        #levels {
+            width: 490px;
+        }
+        .level {
+            .scalelevel(40px;
+            30px;
+            22pt);
+        }
+    }
 }
