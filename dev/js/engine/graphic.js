@@ -29,7 +29,7 @@ var Graphic = Class.extend({
         return Math.round(p * config.display.scale);
     },
 
-    drawArea: function(ctx, data, x, y, xs, ys, w, h) {
+    drawArea: function(ctx, data, x, y, xs, ys, w, h, sx, sy) {
         x = x + ~~config.display.offset.x;
         y = y + ~~config.display.offset.y;
 
@@ -62,6 +62,9 @@ var Graphic = Class.extend({
             h = h - (y + h - rh);
         }
 
+        if(sx) x = x*sx - (sx < 0 ? w : 0);
+        if(sy) y = y*sy - (sy < 0 ? h : 0);
+
         debug.draws++;
         ctx.drawImage(
             data,
@@ -84,6 +87,7 @@ var Graphic = Class.extend({
         this.image = new Image();
         this.image.onload = this._onload.bind(this);
         this.image.onerror = this._onerror.bind(this);
+        
         this.image.src = this.path;
     },
 

@@ -78,7 +78,6 @@ var PerspectiveLayer = Layer.extend({
             }
         }
     }
-
 });
 
 

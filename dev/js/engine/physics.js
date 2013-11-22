@@ -25,6 +25,8 @@ var Physics = {
 
     lastDt: new Date().getTime(),
 
+    paused: false,
+
     step: function() {
         var ct = new Date().getTime();
         var dt = (ct - this.lastDt) / 1000;
@@ -33,18 +35,29 @@ var Physics = {
         this.dtRemaining += dt;
         while (this.dtRemaining > this.stepAmount) {
             this.dtRemaining -= this.stepAmount;
-            this.world.Step(this.stepAmount, 8, 3);
+            this.world.Step(this.paused ? 0 : this.stepAmount, 8, 3);
         }
 
         this.lastDt = dt;
     },
 
-    addBoxEntity: function(x, y, w, h, options) {
+    setPaused: function(p) {
+        this.paused = p;
+    },
+
+    removeBody: function(body) {
+        this.world.DestroyBody(body);
+    },
+
+    addPlayerEntity: function(x, y, w, h, options) {
         var bd = new b2BodyDef();
         bd.position.Set(x, y);
         bd.type = b2Body.b2_dynamicBody;
         var body = this.world.CreateBody(bd);
         body.SetFixedRotation(true);
+
+        w = w-0.6;
+
 
         var shape = new b2PolygonShape();
         shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
@@ -64,14 +77,39 @@ var Physics = {
         shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(w, h/2), 0);
         body.CreateFixture(fd);
 
-        shape.SetAsOrientedBox((w/2)-0.6, 0.2, new b2Vec2(w/2, h), 0);
+        shape.SetAsOrientedBox((w/2)-1.2, 0.3, new b2Vec2(w/2, h), 0);
         fd.isSensor = true;
 
         var footSensor = body.CreateFixture(fd);
         footSensor.SetUserData({id: 'foot'});
         body.SetUserData({footContacts: 0});
 
-        window.world = this.world;
+        return body;
+    },
+
+    addBoxEntity: function(x, y, w, h, options) {
+        options = options || {};
+        var bd = new b2BodyDef();
+        bd.position.Set(x, y);
+        bd.type = b2Body.b2_dynamicBody;
+        var body = this.world.CreateBody(bd);
+        body.SetFixedRotation(options.FixedRotation || true);
+
+        var shape = new b2PolygonShape();
+        shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
+
+
+        var fd = new b2FixtureDef();
+        fd.shape = shape;
+        fd.density = 40;
+        fd.friction = .5;
+        fd.restitution = 0;
+        body.CreateFixture(fd);
+
+
+        shape.SetAsOrientedBox((w/2)-1.2, 0.3, new b2Vec2(w/2, 0), 0);
+        fd.restitution = 0.5;
+        body.CreateFixture(fd);
 
         return body;
     },

@@ -4,6 +4,8 @@ var Animation = require('../engine/animation');
 var Input = require('../engine/input');
 var p = require('../engine/physics');
 
+var b2Vec2 = Box2D.Common.Math.b2Vec2;
+
 var Entity = Class.extend({
     width: 16,
     height: 16,
@@ -11,6 +13,11 @@ var Entity = Class.extend({
     pos: {
         x: 100,
         y: 100
+    },
+
+    offset: {
+        x: 0, 
+        y: 0
     },
 
     body: null,
@@ -22,6 +29,8 @@ var Entity = Class.extend({
 
     angle: 0,
 
+    bodyType: 'Box',
+
     init: function(x, y, scale) {
         this.pos = {
             x: x,
@@ -31,11 +40,26 @@ var Entity = Class.extend({
         this.scale = scale;
 
         this.animations = {};
-        this.body = p.addBoxEntity(this.pos.x, this.pos.y, this.width*this.scale, this.height*this.scale);
+        this.initBody();
     },
 
-    addAnimation: function(name, animation) {
-        this.animations[name] = animation;
+    setPos: function(x, y) {
+        this.body.SetPosition(new b2Vec2(x, y));
+        this.body.SetAwake(true);
+        this.body.SetLinearVelocity(new b2Vec2(0, 0));
+    },
+
+    initBody: function() {
+        this.body = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale);
+    },
+
+    removeBody: function() {
+        p.removeBody(this.body);
+    },
+
+    addAnimation: function(name, tilesheet, scale, frametime, sequence, loop) {
+        this.animations[name] = new Animation(Object.$get(Assets.Graphics, tilesheet), scale, frametime, sequence, loop);
+        this.animation = this.animations[name];
     },
 
     update: function() {
@@ -52,12 +76,11 @@ var Entity = Class.extend({
 
     draw: function(ctx) {
         if(this.animation) {
-            this.animation.draw(ctx, this.pos.x, this.pos.y, this.angle);
+            this.animation.draw(ctx, this.pos.x-this.offset.x, this.pos.y-this.offset.y, this.angle);
         }
     }
 
 
 });
-
 
 module.exports = Entity;

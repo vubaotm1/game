@@ -43,8 +43,6 @@ var Camera = Class.extend({
         y: 0
     },
 
-    debug: false,
-
 
     init: function(offsetX, offsetY, damping) {
         this.offset.x = offsetX;
@@ -90,14 +88,12 @@ var Camera = Class.extend({
 
 
     draw: function(ctx) {
-        if (this.debug) {
-            ctx.fillStyle = 'rgba(255,0,255,0.3)';
-            ctx.fillRect(
-                (this.trap.pos.x - this.pos.x) * config.display.scale, (this.trap.pos.y - this.pos.y) * config.display.scale,
-                this.trap.size.x * config.display.scale,
-                this.trap.size.y * config.display.scale
-            );
-        }
+        ctx.fillStyle = 'rgba(255,0,255,0.3)';
+        ctx.fillRect(
+            (this.trap.pos.x - this.pos.x) * config.display.scale, (this.trap.pos.y - this.pos.y) * config.display.scale,
+            this.trap.size.x * config.display.scale,
+            this.trap.size.y * config.display.scale
+        );
     }
 });
 

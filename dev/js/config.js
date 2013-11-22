@@ -34,7 +34,7 @@ var Config = {
     },
 
     display: {
-        clearColor: 'rgb(24, 17, 23)',
+        clearColor: '#261C25',
 
         offset: {
             x: 0,

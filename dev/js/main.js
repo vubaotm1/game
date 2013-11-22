@@ -16,20 +16,34 @@ window.debug = {
 var dat = require('./lib/dat.gui');
 window.gui = new dat.GUI();
 gui.add(debug, 'draws').listen();
-gui.add(config.display.offset, 'x').listen();
-gui.add(config.display.offset, 'y').listen();
-
 
 var engine;
-window.addEventListener('load', function() {
+$(function(){
     engine = new (require('./engine/engine'))();
-})
+});
 
-window.addEventListener('resize', function() {
+$(window).resize(function(){
     if(engine) engine.resize.call(engine);
+});
+
+$(document).keydown(Input._down.bind(Input));
+$(document).keyup(Input._up.bind(Input));
+$(document).mousedown(Input._down.bind(Input));
+$(document).mouseup(Input._up.bind(Input));
+
+$('#play').click(function() {
+    $('#intro').hide();
+    $('#levels').show();
+});
+
+
+$('#github').click(function() {
+    window.location = "https://github.com/jeroenverfallie/game-off-2013";
 })
 
-document.addEventListener('keydown', Input._down.bind(Input));
-document.addEventListener('keyup', Input._up.bind(Input));
-document.addEventListener('mousedown', Input._down.bind(Input));
-document.addEventListener('mouseup', Input._up.bind(Input));
+
+$('#icons-menu .menu').click(function(){
+    $('#levels').hide();
+    $('#icons-menu').hide();
+    $('#intro').show();
+})

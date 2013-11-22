@@ -1,9 +1,16 @@
 var media = {
     img: {
-        player: {
-            file: 'tileset_16_16.jpg',
-            scale: [1],
-            tilesize: 16
+        sprites: {
+            player: {
+                file: 'player',
+                tilesize: 20
+            }
+        },
+        debug: {
+            placeholder: {
+                file: 'tileset_16_16.jpg',
+                tilesize: 16
+            }
         },
         tilesets: {
             main: {

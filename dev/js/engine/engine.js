@@ -6,11 +6,11 @@ var Assets = require('./assets');
 var game = require('../game');
 
 var Engine = Class.extend({
-    paused: false,
     game: null,
 
     canvas: null,
     context: null,
+    ui: null,
 
     draws: 0,
 
@@ -19,22 +19,24 @@ var Engine = Class.extend({
     init: function(gameConst) {
         this.initCanvas();
 
+        this.ui = document.getElementById('ui');
+        this.ui.style.display = "block";
+
+        this.scaleUI(config.display.scale);
+
         p.initDebug(this.context, config.display.scale);
         p.dragNDrop(this.canvas);
 
         this.tick();
+
+        window.dom = {
+            ui: this.ui,
+            canvas: this.canvas
+        };
     },
 
     initCanvas: function() {
-        var c = document.getElementById('canvas');
-        if (!c) {
-            c = document.createElement('canvas');
-            c.id = 'canvas';
-            var container = document.getElementById(config.display.container) || document.body;
-            container.appendChild(c);
-        }
-
-        this.canvas = c;
+        this.canvas = document.getElementById('canvas');
 
         this.canvas.style.imageRendering = '-moz-crisp-edges';
         this.canvas.style.imageRendering = '-o-crisp-edges';
@@ -47,21 +49,29 @@ var Engine = Class.extend({
         this.context.webkitImageSmoothingEnabled = false;
         this.context.mozImageSmoothingEnabled = false;
 
-
         this.resize();
+    },
+
+    scaleUI: function(s) {
+        if (s == 1) ui.className = "small";
+        if (s == 2) ui.className = "normal";
+        if (s == 3) ui.className = "big";
     },
 
     resize: function() {
         var self = this;
 
-        var w = window.innerWidth, s = 1;
-        if(w > 840) s = 2;
-        if(w > 1260) s = 3;
+        var w = window.innerWidth,
+            s = 1;
+        if (w > 840) s = 2;
+        if (w > 1260) s = 3;
+
+        this.scaleUI(s);
 
         this.canvas.width = config.display.width * s;
-        this.canvas.height = config.display.height * s; 
+        this.canvas.height = config.display.height * s;
         config.display.realwidth = this.canvas.width;
-        config.display.realheight = this.canvas.height;   
+        config.display.realheight = this.canvas.height;
 
 
         //if(w > 1700) s = 4; 
@@ -76,7 +86,7 @@ var Engine = Class.extend({
             }, this);
         }
 
-        if(this.game && config.display.scale != s) {
+        if (this.game && config.display.scale != s) {
             p.resizeDebug(s);
             config.display.scale = s;
             Assets.resizeAll();
@@ -86,8 +96,6 @@ var Engine = Class.extend({
     update: function() {
         p.step();
         this.game.update();
-
-        Input.update();
     },
 
     clear: function() {
@@ -111,22 +119,26 @@ var Engine = Class.extend({
     },
 
     togglePause: function() {
-        this.paused = !this.paused;
+        this.game.paused = !this.game.paused;
 
-        if (!this.paused) {
+        if (!this.game.paused) {
             this.tick();
         }
     },
 
     tick: function() {
-        if (this.paused || !this.game) return requestAnimFrame(this.tick.bind(this));
+        if (!this.game) return requestAnimFrame(this.tick.bind(this));
 
         Stats.begin();
+        if(!this.game.paused) {
+            config.tick = (new Date()).getTime() - this.lastUpdate;
+            this.lastUpdate = this.lastUpdate + config.tick;
 
-        config.tick = (new Date()).getTime() - this.lastUpdate; 
-        this.lastUpdate = this.lastUpdate + config.tick;
+            this.update();
+        }
 
-        this.update();
+        Input.update();
+        
         requestAnimFrame(this.tick.bind(this));
         this.draw();
 

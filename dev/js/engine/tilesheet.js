@@ -28,8 +28,9 @@ var Tilesheet = Graphic.extend({
 
         var sx = flip.x ? -1 : 1;
         var sy = flip.y ? -1 : 1;
-        x = this.applyScale(x) * sx - ((flip.x) ? rect.width : 0);
-        y = this.applyScale(y) * sy - ((flip.y) ? rect.height : 0);
+
+        x = this.applyScale(x);
+        y = this.applyScale(y);
 
 
         ctx.save();
@@ -41,7 +42,7 @@ var Tilesheet = Graphic.extend({
             x = this.pivot.x; y = this.pivot.y; //pivot
         }
 
-        this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height);
+        this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height, sx, sy);
 
         ctx.restore();
     },

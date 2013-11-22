@@ -5,6 +5,8 @@ var Animation = Class.extend({
     sequence: null,
     loop: null,
 
+    looped: false,
+
     frame: 0,
     tile: 0,
 
@@ -21,20 +23,25 @@ var Animation = Class.extend({
         this.frameTime = frametime;
         this.sequence = sequence;
 
-        this.flip = {};
-
-        this.loop = loop || true;
+        this.loop = loop == undefined ? true : false;
 
         this._initTime = (new Date()).getTime();
 
         this.tile = this.sequence[0];
     },
 
+    reset: function() {
+        this._initTime = (new Date()).getTime();
+        this.tile = this.sequence[0];
+        this.looped = false;
+    },
+
     update: function() {
         var time = (new Date()).getTime();
         var currentFrame = ~~(((time - this._initTime) / 1000) / this.frameTime);
-        if (!this.loop && this.currentFrame > this.sequence.length - 1) {
+        if (!this.loop && currentFrame > this.sequence.length - 1) {
             this.frame = this.sequence.length - 1;
+            this.looped = true;
         } else {
             this.frame = currentFrame % this.sequence.length;
         }
