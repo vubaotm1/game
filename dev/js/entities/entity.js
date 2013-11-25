@@ -1,5 +1,6 @@
 var Assets = require('../engine/assets');
 var Animation = require('../engine/animation');
+var config = require('../config');
 
 var Input = require('../engine/input');
 var p = require('../engine/physics');
@@ -31,7 +32,7 @@ var Entity = Class.extend({
 
     bodyType: 'Box',
 
-    init: function(x, y, scale) {
+    init: function(x, y, scale, bodyoptions) {
         this.pos = {
             x: x,
             y: y
@@ -40,7 +41,11 @@ var Entity = Class.extend({
         this.scale = scale;
 
         this.animations = {};
-        this.initBody();
+        this.initBody(bodyoptions);
+    },
+
+    applyScale: function(n) {
+        return Math.round(n*config.display.scale);
     },
 
     setPos: function(x, y) {
@@ -49,8 +54,8 @@ var Entity = Class.extend({
         this.body.SetLinearVelocity(new b2Vec2(0, 0));
     },
 
-    initBody: function() {
-        this.body = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale);
+    initBody: function(bodyoptions) {
+        this.body = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale, bodyoptions);
     },
 
     removeBody: function() {
@@ -58,7 +63,10 @@ var Entity = Class.extend({
     },
 
     addAnimation: function(name, tilesheet, scale, frametime, sequence, loop) {
-        this.animations[name] = new Animation(Object.$get(Assets.Graphics, tilesheet), scale, frametime, sequence, loop);
+        if(typeof(tilesheet) !== "object") {
+            tilesheet = Object.$get(Assets.Graphics, tilesheet)
+        }
+        this.animations[name] = new Animation(tilesheet, scale, frametime, sequence, loop);
         this.animation = this.animations[name];
     },
 
@@ -67,11 +75,13 @@ var Entity = Class.extend({
             this.animation.update();
         }
         
-        var pos = this.body.GetPosition();
-        this.pos.x = pos.x;
-        this.pos.y = pos.y;
+        if(this.body) {
+            var pos = this.body.GetPosition();
+            this.pos.x = pos.x;
+            this.pos.y = pos.y;
 
-        this.angle = this.body.GetAngle();
+            this.angle = this.body.GetAngle();
+        }
     },
 
     draw: function(ctx) {

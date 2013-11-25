@@ -14,7 +14,7 @@ var Test = Player.extend({
     }
 });
 
-Test.takeover = true;
+Test.control = true;
 Test.pauseWhileMorph = false;
 
 module.exports = Test;

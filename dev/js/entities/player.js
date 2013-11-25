@@ -5,7 +5,7 @@ var config = require('../config');
 
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
-var SPEED = 25;
+var SPEED = 18;
 var JUMP = 110;
 
 var Player = Entity.extend({
@@ -31,10 +31,11 @@ var Player = Entity.extend({
     },
     initAnim: function(sheet) {
         this.addAnimation('stand', sheet, this.scale, .1, [0]);
-        this.addAnimation('walk', sheet, this.scale, .15, [1, 2, 3]);
+        this.addAnimation('walk', sheet, this.scale, .1, [1, 2, 3]);
         this.addAnimation('jump', sheet, this.scale, .15, [4, 5]);
-        this.addAnimation('morph', sheet, this.scale, .15, [1, 2, 3, 4, 5], false);
+        this.addAnimation('morph', sheet, this.scale, .09, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
         this.animation = this.animations['stand'];
+        this.animations['walk'].flip.x = true;
     },
 
     update: function() {

@@ -1,4 +1,5 @@
 var Entity = require('../entity');
+
 var Test = Entity.extend({
     width: 16,
     height: 16,
@@ -15,7 +16,7 @@ var Test = Entity.extend({
     },
 });
 
-Test.takeover = false;
+Test.control = false;
 Test.pauseWhileMorph = false;
 
 module.exports = Test;
