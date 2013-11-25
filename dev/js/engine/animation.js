@@ -18,6 +18,12 @@ var Animation = Class.extend({
     init: function(tilesheet, scale, frametime, sequence, loop) {
         if(!tilesheet) throw("Tilesheet not found!");
 
+
+        this.flip = {
+            x: false,
+            y: false
+        }
+
         this.scale = scale;
         this.tilesheet = tilesheet;
         this.frameTime = frametime;
@@ -55,7 +61,7 @@ var Animation = Class.extend({
     },
 
     draw: function(ctx, x, y, angle) {
-        this.tilesheet.drawTile(ctx, x, y, this.tile, this.scale, this.flip, angle);
+        this.tilesheet.drawTile(ctx, x, y, this.tile, this.scale, this.flip, angle, this.alpha);
     }
 
 });

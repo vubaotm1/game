@@ -11,14 +11,21 @@ var Tilesheet = Graphic.extend({
         y: 0
     },
 
+    r: 360*Math.PI/180,
+
     init: function(path, options, callback) {
         this.parent(path, options, callback);
 
         this.tileheight = options.tileheight || options.tilesize;
         this.tilewidth = options.tilewidth || options.tilesize;
+
+
+        this.pivot = {};
+        this.pivot.x = this.tilewidth/2;
+        this.pivot.y = this.tileheight/2;
     },
 
-    drawTile: function(ctx, x, y, tile, scale, flip, angle) {
+    drawTile: function(ctx, x, y, tile, scale, flip, angle, alpha, ignoreoffscreen) {
         if (!this.loaded) return;
 
         var rect = this.getRect(tile || 0, scale);
@@ -29,20 +36,42 @@ var Tilesheet = Graphic.extend({
         var sx = flip.x ? -1 : 1;
         var sy = flip.y ? -1 : 1;
 
-        x = this.applyScale(x);
-        y = this.applyScale(y);
+        x = this.applyScale(x) + ~~config.display.offset.x;
+        y = this.applyScale(y) + ~~config.display.offset.y;
 
+        if(angle) {
+            // TODO -> FIX
+            var rw = config.display.realwidth;
+            var rh = config.display.realheight;
+
+            var a = angle % this.r;
+            var xx = (a > 2.35) ? x - this.applyScale(rect.width) : x;
+            var yy = (a > 0.78 && a < 2.35) ? y - this.applyScale(rect.height) : y;
+            var w = rect.width;
+            var h = rect.height;
+
+            if (xx + w < 0 || xx > rw || yy + h < 0 || yy > rh) return;
+            if(config.fog.enabled &&
+               (xx < config.fog.area.x || xx + w > rw - config.fog.area.x ||
+               yy < config.fog.area.y || yy + h > rh - config.fog.area.y)) return;
+        }
 
         ctx.save();
+
+
+        if(alpha) {
+            ctx.globalAlpha = alpha;
+        }
 
         if (flip) ctx.scale(sx, sy);
         if (angle) {
             ctx.translate(x, y);
             ctx.rotate(angle);
-            x = this.pivot.x; y = this.pivot.y; //pivot
+            x = 0; y = 0;
+            ignoreoffscreen = true;
         }
 
-        this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height, sx, sy);
+        this.drawArea(ctx, data, x, y, rect.x, rect.y, rect.width, rect.height, sx, sy, ignoreoffscreen);
 
         ctx.restore();
     },

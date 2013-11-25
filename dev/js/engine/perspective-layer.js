@@ -1,5 +1,6 @@
 var Layer = require('./layer');
 var config = require('../config');
+var Assets = require('./assets');
 
 var PerspectiveLayer = Layer.extend({
     asset: null,

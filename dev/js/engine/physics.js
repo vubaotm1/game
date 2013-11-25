@@ -10,10 +10,72 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
     b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
     b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
-    b2Listener = Box2D.Dynamics.b2ContactListener;
+    b2Listener = Box2D.Dynamics.b2ContactListener,
+    b2PrismaticJoint = Box2D.Dynamics.Joints.b2PrismaticJoint,
+    b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef;
 
 var b2Sep = require('../lib/box_2d_separator');
 var config = require('../config');
+
+
+
+var listener = new b2Listener;
+
+listener.BeginContact = function(contact) {
+    var fixtureDataA = contact.GetFixtureA().GetUserData();
+    var fixtureDataB = contact.GetFixtureB().GetUserData();
+    var bodyDataA = contact.GetFixtureA().m_body.m_userData;
+    var bodyDataB = contact.GetFixtureB().m_body.m_userData;
+    if (fixtureDataA) {
+        if (fixtureDataA.id == 'foot' && (!bodyDataB || !bodyDataB.sensor)) {
+            bodyDataA.footContacts++;
+        }
+        if (fixtureDataA.id == 'player') {
+            if (bodyDataB) {
+                bodyDataB.playerCollision = true;
+            }
+        }
+    }
+
+    if (fixtureDataB) {
+        if (fixtureDataB.id == 'foot' && (!bodyDataA || !bodyDataA.sensor)) {
+            bodyDataB.footContacts++;
+        }
+        if (fixtureDataB.id == 'player') {
+            if (bodyDataA) {
+                bodyDataA.playerCollision = true;
+            }
+        }
+    }
+}
+
+listener.EndContact = function(contact) {
+    var fixtureDataA = contact.GetFixtureA().GetUserData();
+    var fixtureDataB = contact.GetFixtureB().GetUserData();
+    var bodyDataA = contact.GetFixtureA().m_body.m_userData;
+    var bodyDataB = contact.GetFixtureB().m_body.m_userData;
+    if (fixtureDataA) {
+        if (fixtureDataA.id == 'foot' && (!bodyDataB || !bodyDataB.sensor)) {
+            bodyDataA.footContacts--;
+        }
+        if (fixtureDataA.id == 'player') {
+            if (bodyDataB) {
+                bodyDataB.playerCollision = false;
+            }
+        }
+    }
+
+    if (fixtureDataB) {
+        if (fixtureDataB.id == 'foot' && (!bodyDataA || !bodyDataA.sensor)) {
+            bodyDataB.footContacts--;
+        }
+        if (fixtureDataB.id == 'player') {
+            if (bodyDataA) {
+                bodyDataA.playerCollision = false;
+            }
+        }
+    }
+}
 
 var Physics = {
     world: new b2World(new b2Vec2(0, 9.8), true),
@@ -26,6 +88,14 @@ var Physics = {
     lastDt: new Date().getTime(),
 
     paused: false,
+
+    ground: null,
+
+    resetWorld: function() {
+        this.world = new b2World(new b2Vec2(0, 9.8), true);
+        this.world.SetContactListener(listener);
+        this.world.SetDebugDraw(this.debugDraw);
+    },
 
     step: function() {
         var ct = new Date().getTime();
@@ -56,7 +126,7 @@ var Physics = {
         var body = this.world.CreateBody(bd);
         body.SetFixedRotation(true);
 
-        w = w-0.6;
+        w = w - 0.6;
 
 
         var shape = new b2PolygonShape();
@@ -68,48 +138,89 @@ var Physics = {
         fd.density = 4;
         fd.friction = 0.5;
         fd.restitution = 0.2;
-        body.CreateFixture(fd);
+
+        var fix = body.CreateFixture(fd);
+        fix.SetUserData({
+            id: 'player'
+        });
 
         fd.friction = 0;
         fd.restitution = 0.05;
-        shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(0, h/2), 0);
+        shape.SetAsOrientedBox(0.3, h / 2, new b2Vec2(0, h / 2), 0);
         body.CreateFixture(fd);
-        shape.SetAsOrientedBox(0.3, h/2, new b2Vec2(w, h/2), 0);
+        shape.SetAsOrientedBox(0.3, h / 2, new b2Vec2(w, h / 2), 0);
         body.CreateFixture(fd);
 
-        shape.SetAsOrientedBox((w/2)-1.2, 0.3, new b2Vec2(w/2, h), 0);
+        shape.SetAsOrientedBox((w / 2), 0.3, new b2Vec2(w / 2, h), 0);
         fd.isSensor = true;
 
         var footSensor = body.CreateFixture(fd);
-        footSensor.SetUserData({id: 'foot'});
-        body.SetUserData({footContacts: 0});
+        footSensor.SetUserData({
+            id: 'foot'
+        });
+        body.SetUserData({
+            footContacts: 0
+        });
 
         return body;
     },
 
     addBoxEntity: function(x, y, w, h, options) {
         options = options || {};
+        if (!options.bodytype) options.bodytype = "b2_dynamicBody";
+        if (options.fixedrotation == undefined) options.fixedrotation = true;
+        if (!options.density) options.density = 4;
+        if (!options.friction) options.friction = 0;
+        if (!options.restitution) options.restitution = 0;
+        if (options.width) w = options.width;
+        if (options.height) h = options.height;
+        if (options.x) x = options.x;
+        if (options.y) y = options.y;
+
         var bd = new b2BodyDef();
         bd.position.Set(x, y);
-        bd.type = b2Body.b2_dynamicBody;
+        bd.type = b2Body[options.bodytype];
+
         var body = this.world.CreateBody(bd);
-        body.SetFixedRotation(options.FixedRotation || true);
+        body.SetFixedRotation(options.fixedrotation);
 
         var shape = new b2PolygonShape();
         shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
 
-
         var fd = new b2FixtureDef();
         fd.shape = shape;
-        fd.density = 40;
-        fd.friction = .5;
-        fd.restitution = 0;
+        fd.density = options.density;
+        fd.friction = options.friction;
+        fd.restitution = options.restitution;
+        fd.isSensor = options.isSensor || false;
+        if (fd.isSensor) {
+            body.SetUserData({
+                playerCollision: false,
+                sensor: true
+            });
+        }
         body.CreateFixture(fd);
 
+        if (options.top) {
+            shape.SetAsOrientedBox((w / 2) - 1.2, 0.3, new b2Vec2(w / 2, -0.3), 0);
+            fd.restitution = options.top.restitution || 0;
+            fd.friction = options.top.friction || 0;
+            body.CreateFixture(fd);
+        }
 
-        shape.SetAsOrientedBox((w/2)-1.2, 0.3, new b2Vec2(w/2, 0), 0);
-        fd.restitution = 0.5;
-        body.CreateFixture(fd);
+        if (options.bottom) {
+            shape.SetAsOrientedBox((w / 2), 0.4, new b2Vec2(w / 2, h - 0.3), 0);
+            fd.friction = options.bottom.friction || 0;
+            body.CreateFixture(fd);
+        }
+
+        if (options.fixed) {
+            body.SetFixedRotation(false);
+            var pjd = new b2PrismaticJointDef();
+            var axis = options.fixed == "y" ? new b2Vec2(0, 1) : new b2Vec2(1, 0);
+            pjd.Initialize(this.world.GetGroundBody(), body, new b2Vec2(0, 0), axis);
+            var joint = this.world.CreateJoint(pjd);
+        }
 
         return body;
     },
@@ -118,17 +229,17 @@ var Physics = {
         var bd = new b2BodyDef();
         bd.type = b2Body.b2_staticBody;
         bd.position.Set(x, y);
-        bd.density = 1;
         var body = this.world.CreateBody(bd);
 
         return body;
     },
 
-    createCollisionFixture: function() {
+    createCollisionFixture: function(options) {
+        options = options || {};
         var fd = new b2FixtureDef();
-        fd.restitution = 0;
-        fd.friction = 0.5;
-        fd.density = 4;
+        fd.restitution = options.restitution || 0;
+        fd.friction = options.friction || 0.5;
+        fd.density = options.density || 0;
 
         return fd;
     },
@@ -137,14 +248,14 @@ var Physics = {
         var vel = body.GetLinearVelocity();
 
         var changeX = speed - vel.x,
-            impulseX = body.GetMass()*changeX;
+            impulseX = body.GetMass() * changeX;
 
         body.ApplyLinearImpulse(new b2Vec2(impulse, 0), body.GetWorldCenter());
     },
 
-    createCollisionBox: function(x, y, w, h) {
+    createCollisionBox: function(x, y, w, h, options) {
         var body = this.createCollisionBody(x, y);
-        var fd = this.createCollisionFixture();
+        var fd = this.createCollisionFixture(options);
 
         var shape = new b2PolygonShape();
         shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
@@ -155,9 +266,9 @@ var Physics = {
         return body;
     },
 
-    createCollisionPolyline: function(vecArray, x, y) {
+    createCollisionPolyline: function(vecArray, x, y, options) {
         var body = this.createCollisionBody(x, y);
-        var fd = this.createCollisionFixture();
+        var fd = this.createCollisionFixture(options);
 
         for (var i = 0; i < vecArray.length - 1; i++) {
             var v1 = new b2Vec2(vecArray[i].x, vecArray[i].y),
@@ -173,14 +284,14 @@ var Physics = {
         return body;
     },
 
-    createCollisionPolygon: function(vecArray, x, y) {
+    createCollisionPolygon: function(vecArray, x, y, options) {
         var val = b2Sep.validate(vecArray);
         if (val !== 0) {
             throw ('Couldnt separate polygon, validation code ' + val);
         }
 
         var body = this.createCollisionBody(x, y);
-        var fd = this.createCollisionFixture();
+        var fd = this.createCollisionFixture(options);
 
         b2Sep.separate(body, fd, vecArray);
 
@@ -227,8 +338,8 @@ var Physics = {
 
         function calculateWorldPosition(e) {
             return point = {
-                x: ((e.offsetX || e.layerX)-config.display.offset.x) / self.scale,
-                y: ((e.offsetY || e.layerY)-config.display.offset.y) / self.scale
+                x: ((e.offsetX || e.layerX) - config.display.offset.x) / self.scale,
+                y: ((e.offsetY || e.layerY) - config.display.offset.y) / self.scale
             };
         }
 
@@ -270,33 +381,6 @@ var Physics = {
     }
 };
 
-var listener = new b2Listener;
-
-listener.BeginContact = function(contact) {
-    var fixtureData = contact.GetFixtureA().GetUserData();
-    if (fixtureData && fixtureData.id == 'foot') {
-        contact.GetFixtureA().m_body.m_userData.footContacts++;
-    }
-    
-    fixtureData = contact.GetFixtureB().GetUserData();
-    if (fixtureData && fixtureData.id == 'foot') {
-        contact.GetFixtureB().m_body.m_userData.footContacts++;
-    }
-}
-
-listener.EndContact = function(contact) {
-    var fixtureData = contact.GetFixtureA().GetUserData();
-    if (fixtureData && fixtureData.id == 'foot') {
-        contact.GetFixtureA().m_body.m_userData.footContacts--;
-    }
-    
-    fixtureData = contact.GetFixtureB().GetUserData();
-    if (fixtureData && fixtureData.id == 'foot') {
-        contact.GetFixtureB().m_body.m_userData.footContacts--;
-    }
-}
-
-Physics.world.SetContactListener(listener);
 
 
 module.exports = Physics;

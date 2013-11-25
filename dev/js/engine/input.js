@@ -13,7 +13,7 @@ var Input = Input || {
     },
 
     _down: function(e) {
-        var kc = e.keyCode;
+        var kc = e.keyCode || 0;
 
         if (!this.down[kc]) {
             this.down[kc] = true;
@@ -25,7 +25,7 @@ var Input = Input || {
     },
 
     _up: function(e) {
-        var kc = e.keyCode;
+        var kc = e.keyCode || 0;
         if (this.down[kc]) {
             this.down[kc] = false;
         }

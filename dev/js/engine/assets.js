@@ -85,6 +85,9 @@ var Assets = {
             req.onreadystatechange = function() {
                 if(req.readyState == 4) {
                     var data = JSON.parse(req.responseText);
+                    if(resource.morphs) {
+                        data.morphs = resource.morphs;
+                    }
                     Object.$set(Assets.Data, p, data);
                     self._doneLoading(path);
                 }                           

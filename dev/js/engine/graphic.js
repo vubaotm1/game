@@ -29,41 +29,42 @@ var Graphic = Class.extend({
         return Math.round(p * config.display.scale);
     },
 
-    drawArea: function(ctx, data, x, y, xs, ys, w, h, sx, sy) {
-        x = x + ~~config.display.offset.x;
-        y = y + ~~config.display.offset.y;
-
+    drawArea: function(ctx, data, x, y, xs, ys, w, h, sx, sy, ignoreoffscreen) {
         var rw = config.display.realwidth;
         var rh = config.display.realheight;
 
-        if (x + w < 0 || x > rw || y + h < 0 || y > rh) return;
-        if (config.fog.enabled && 
-            (x < config.fog.area.x || x + w > rw - config.fog.area.x ||
-             y < config.fog.area.y || y + h > rh - config.fog.area.y)) 
-            return;
+        if (!ignoreoffscreen) {
 
-        if (x < 0 && x + w > 0) {
-            w = w + x;
-            xs = xs - x;
-            x = 0;
+            if (x + w < 0 || x > rw || y + h < 0 || y > rh) return;
+            if (config.fog.enabled &&
+                (x < config.fog.area.x || x + w > rw - config.fog.area.x ||
+                    y < config.fog.area.y || y + h > rh - config.fog.area.y))
+                return;
+
+            if (x < 0 && x + w > 0) {
+                w = w + x;
+                xs = xs - x;
+                x = 0;
+            }
+
+            if (x < rw && x + w > rw) {
+                w = w - (x + w - rw);
+            }
+
+            if (y < 0 && y + h > 0) {
+                h = h + y;
+                ys = ys - y;
+                y = 0;
+            }
+
+            if (y < rh && y + h > rh) {
+                h = h - (y + h - rh);
+            }
+
         }
 
-        if (x < rw && x + w > rw) {
-            w = w - (x + w - rw);
-        }
-
-        if (y < 0 && y + h > 0) {
-            h = h + y;
-            ys = ys - y;
-            y = 0;
-        }
-
-        if (y < rh && y + h > rh) {
-            h = h - (y + h - rh);
-        }
-
-        if(sx) x = x*sx - (sx < 0 ? w : 0);
-        if(sy) y = y*sy - (sy < 0 ? h : 0);
+        if (sx) x = x * sx - (sx < 0 ? w : 0);
+        if (sy) y = y * sy - (sy < 0 ? h : 0);
 
         debug.draws++;
         ctx.drawImage(
@@ -87,7 +88,7 @@ var Graphic = Class.extend({
         this.image = new Image();
         this.image.onload = this._onload.bind(this);
         this.image.onerror = this._onerror.bind(this);
-        
+
         this.image.src = this.path;
     },
 
