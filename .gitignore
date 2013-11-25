@@ -12,6 +12,9 @@ dev/js/lib/physicsjs
 
 # TILED
 
+*.pickle
+*.bak
+
 *.tmx
 *.tsx
 rules.txt
