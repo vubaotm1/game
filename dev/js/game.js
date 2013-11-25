@@ -31,6 +31,7 @@ var Game = Class.extend({
         Input.bind("up", [Keys.Z, Keys.SPACE, Keys.UP_ARROW, Keys.W]);
         Input.bind("down", [Keys.S, Keys.DOWN_ARROW]);
         Input.bind("morph", [Keys.E]);
+        Input.bind("restart", [Keys.T]);
 
 
         $('#ui').fadeIn(1000);
@@ -146,7 +147,7 @@ var Game = Class.extend({
         this.initLevels();
 
         if (config.debug) {
-            this.loadLevel(Assets.Data.levels['0']);
+            this.loadLevel(Assets.Data.levels[config.debug.level]);
             showIntro(false);
             showGame();
             this.stats.starttime = (new Date()).getTime();
@@ -232,6 +233,7 @@ var Game = Class.extend({
         $('#stats #deaths').text(this.stats.deaths+'');
         $('#stats #transforms').text(this.stats.transforms+'');
 
+        $('#morphs').fadeOut();
         $('#icons-top .left').fadeOut();
         var a, b = $('#end').height();
         a = this.showMessage('Level Complete!', '#99FC87', 1500, {
@@ -246,14 +248,19 @@ var Game = Class.extend({
     },
 
     retryLevel: function() {
-        this.stats.restarts = 0;
-        this.stats.starttime = (new Date()).getTime();
+        this.resetStats();
         this.loadLevel(this.currentLevelData);
     },
 
-    nextLevel: function() {
+    resetStats: function() {
         this.stats.restarts = 0;
         this.stats.starttime = (new Date()).getTime();
+        this.stats.deaths = 0;
+        this.stats.transforms = 0;
+    },
+
+    nextLevel: function() {
+        this.resetStats();
         this.loadLevel(Assets.Data.levels[this.currentLevelData.next]);
     },
 
@@ -272,7 +279,7 @@ var Game = Class.extend({
 
     loadLevel: function(level) {
         if (!level) return;
-        this.level = new Level(level);
+        this.level = new Level(level, this.stats);
         this.currentLevelData = level;
 
         $('#leveltitle').text(level.title);
@@ -282,6 +289,18 @@ var Game = Class.extend({
     },
 
     update: function() {
+        if(Input.isPressed('restart')) {
+            var self = this;
+            $('#morphs').fadeOut(500);
+            $('#canvas').fadeTo(300, .05, function() {
+                self.restartLevel();
+                $('#icons-top .left').fadeIn();
+                $('#canvas').fadeTo(300, 1);
+                if (self.currentLevelData != Assets.Data.levels['0']) $('#morphs').delay(400).fadeIn();
+            });
+        }
+
+
         this.level.update(this);
     },
 

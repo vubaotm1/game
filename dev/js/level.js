@@ -41,8 +41,12 @@ var Level = Class.extend({
     morphing: false,
     morphSubject: null,
 
-    init: function(data) {
+    stats: null,
+
+    init: function(data, stats) {
         p.resetWorld();
+
+        this.stats = stats;
 
         this.layers = [];
         this.entities = [];
@@ -140,6 +144,9 @@ var Level = Class.extend({
 
     morph: function(other) {
         if (typeof(other) == "string") other = Object.$get(Entities, other);
+
+        this.stats.transforms++;
+
         this.morphing = true;
         this.player.initMorph();
         this.morphSubject = other;
@@ -149,6 +156,9 @@ var Level = Class.extend({
     respawnPlayer: function(dead) {
         if (this.player.isMorphing()) return;
         if (dead) {
+            this.stats.deaths++;
+
+
             var color = $('body').css('background-color');
             $('body').animate({
                 backgroundColor: jQuery.Color('#4F2222')
