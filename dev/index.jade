@@ -4,50 +4,37 @@ html
         title Title
         link(rel="stylesheet", type="text/css", href="css/main.css")
     body
-        #container.big
+        #container
             canvas#canvas
-            #ui.big
-                #icons
-                    #icons-top
-                        .pause
-                        .mute
-                        .restart
-                        .menu
-                    #icons-menu
-                        .menu
-                        .restart
-                        .play
-                        .mute
-                #menu
-                    #levels
-                        .level 1
-                        .level 2
-                        .level.locked 3
-                        .level.locked 4
-                        .level.locked 5
-                        .level.locked 6
-                        .level.locked 7
-                        .level.locked 8
-                        .level.locked 9
-                        .level.locked 10
-                        .level.locked 11
-                        .level.locked 12
-                        .level.locked 13
-                        .level.locked 14
-                        .level.locked 15
-                        .level.locked 16
-                        .level.locked 17
-                        .level.locked 18
-                        .level.locked 19
-                        .level.locked 20
-                    #intro
-                        #play Play
-                        #github Github
+            #ui
+                #levels
+                #icons-menu
+                    .menu
+                    .restart
+                    .play
+                    .mute
+                #intro
+                    #title Trans<span>cube</span>
+                    #slug a game by <a href="https://github.com/jeroenverfallie">jerev</a>
+                    #play Play
+                    #github Github
+            #icons-top
+                .pause
+                .mute
+                .restart
+                .menu
+            #footer
+                #morphs 
+                    span Spawns a movable block you can stand on.
+                    div
+
 
         if debug
             script(type="text/javascript", src="/jquery-1.10.1.min.js")
+            script(type="text/javascript", src="/jquery.color-2.1.2.min.js")
             script(type="text/javascript", src="js/main.js")
             script(type="text/javascript", src="//localhost:35729/livereload.js")
         else
             script(type="text/javascript", src="http://code.jquery.com/jquery-1.10.1.min.js")
+            script(type="text/javascript", src="http://code.jquery.com/color/jquery.color-2.1.2.js")
             script(type="text/javascript", src="js/main.min.js")
