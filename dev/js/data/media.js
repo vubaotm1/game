@@ -4,6 +4,10 @@ var media = {
             player: {
                 file: 'player',
                 tilesize: 20
+            },
+            spawn: {
+                file: 'spawn',
+                tilesize: 20
             }
         },
         debug: {
@@ -12,7 +16,16 @@ var media = {
                 tilesize: 16
             }
         },
+        info: {
+            file: 'info',
+            tilesize: 30
+        },
         tilesets: {
+            scenery: {
+                file: 'scenery',
+                tilewidth: 16,
+                tileheight: 10
+            },
             main: {
                 file: 'main_tileset',
                 tileheight: 21,
@@ -24,9 +37,12 @@ var media = {
     sfx: {},
     data: {
         levels: {
-            first: {
-                type: 'level',
+            intro: {
                 file: 'first'
+            },
+            0: {
+                morphs: {'Spawn.Movable': 1},
+                file: '0'
             }
         }
     }

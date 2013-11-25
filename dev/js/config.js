@@ -1,5 +1,7 @@
 var Config = {
 
+    debug: true,
+
     tick: 0,
 
     assetsPath: 'media/',
@@ -15,6 +17,11 @@ var Config = {
         asset: 'tilesets.main',
         align: 'b-r',
         depth: 0
+    },
+
+    image: {
+        asset: 'info',
+        firstgid: 22
     },
 
     physics: {

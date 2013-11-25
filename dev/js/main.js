@@ -1,21 +1,18 @@
 require('./lib/class.js');
 require('./lib/requestAnimFrame');
-
 window.Stats = require('./lib/stats');
-window.Input = require('./engine/input');
-window.Keys = require('./engine/keys');
-Input.bind('a', [Keys.A]);
-Input.bind('physDebugToggle', [Keys.P]);
 
-window.Assets = require('./engine/assets');
-
+var Input = require('./engine/input');
 var config = require('./config');
 window.debug = {
-    draws: 0
+    draws: 0,
+    bounciness: 0.5
 }
 var dat = require('./lib/dat.gui');
-window.gui = new dat.GUI();
+window.gui = new dat.GUI({autoPlace: true});
 gui.add(debug, 'draws').listen();
+gui.add(config.physics, 'debug');
+gui.close();
 
 var engine;
 $(function(){
@@ -31,6 +28,7 @@ $(document).keyup(Input._up.bind(Input));
 $(document).mousedown(Input._down.bind(Input));
 $(document).mouseup(Input._up.bind(Input));
 
+
 $('#play').click(function() {
     $('#intro').hide();
     $('#levels').show();
@@ -39,11 +37,4 @@ $('#play').click(function() {
 
 $('#github').click(function() {
     window.location = "https://github.com/jeroenverfallie/game-off-2013";
-})
-
-
-$('#icons-menu .menu').click(function(){
-    $('#levels').hide();
-    $('#icons-menu').hide();
-    $('#intro').show();
 })

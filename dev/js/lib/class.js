@@ -51,7 +51,7 @@
         while (a.length) {
             var n = a.shift();
             if (a.length > 0) {
-                o[n] = {};
+                o[n] = o[n] || {};
                 o = o[n];
             } else {
                 o[n] = val;
