@@ -19,20 +19,12 @@ var Engine = Class.extend({
     init: function(gameConst) {
         this.initCanvas();
 
-        this.ui = document.getElementById('ui');
-        this.ui.style.display = "block";
-
-        this.scaleUI(config.display.scale);
+        $('#ui').show();
 
         p.initDebug(this.context, config.display.scale);
-        p.dragNDrop(this.canvas);
+        p.dragNDrop(window);
 
         this.tick();
-
-        window.dom = {
-            ui: this.ui,
-            canvas: this.canvas
-        };
     },
 
     initCanvas: function() {
@@ -52,29 +44,20 @@ var Engine = Class.extend({
         this.resize();
     },
 
-    scaleUI: function(s) {
-        if (s == 1) ui.className = "small";
-        if (s == 2) ui.className = "normal";
-        if (s == 3) ui.className = "big";
-    },
-
     resize: function() {
-        var self = this;
-
         var w = window.innerWidth,
-            s = 1;
-        if (w > 840) s = 2;
-        if (w > 1260) s = 3;
-
-        this.scaleUI(s);
+            h = window.innerHeight,
+            s = (w > 1260 && h > 700) ? 3: 2;
 
         this.canvas.width = config.display.width * s;
         this.canvas.height = config.display.height * s;
         config.display.realwidth = this.canvas.width;
         config.display.realheight = this.canvas.height;
 
-
-        //if(w > 1700) s = 4; 
+        $('#ui').css('width', this.canvas.width);
+        var uh = $('#ui').css('height').replace('px', '');
+        $('#ui').css('padding-top', ~~(h/2-uh/2));
+        $('#canvas').css('left', ~~(w/2 - this.canvas.width/2) + "px").css('top', ~~(h/2 - this.canvas.height/2) + "px");
 
         if (!this.game) {
             config.display.scale = s;
@@ -127,18 +110,19 @@ var Engine = Class.extend({
     },
 
     tick: function() {
-        if (!this.game) return requestAnimFrame(this.tick.bind(this));
-
-        Stats.begin();
-        if(!this.game.paused) {
-            config.tick = (new Date()).getTime() - this.lastUpdate;
-            this.lastUpdate = this.lastUpdate + config.tick;
-
-            this.update();
+        if (!this.game || this.game.paused) {
+            if(this.game) this.draw();
+            return requestAnimFrame(this.tick.bind(this));
         }
 
+        Stats.begin();
+        config.tick = (new Date()).getTime() - this.lastUpdate;
+        this.lastUpdate = this.lastUpdate + config.tick;
+
+        this.update();
+
         Input.update();
-        
+
         requestAnimFrame(this.tick.bind(this));
         this.draw();
 
