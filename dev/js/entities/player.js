@@ -34,8 +34,23 @@ var Player = Entity.extend({
         this.addAnimation('walk', sheet, this.scale, .1, [1, 2, 3]);
         this.addAnimation('jump', sheet, this.scale, .15, [4, 5]);
         this.addAnimation('morph', sheet, this.scale, .09, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
+        this.addAnimation('endlevel', sheet, this.scale, .15, [16, 17, 18]);
         this.animation = this.animations['stand'];
         this.animations['walk'].flip.x = true;
+    },
+
+    endLevel: function(level) {
+        this.animation = this.animations['endlevel'];
+        this.animation.flip.x = true;
+
+
+        var pos = this.body.GetPosition();
+        pos.y -= this.height/2;
+
+        this.body.SetPosition(pos);
+
+        this.body.SetType(1);
+        this.body.SetLinearVelocity(new b2Vec2(30, 0));
     },
 
     update: function() {
@@ -52,7 +67,11 @@ var Player = Entity.extend({
             }
         }
 
-        if (!this.morphing) {
+        if(this.animation == this.animations['endlevel']) {
+            this.animation.alpha -= 0.005;
+        }
+
+        if (!this.morphing && this.animation != this.animations['endlevel']) {
             if (!Input.isDown(0)) this.handleMovement();
         }
     },

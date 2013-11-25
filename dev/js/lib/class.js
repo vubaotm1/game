@@ -59,11 +59,11 @@
         }
     };
 
-    Object.$merge = function(obj, other) {
+    Object.$merge = function(obj, other, override) {
         if(!obj || !other) return;
 
         for(var prop in other) {
-            if(!obj[prop]) obj[prop] = other[prop];
+            if(!obj[prop] || override) obj[prop] = other[prop];
         }
     }
 })();

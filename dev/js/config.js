@@ -1,6 +1,6 @@
 var Config = {
 
-    debug: true,
+    debug: false,
 
     tick: 0,
 
@@ -8,6 +8,10 @@ var Config = {
     defaultExt: {
         img: 'png',
         data: 'json'
+    },
+
+    message: {
+        top: 0,
     },
 
     perspective: {

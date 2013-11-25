@@ -32,7 +32,9 @@ var Assets = {
             this._stack.items = {};
             this._stack.total = 0;
         }
-        console.info(path + ' loaded ' + (new Date()).getTime() + ' - Completion: %c' + this.completion + ' %', 'color: green; font-size: 14px;');
+
+        $('#leveltitle').text(this.completion != 100 ? "Loading.. "+this.completion + "% done!" : '');
+        console.info(path + ' loaded - Completion: %c' + this.completion + ' %', 'color: green; font-size: 14px;');
 
     },
 
@@ -85,9 +87,7 @@ var Assets = {
             req.onreadystatechange = function() {
                 if(req.readyState == 4) {
                     var data = JSON.parse(req.responseText);
-                    if(resource.morphs) {
-                        data.morphs = resource.morphs;
-                    }
+                    Object.$merge(data, resource);
                     Object.$set(Assets.Data, p, data);
                     self._doneLoading(path);
                 }                           

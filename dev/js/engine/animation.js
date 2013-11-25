@@ -15,6 +15,8 @@ var Animation = Class.extend({
         y: false
     },
 
+    alpha: 1,
+
     init: function(tilesheet, scale, frametime, sequence, loop) {
         if(!tilesheet) throw("Tilesheet not found!");
 

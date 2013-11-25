@@ -1,8 +1,7 @@
 var Entity = require('./entity');
 
-var ChangeSpawn = Entity.extend({
-    done: 0,
-
+var EndLevel = Entity.extend({
+    done: false,
 
     init: function(x, y, options) {
         this.parent(x, y, 1, {
@@ -14,16 +13,16 @@ var ChangeSpawn = Entity.extend({
     },
 
     update: function(game) {
-        if(!this.done && this.body.m_userData.playerCollision) {
-            game.level.setSpawn(this.pos.x, this.pos.y);
+        if (!this.done && this.body.m_userData.playerCollision) {
+            game.endLevel();
             this.done = true;
-            game.showMessage('Spawnpoint set!', '#95FBAE', 1000, {top: "-=50"});
         }
     },
 
-    draw: function(ctx) { }
+    draw: function(ctx) {
+        this.parent(ctx);
 
-
+    }
 });
 
-module.exports = ChangeSpawn;
+module.exports = EndLevel;

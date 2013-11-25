@@ -7,6 +7,7 @@ var Keys = require('./engine/keys');
 var p = require('./engine/physics');
 
 var Assets = require('./engine/assets');
+var Message = require('./engine/message');
 
 var Game = Class.extend({
     player: null,
@@ -17,6 +18,13 @@ var Game = Class.extend({
 
     currentLevelData: null,
 
+    stats: {
+        restarts: 0,
+        deaths: 0,
+        starttime: 0,
+        transforms: 0
+    },
+
     init: function(context) {
         Input.bind("right", [Keys.D, Keys.RIGHT_ARROW]);
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
@@ -25,77 +33,84 @@ var Game = Class.extend({
         Input.bind("morph", [Keys.E]);
 
 
+        $('#ui').fadeIn(1000);
+        $('#icons-top .right').fadeIn(1000);
+
+
         this.context = context;
         this.loadLevel(Assets.Data.levels['intro']);
 
         var self = this;
         $('#levels').on('click', '.level', function() {
             var lvl = $(this).data('level');
-            $('#canvas').fadeTo(100, 0).delay(100).fadeTo(500, 1, function() {
-                if(lvl != '0') {
-                    $('#morphs').fadeIn(500);
-                }
-            });
-            $('#levels').hide();
-            $('#icons-top').show();
-            $('#icons-menu').hide();
+            self.stats.starttime = (new Date()).getTime();
             self.loadLevel(Assets.Data.levels[lvl]);
-            self.paused = false;
-            p.setPaused(false);
-            $('.pause').toggleClass('paused', false);
+            showLevels(false);
+            showGame();
         });
 
         $('.mute').click(function() {
             $('.mute').toggleClass('muted');
         });
 
+
+        $('#menu .menu').click(function() {
+            $('#leveltitle').hide();
+            showLevels(false);
+            showIntro(true);
+            showGame(false);
+            self.loadLevel(Assets.Data.levels['intro']);
+        });
+
+        var b;
         $('.pause').click(function() {
             var a = $('.pause');
             if (a.hasClass('paused')) {
-                a.removeClass('paused');
-                self.showGame();
+                self.pauseGame(false);
+                showGame();
+                b.fadeOut(300, function() {
+                    $(this).remove();
+                });
             } else {
-                a.addClass('paused');
-                $('#canvas').fadeTo(300, .05);
-                p.setPaused(true);
-                self.paused = true;
+                showGame(false, true);
+                self.pauseGame(true);
+                b = Message.spawn('Paused!', '#AAE0F4');
             }
         });
 
-        $('#icons-menu .menu').click(function() {
-            $('#levels').hide();
-            $('#icons-menu').hide();
-            $('#intro').show();
-            self.loadLevel(Assets.Data.levels['intro']);
-            self.paused = false;
-            p.setPaused(false);
-        })
-
         $('.play').click(function() {
-            self.showGame();
-            $('#morphs').delay(400).fadeIn(500);
-        })
+            $('#leveltitle').fadeIn();
+            showLevels(true);
+            showGame();
+            self.pauseGame(false);
+        });
+
+        $('#play').click(function() {
+            showIntro(false);
+            showLevels(true);
+            self.pauseGame(true);
+        });
 
         $('.restart').click(function() {
+            showLevels(false);
             $('#morphs').fadeOut(500);
             $('#canvas').fadeTo(300, .05, function() {
                 self.restartLevel();
-                self.showGame();
-                if(self.currentLevelData != Assets.Data.levels['0']) $('#morphs').delay(500).fadeIn(500);
+                showGame();
             });
         });
 
-
-        $('#icons-top .menu').click(function() {
-            $('#morphs').fadeOut(500);
-            $('#canvas').fadeTo(300, .05);
-            $('#levels').show();
-            $('#icons-top').hide();
-            $('#icons-menu').show();
-            self.paused = true;
-            p.setPaused(true);
+        $('.retry').click(function() {
+            showEnd(false);
+            showGame();
+            self.retryLevel();
         });
 
+        $('#icons-top .menu').click(function() {
+            showGame(false);
+            showLevels();
+            self.pauseGame(true);
+        });
 
         $('#morphs > div').on('click', 'div', function(e) {
             self.level.setActiveMorph($(this).attr('id') - 1);
@@ -114,6 +129,69 @@ var Game = Class.extend({
             $('#morphs > span').text(info);
         });
 
+        
+
+        $('#btns .menu').click(function() {
+            showEnd(false);
+            showLevels(true);
+        });
+
+        $('#btns .next').click(function(){
+            showGame(false);
+            showEnd(false);
+            self.nextLevel();
+            showGame();
+        });
+
+        this.initLevels();
+
+        if (config.debug) {
+            this.loadLevel(Assets.Data.levels['0']);
+            showIntro(false);
+            showGame();
+            this.stats.starttime = (new Date()).getTime();
+        }
+
+
+        function showGame(show, paused) {
+            if(show == undefined || show) {
+                $('#icons-top .left').fadeIn();
+                $('#canvas').fadeTo(300, 1);
+                if (self.currentLevelData != Assets.Data.levels['0']) $('#morphs').delay(400).fadeIn();
+            } else {
+                if(!paused) $('#icons-top .left').hide();
+                $('#canvas').fadeTo(300, 0.05);
+                $('#morphs').hide();
+            }
+        }
+
+        function showEnd(show) {
+            if(show == undefined || show) {
+                $('#end').fadeIn();
+            } else {
+                $('#end').hide();
+                $('#ui .message').remove();
+            }
+        }
+
+        function showIntro(show) {
+            if(show == undefined || show) {
+                $('#intro').fadeIn();
+            } else {
+                $('#intro').hide();
+            }
+        }
+
+        function showLevels(show) {
+            if(show == undefined || show) {
+                $('#levelselect').fadeIn();
+            } else {
+                $('#levelselect').hide();
+            }
+        }
+    },
+
+    initLevels: function() {
         var n = 0;
         for (var i in Assets.Data.levels) {
             if (isNaN(i)) continue;
@@ -122,12 +200,61 @@ var Game = Class.extend({
             lvlbtn.text("" + ++n);
             $('#levels').append(lvlbtn);
         }
+    },
 
-        if (config.debug) {
-            this.loadLevel(Assets.Data.levels['0']);
-            this.showGame();
+    showMessage: function(message, color, duration, options, nofade, callback) {
+        return Message.spawn(message, color, duration, options, nofade, callback);
+    },
+
+    pauseGame: function(paused) {
+        if (paused == undefined) paused = true;
+        this.paused = paused;
+        p.setPaused(paused);
+
+        var a = $('.pause');
+        if (!paused && a.hasClass('paused')) {
+            a.removeClass('paused');
+        } else {
+            if (paused && !a.hasClass('paused')) a.addClass('paused');
         }
+    },
 
+    endLevel: function() {
+        this.level.camera.max.x = Infinity;
+        this.level.camera.min.y = -Infinity;
+        this.level.camera.max.y = Infinity;
+        this.level.camera.min.x = -Infinity;
+        this.level.player.endLevel();
+
+
+        $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime)/1000)+'');
+        $('#stats #restarts').text(this.stats.restarts+'');
+        $('#stats #deaths').text(this.stats.deaths+'');
+        $('#stats #transforms').text(this.stats.transforms+'');
+
+        $('#icons-top .left').fadeOut();
+        var a, b = $('#end').height();
+        a = this.showMessage('Level Complete!', '#99FC87', 1500, {
+            top: config.message.top - b,
+            color: jQuery.Color('#FBCF95'),
+            el: "#ui"
+        }, true, function() {
+            var h = a.height();
+
+            $('#end').css('top', config.message.top - b / 2 + h).fadeIn(400);
+        });
+    },
+
+    retryLevel: function() {
+        this.stats.restarts = 0;
+        this.stats.starttime = (new Date()).getTime();
+        this.loadLevel(this.currentLevelData);
+    },
+
+    nextLevel: function() {
+        this.stats.restarts = 0;
+        this.stats.starttime = (new Date()).getTime();
+        this.loadLevel(Assets.Data.levels[this.currentLevelData.next]);
     },
 
     showGame: function() {
@@ -136,11 +263,10 @@ var Game = Class.extend({
         $('#icons-menu').hide();
         $('#intro').hide();
         $('#canvas').fadeTo(300, 1);
-        this.paused = false;
-        p.setPaused(false);
     },
 
     restartLevel: function() {
+        this.stats.restarts++;
         this.loadLevel(this.currentLevelData);
     },
 
@@ -149,7 +275,10 @@ var Game = Class.extend({
         this.level = new Level(level);
         this.currentLevelData = level;
 
-        if(level == Assets.Data.levels['0']) this.level.setActiveMorph(2);
+        $('#leveltitle').text(level.title);
+
+        if (level == Assets.Data.levels['0']) this.level.setActiveMorph(2);
+        this.pauseGame(false);
     },
 
     update: function() {

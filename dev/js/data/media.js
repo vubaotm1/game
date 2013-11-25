@@ -41,8 +41,16 @@ var media = {
                 file: 'first'
             },
             0: {
+                title: "Introduction",
                 morphs: {'Spawn.Movable': 1},
-                file: '0'
+                file: '0',
+                next: '1'
+            },
+            1: {
+                title: "Intro!!",
+                morphs: {'Spawn.Movable': 2},
+                file: '0',
+                next: '0'
             }
         }
     }

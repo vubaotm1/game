@@ -1,8 +1,10 @@
 module.exports = {
     Intro: require('./intro'),
     ChangeSpawn: require('./changespawn'),
+    EndLevel: require('./endlevel'),
     Lava: require('./lava'),
     Player: require('./player'),
+    Emitter: require('./particleemitter'),
     Control: { 
         Test: require('./control/test') 
     },

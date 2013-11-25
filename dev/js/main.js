@@ -1,18 +1,26 @@
+
 require('./lib/class.js');
 require('./lib/requestAnimFrame');
-window.Stats = require('./lib/stats');
 
 var Input = require('./engine/input');
 var config = require('./config');
+// DEBUG STUFF
+
+window.Stats = require('./lib/stats');
+
 window.debug = {
     draws: 0,
     bounciness: 0.5
 }
 var dat = require('./lib/dat.gui');
 window.gui = new dat.GUI({autoPlace: true});
+
 gui.add(debug, 'draws').listen();
 gui.add(config.physics, 'debug');
 gui.close();
+
+// GLOBALS
+
 
 var engine;
 $(function(){
@@ -27,12 +35,9 @@ $(document).keydown(Input._down.bind(Input));
 $(document).keyup(Input._up.bind(Input));
 $(document).mousedown(Input._down.bind(Input));
 $(document).mouseup(Input._up.bind(Input));
-
-
-$('#play').click(function() {
-    $('#intro').hide();
-    $('#levels').show();
-});
+$(document).bind("contextmenu",function(e){
+      return false;
+}); 
 
 
 $('#github').click(function() {

@@ -26,7 +26,7 @@ var Tilesheet = Graphic.extend({
     },
 
     drawTile: function(ctx, x, y, tile, scale, flip, angle, alpha, ignoreoffscreen) {
-        if (!this.loaded) return;
+        if (!this.loaded || alpha <= 0) return;
 
         var rect = this.getRect(tile || 0, scale);
         var data = this.scaled[scale] || this.image;
@@ -59,8 +59,8 @@ var Tilesheet = Graphic.extend({
         ctx.save();
 
 
-        if(alpha) {
-            ctx.globalAlpha = alpha;
+        if(alpha !== undefined && alpha < 1) {
+            ctx.globalAlpha = Math.max(0, Math.min(alpha, 1));
         }
 
         if (flip) ctx.scale(sx, sy);

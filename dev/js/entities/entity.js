@@ -7,6 +7,7 @@ var p = require('../engine/physics');
 
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
+
 var Entity = Class.extend({
     width: 16,
     height: 16,
@@ -43,7 +44,7 @@ var Entity = Class.extend({
         this.animations = {};
         this.initBody(bodyoptions);
     },
-
+    
     applyScale: function(n) {
         return Math.round(n*config.display.scale);
     },

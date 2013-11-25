@@ -19,8 +19,6 @@ var Engine = Class.extend({
     init: function(gameConst) {
         this.initCanvas();
 
-        $('#ui').show();
-
         p.initDebug(this.context, config.display.scale);
         p.dragNDrop(window);
 
@@ -58,6 +56,8 @@ var Engine = Class.extend({
         var uh = $('#ui').css('height').replace('px', '');
         $('#ui').css('padding-top', ~~(h/2-uh/2));
         $('#canvas').css('left', ~~(w/2 - this.canvas.width/2) + "px").css('top', ~~(h/2 - this.canvas.height/2) + "px");
+        config.message.top = ~~(h/2 - 50);
+
 
         if (!this.game) {
             config.display.scale = s;
@@ -66,6 +66,7 @@ var Engine = Class.extend({
                 if (!this.game) {
                     this.game = new game(this.context);
                 }
+                
             }, this);
         }
 
