@@ -41,16 +41,28 @@ var media = {
                 file: 'first'
             },
             0: {
-                title: "Introduction",
-                morphs: {'Spawn.Movable': 1},
+                title: "Knowing your keys",
+                morphs: {'Spawn.Immovable': 1},
                 file: '0',
                 next: '1'
             },
             1: {
-                title: "Intro!!",
-                morphs: {'Spawn.Movable': 2},
-                file: '0',
-                next: '0'
+                title: "Building up",
+                morphs: {'Spawn.Immovable': 2},
+                file: '1',
+                next: '2'
+            },
+            2: {
+                title: "Know your jump",
+                morphs: {'Spawn.Immovable': 1},
+                file: '2',
+                next: '3'
+            },
+            3: {
+                title: "Efficient building",
+                morphs: {'Spawn.Immovable': 3},
+                file: '3',
+                next: '2'
             }
         }
     }

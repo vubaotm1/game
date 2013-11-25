@@ -50,7 +50,7 @@ var Player = Entity.extend({
         this.body.SetPosition(pos);
 
         this.body.SetType(1);
-        this.body.SetLinearVelocity(new b2Vec2(30, 0));
+        this.body.SetLinearVelocity(new b2Vec2(30, -15));
     },
 
     update: function() {
@@ -68,7 +68,7 @@ var Player = Entity.extend({
         }
 
         if(this.animation == this.animations['endlevel']) {
-            this.animation.alpha -= 0.005;
+            this.animation.alpha -= 0.008;
         }
 
         if (!this.morphing && this.animation != this.animations['endlevel']) {

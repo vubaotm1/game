@@ -4,6 +4,7 @@ tasks
 
 # dist - gh-pages subtree..
 
+dist
 dev/js/lib/physicsjs
 
 *.psd
@@ -14,6 +15,8 @@ dev/js/lib/physicsjs
 
 *.pickle
 *.bak
+*.txt
+*.rar
 
 *.tmx
 *.tsx
