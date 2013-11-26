@@ -25,6 +25,9 @@ var Game = Class.extend({
         transforms: 0
     },
 
+    shakeDuration: -1,
+    shakeForce: 0,
+
     init: function(context) {
         Input.bind("right", [Keys.D, Keys.RIGHT_ARROW]);
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
@@ -80,8 +83,7 @@ var Game = Class.extend({
         });
 
         $('.play').click(function() {
-            $('#leveltitle').fadeIn();
-            showLevels(true);
+            showLevels(false);
             showGame();
             self.pauseGame(false);
         });
@@ -156,6 +158,7 @@ var Game = Class.extend({
 
         function showGame(show, paused) {
             if(show == undefined || show) {
+                $('#leveltitle').fadeIn();
                 $('#icons-top .left').fadeIn();
                 $('#canvas').fadeTo(300, 1);
                 if (self.currentLevelData != Assets.Data.levels['0']) $('#morphs').delay(400).fadeIn();
@@ -288,6 +291,11 @@ var Game = Class.extend({
         this.pauseGame(false);
     },
 
+    shake: function(duration, force) {
+        this.shakeForce = force;
+        this.shakeDuration = duration;
+    },
+
     update: function() {
         if(Input.isPressed('restart')) {
             var self = this;
@@ -302,6 +310,16 @@ var Game = Class.extend({
 
 
         this.level.update(this);
+
+        if (this.shakeDuration > 0) {
+            this.shakeDuration = this.shakeDuration - config.tick;
+            var forceX = Math.random()*this.shakeForce/2 - this.shakeForce;
+            var forceY = Math.random()*this.shakeForce/2 - this.shakeForce;
+            config.display.shake = {x: forceX, y: forceY};
+
+        } else {
+            config.display.shake = {x: 0, y: 0};
+        }
     },
 
     draw: function() {

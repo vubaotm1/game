@@ -62,7 +62,13 @@ var media = {
                 title: "Efficient building",
                 morphs: {'Spawn.Immovable': 3},
                 file: '3',
-                next: '2'
+                next: '4'
+            },
+            4: {
+                title: "Introducing death",
+                morphs: {'Spawn.Immovable': 2},
+                file: '4',
+                next: '5'
             }
         }
     }

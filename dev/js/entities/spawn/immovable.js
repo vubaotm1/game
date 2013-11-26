@@ -12,7 +12,7 @@ var Ent = Entity.extend({
     init: function(x, y) {
         var bodyoptions = {
             fixed: "y",
-            density: 90,
+            density: 90
         };
 
         this.parent(x, y, 1, bodyoptions);

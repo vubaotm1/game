@@ -24,6 +24,8 @@ var Player = Entity.extend({
 
     bodyType: 'Player',
 
+    hitTime: 0,
+
     init: function(x, y, sheet) {
         this.parent(x, y, 1);
 
@@ -33,8 +35,9 @@ var Player = Entity.extend({
         this.addAnimation('stand', sheet, this.scale, .1, [0]);
         this.addAnimation('walk', sheet, this.scale, .1, [1, 2, 3]);
         this.addAnimation('jump', sheet, this.scale, .15, [4, 5]);
-        this.addAnimation('morph', sheet, this.scale, .09, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
+        this.addAnimation('morph', sheet, this.scale, .08, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
         this.addAnimation('endlevel', sheet, this.scale, .15, [16, 17, 18]);
+        this.addAnimation('hit', sheet, this.scale, .02, [19, 20]);
         this.animation = this.animations['stand'];
         this.animations['walk'].flip.x = true;
     },
@@ -53,12 +56,40 @@ var Player = Entity.extend({
         this.body.SetLinearVelocity(new b2Vec2(30, -15));
     },
 
-    update: function() {
+    kill: function(game, time) {
+        //if (this.isMorphing()) return;
+        if(this.animation === this.animations['endlevel']) return;
+        if(this.animation !== this.animations['hit']) {
+            this.morphing = false;
+            game.level.morphing = false;
+            this.animation = this.animations['hit'];
+            this.animation.flip.x = true;
+            this.hitTime = time || 300;
+            game.shake(time || 300, 20);
+        }
+
+        this.hitTime = this.hitTime - config.tick;
+        if(this.hitTime < 0) {
+            game.level.respawnPlayer(true);
+        }
+    },
+
+    respawn: function(x, y) {
+        this.setPos(x, y);
+        this.animation = this.animations['stand'];
+    },
+
+    update: function(game) {
+        if (this.hitTime > 0) {
+            this.kill(game);
+        }
+
         this.parent();
 
         if (this.morphing) {
             if (this.animation != this.animations['morph']) {
                 this.animation = this.animations['morph'];
+                this.animation.flip.x = this.animations['walk'].flip.x;
                 this.animation.reset();
             } else {
                 if (this.animation.looped) {
@@ -71,13 +102,14 @@ var Player = Entity.extend({
             this.animation.alpha -= 0.008;
         }
 
-        if (!this.morphing && this.animation != this.animations['endlevel']) {
+        if (!this.morphing && this.animation != this.animations['endlevel'] && this.animation != this.animations['hit']) {
             if (!Input.isDown(0)) this.handleMovement();
         }
     },
 
     initMorph: function() {
-        this.morphing = true;
+        if(this.animation != this.animations['endlevel'] && this.animation != this.animations['hit']) this.morphing = true;
+        return this.morphing;
     },
 
     isMorphing: function() {

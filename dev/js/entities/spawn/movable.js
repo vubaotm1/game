@@ -14,6 +14,9 @@ var Ent = Entity.extend({
             density: 40,
             bottom: {
                 friction: 0.5
+            },
+            top: {
+                friction: 0.1
             }
         };
 

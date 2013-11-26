@@ -67,6 +67,7 @@ var Level = Class.extend({
         this.realwidth = this.tilewidth * this.width;
 
         this.initLayers(data.layers);
+        this.initEntities();
 
 
         this.player = new Entities.Player(this.spawn.x, this.spawn.y);
@@ -117,9 +118,10 @@ var Level = Class.extend({
         }
 
         this.setActiveMorph(0);
-    },
+    },  
 
     setActiveMorph: function(i) {
+        if(this.morphing) return;
         this.activemorph = i;
         $('#morphs > div div').removeClass('active');
         $('#morphs > div #' + (i + 1)).addClass('active');
@@ -145,12 +147,15 @@ var Level = Class.extend({
     morph: function(other) {
         if (typeof(other) == "string") other = Object.$get(Entities, other);
 
+        if(!this.player.initMorph()) return false;
+
         this.stats.transforms++;
 
         this.morphing = true;
-        this.player.initMorph();
         this.morphSubject = other;
         p.setPaused(other.pauseWhileMorph);
+
+        return true;
     },
 
     respawnPlayer: function(dead) {
@@ -169,7 +174,7 @@ var Level = Class.extend({
             });
             $('#container').fadeTo(50, 0.05).delay(100).fadeTo(300, 1);
         }
-        this.player.setPos(this.spawn.x, this.spawn.y);
+        this.player.respawn(this.spawn.x, this.spawn.y);
     },
 
     doMorph: function() {
@@ -208,24 +213,56 @@ var Level = Class.extend({
         }
     },
 
+    initEntities: function() {
+        var named = {};
+        for (var i = 0; i < this.entities.length; i++) {
+            var ent = this.entities[i];
+            if (ent._name) {
+                named[ent._name] = ent;
+            }
+        }
+
+        for (var i = 0; i < this.entities.length; i++) {
+            var ent = this.entities[i];
+            if (ent._target) {
+                var _targets = ent._target.split(",");
+                var targets = [];
+                
+                for(var n = 0; n < _targets.length; n++) {
+                    if(named[_targets[n]]) {
+                        targets.push(named[_targets[n]]);
+                    }
+                }
+                ent.targets = targets;
+            }
+        }
+    },
+
     initLayer: function(layer) {
-        if (layer.type == "tilelayer") {
-            if (layer.properties.type == "perspective") {
+        if (layer.type === "tilelayer") {
+            if (layer.properties.type === "perspective") {
                 this.layers.push(new PerspectiveLayer(layer, this.width, this.height, this.tilewidth, this.tileheight));
             }
-        } else if (layer.type == "objectgroup") {
-            if (layer.properties.type == "collision") {
+        } else if (layer.type === "objectgroup") {
+            if (layer.properties.type === "collision") {
                 this.layers.push(new CollisionLayer(layer));
             }
-            if (layer.properties.type == "image") {
+            if (layer.properties.type === "image") {
                 this.layers.push(new ImageLayer(layer));
             }
-            if (layer.properties.type == "entity") {
+            if (layer.properties.type === "entity") {
                 for (var i = 0; i < layer.data.length; i++) {
                     var ent = layer.data[i];
                     var e = Object.$get(Entities, ent.name);
-                    if (e && ent.type != "region") {
-                        this.entities.push(new e(ent.x, ent.y, ent));
+                    if (e && ent.type !== "region") {
+                        var o = {};
+                        if(ent.properties && ent.properties.target || ent.properties.name) {
+                            o._target = ent.properties.target;
+                            o._name = ent.properties.name;
+                        }
+                        var e = new e(ent.x, ent.y, ent);
+                        Object.$merge(e, o);
+                        this.entities.push(e);
                     } else {
                         this.initRegion(ent);
                     }
@@ -253,9 +290,16 @@ var Level = Class.extend({
 
         this.camera.follow(this.player);
 
+        if(this.player.pos.x > this.camera.max.x || 
+            this.player.pos.x + this.player.width < this.camera.min.x || 
+            this.player.pos.y > this.camera.max.y || 
+            this.player.pos.y + this.player.height < this.camera.min.y) this.player.kill(game);
+ 
         if (Input.isPressed('morph')) {
             if (this.morphs[this.activemorph] && this.morphs[this.activemorph].count > 0) {
-                this.morph(this.morphs[this.activemorph].type);
+                if(this.morph(this.morphs[this.activemorph].type)) {
+                    game.shake(300, 20);
+                }
             }
         }
 

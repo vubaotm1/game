@@ -1,7 +1,7 @@
 var Config = {
 
     debug: {
-        level: '3'
+        level: '4'
     },
 
     tick: 0,
@@ -22,7 +22,8 @@ var Config = {
         pHeight: 21,
         asset: 'tilesets.main',
         align: 'b-r',
-        depth: 0
+        depth: 0,
+        tilesPerRow: 7
     },
 
     image: {
@@ -53,6 +54,11 @@ var Config = {
             x: 0,
             y: 0
         },
+
+        shake: {
+            x: 0,
+            y: 0
+        }, 
 
         fullscreen: false,
 

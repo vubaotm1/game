@@ -16,10 +16,22 @@ var PerspectiveLayer = Layer.extend({
 
     depth: 0,
 
+    tilesPerRow: 0,
+
     init: function(data, w, h, tw, th) {
         this.parent(data, w, h, tw, th);
 
         Object.$merge(data.properties, config.perspective);
+
+        this.tilesPerRow = config.perspective.tilesPerRow;
+
+        var d = [];
+        for(var i = 0; i < this.data.length; i++) {
+            var n = ~~(this.data[i] / (this.tilesPerRow + 1));
+            d[i] = this.data[i] + n * this.tilesPerRow;
+        }
+
+        this.data = d;
 
         this.asset = Object.$get(Assets.Graphics, data.properties.asset);
         this.definition = data.properties.definition;
@@ -67,13 +79,14 @@ var PerspectiveLayer = Layer.extend({
             for (var y = eh; y >= sy; y--) {
                 xf = f ? ew - (x - sx) : x;
 
-                xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
-                yy = (y * this.tileheight + this.offsetY) * this.scale;
-
                 tile = this.data[xf + y * this.width] - 1;
                 if (tile < 0) continue;
 
-                tile += f ? 7 : 0;
+                xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
+                yy = (y * this.tileheight + this.offsetY) * this.scale;
+
+
+                tile += f ? this.tilesPerRow : 0;
 
                 this.asset.drawTile(ctx, xx, yy, tile, this.scale);
             }

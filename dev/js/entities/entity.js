@@ -7,6 +7,7 @@ var p = require('../engine/physics');
 
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
+var hashnum = 0;
 
 var Entity = Class.extend({
     width: 16,
@@ -33,7 +34,15 @@ var Entity = Class.extend({
 
     bodyType: 'Box',
 
+    targets: null,
+
+    hash: null,
+
+    physicsInfo: null,
+
     init: function(x, y, scale, bodyoptions) {
+        this.hash = hashnum++;
+
         this.pos = {
             x: x,
             y: y
@@ -56,7 +65,15 @@ var Entity = Class.extend({
     },
 
     initBody: function(bodyoptions) {
+        if(bodyoptions) {
+            bodyoptions.ent = this;
+        }
+
         this.body = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale, bodyoptions);
+    
+        if (bodyoptions && bodyoptions.isSensor) {
+            this.physicsInfo = this.body.m_userData
+        }
     },
 
     removeBody: function() {
@@ -71,7 +88,14 @@ var Entity = Class.extend({
         this.animation = this.animations[name];
     },
 
-    update: function() {
+    triggered: function(by) { },
+
+    trigger: function() {
+        for(var i = 0; i < this.targets.length; i++)
+            this.targets[i].triggered(this);
+    },
+
+    update: function(game) {
         if(this.animation) {
             this.animation.update();
         }

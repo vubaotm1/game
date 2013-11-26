@@ -34,6 +34,12 @@ listener.BeginContact = function(contact) {
             if (bodyDataB) {
                 bodyDataB.playerCollision = true;
             }
+        } else {
+            if (bodyDataA) {
+                if(bodyDataA.collisions && fixtureDataB && fixtureDataB.ent) {
+                    bodyDataA.collisions.push(fixtureDataB.ent);
+                }
+            }
         }
     }
 
@@ -44,6 +50,12 @@ listener.BeginContact = function(contact) {
         if (fixtureDataB.id == 'player') {
             if (bodyDataA) {
                 bodyDataA.playerCollision = true;
+            }
+        } else {
+            if (bodyDataB && fixtureDataA && fixtureDataA.ent) {
+                if(bodyDataB.collisions) {
+                    bodyDataB.collisions.push(fixtureDataA.ent);
+                }
             }
         }
     }
@@ -62,6 +74,12 @@ listener.EndContact = function(contact) {
             if (bodyDataB) {
                 bodyDataB.playerCollision = false;
             }
+        } else {
+            if (bodyDataA) {
+                if(bodyDataA.collisions && fixtureDataB && fixtureDataB.ent) {
+                    bodyDataA.collisions.splice(bodyDataA.collisions.indexOf(fixtureDataV.ent), 1);
+                }
+            }
         }
     }
 
@@ -72,6 +90,12 @@ listener.EndContact = function(contact) {
         if (fixtureDataB.id == 'player') {
             if (bodyDataA) {
                 bodyDataA.playerCollision = false;
+            }
+        } else {
+            if (bodyDataB && fixtureDataA && fixtureDataA.ent) {
+                if(bodyDataB.collisions) {
+                    bodyDataB.collisions.splice(bodyDataB.collisions.indexOf(fixtureDataA.ent), 1);
+                }
             }
         }
     }
@@ -182,6 +206,8 @@ var Physics = {
         bd.type = b2Body[options.bodytype];
 
         var body = this.world.CreateBody(bd);
+
+
         body.SetFixedRotation(options.fixedrotation);
 
         var shape = new b2PolygonShape();
@@ -196,10 +222,15 @@ var Physics = {
         if (fd.isSensor) {
             body.SetUserData({
                 playerCollision: false,
+                collisions: [],
                 sensor: true
             });
         }
-        body.CreateFixture(fd);
+        var fix = body.CreateFixture(fd);
+        fix.SetUserData({
+            id: 'spawn',
+            ent: options.ent
+        });
 
         if (options.top) {
             shape.SetAsOrientedBox((w / 2) - 1.2, 0.3, new b2Vec2(w / 2, -0.3), 0);

@@ -64,8 +64,8 @@ var Camera = Class.extend({
         this.pos.x = this.move('x', entity.pos.x, entity.width);
         this.pos.y = this.move('y', entity.pos.y, entity.height);
 
-        config.display.offset.x = -this.pos.x * config.display.scale;
-        config.display.offset.y = -this.pos.y * config.display.scale;
+        config.display.offset.x = -this.pos.x * config.display.scale + config.display.shake.x;
+        config.display.offset.y = -this.pos.y * config.display.scale + config.display.shake.y;
     },
 
 
