@@ -159,7 +159,7 @@ var Physics = {
 
         var fd = new b2FixtureDef();
         fd.shape = shape;
-        fd.density = 4;
+        fd.density = 1;
         fd.friction = 0.5;
         fd.restitution = 0.2;
 
@@ -245,13 +245,16 @@ var Physics = {
             body.CreateFixture(fd);
         }
 
+        var joint;
         if (options.fixed) {
             body.SetFixedRotation(false);
             var pjd = new b2PrismaticJointDef();
             var axis = options.fixed == "y" ? new b2Vec2(0, 1) : new b2Vec2(1, 0);
-            pjd.Initialize(this.world.GetGroundBody(), body, new b2Vec2(0, 0), axis);
-            var joint = this.world.CreateJoint(pjd);
+            pjd.Initialize(body, this.world.GetGroundBody(), new b2Vec2(0, 0), axis);
+            joint = this.world.CreateJoint(pjd);
         }
+
+        if (joint) return {body: body, joint: joint};
 
         return body;
     },

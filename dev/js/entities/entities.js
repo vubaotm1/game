@@ -1,13 +1,20 @@
 module.exports = {
-    Intro: require('./intro'),
-    ChangeSpawn: require('./changespawn'),
-    EndLevel: require('./endlevel'),
-    Lava: require('./lava'),
-    Laser: require('./scenery/Laser'),
+
+
+    Intro: require('./actions/intro'),
+    ChangeSpawn: require('./actions/changespawn'),
+    EndLevel: require('./actions/endlevel'),
+
+
+    Lava: require('./scenery/lava'),
+    Laser: require('./scenery/laser'),
+
+
     Player: require('./player'),
-    Emitter: require('./particleemitter'),
-    Control: { 
-        Test: require('./control/test') 
+
+
+    Control: {
+        Test: require('./control/test')
     },
     Spawn: {
         Test: require('./spawn/test'),

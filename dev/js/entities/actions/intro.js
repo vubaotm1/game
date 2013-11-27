@@ -1,4 +1,4 @@
-var Entity = require('./entity');
+var Entity = require('../entity');
 
 var Intro = Entity.extend({
     done: false,

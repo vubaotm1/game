@@ -24,6 +24,7 @@ var Entity = Class.extend({
     },
 
     body: null,
+    joint: null,
 
     scale: 1,
 
@@ -69,8 +70,16 @@ var Entity = Class.extend({
             bodyoptions.ent = this;
         }
 
-        this.body = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale, bodyoptions);
-    
+        var b = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale, bodyoptions);
+        
+        if (b && b.body && b.joint) {
+            this.body = b.body;
+            this.joint = b.joint;
+        } else {
+            this.body = b;
+        }
+
+
         if (bodyoptions && bodyoptions.isSensor) {
             this.physicsInfo = this.body.m_userData
         }

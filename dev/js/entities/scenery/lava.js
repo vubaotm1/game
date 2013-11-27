@@ -1,11 +1,6 @@
-var Entity = require('./entity');
-var config = require('../config');
+var Entity = require('../entity');
 
 var Lava = Entity.extend({
-
-    delay: 0,
-
-
     init: function(x, y, options) {
         this.parent(x, y, 1, {
             width: options.width,
@@ -16,7 +11,6 @@ var Lava = Entity.extend({
     },
 
     update: function(game) {
-        this.delay -= config.tick;
         if (this.body.m_userData.playerCollision) game.level.player.kill(game, 500);
     },
 
