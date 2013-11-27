@@ -8,6 +8,21 @@ var media = {
             spawn: {
                 file: 'spawn',
                 tilesize: 20
+            },
+            door: {
+                file: 'door',
+                tilewidth: 22,
+                tileheight: 42
+            },
+            button: {
+                file: 'button',
+                tilewidth: 22,
+                tileheight: 21
+            },
+            laser: {
+                file: 'laser',
+                tilewidth: 17,
+                tileheight: 16
             }
         },
         debug: {

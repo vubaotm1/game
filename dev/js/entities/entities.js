@@ -5,9 +5,13 @@ module.exports = {
     ChangeSpawn: require('./actions/changespawn'),
     EndLevel: require('./actions/endlevel'),
 
+    Button: require('./scenery/button'),
+    Door: require('./scenery/door'),
+
 
     Lava: require('./scenery/lava'),
     Laser: require('./scenery/laser'),
+    LaserBlock: require('./scenery/laserblock'),
 
 
     Player: require('./player'),

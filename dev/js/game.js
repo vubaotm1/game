@@ -308,6 +308,10 @@ var Game = Class.extend({
             });
         }
 
+        if(Input.isPressed(Keys.P)) {
+            config.physics.debug = !config.physics.debug;
+        }
+
 
         this.level.update(this);
 

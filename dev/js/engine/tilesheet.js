@@ -11,7 +11,9 @@ var Tilesheet = Graphic.extend({
         y: 0
     },
 
-    r: 360*Math.PI/180,
+    // drawRegion: null,
+
+    r: 360 * Math.PI / 180,
 
     init: function(path, options, callback) {
         this.parent(path, options, callback);
@@ -21,8 +23,8 @@ var Tilesheet = Graphic.extend({
 
 
         this.pivot = {};
-        this.pivot.x = this.tilewidth/2;
-        this.pivot.y = this.tileheight/2;
+        this.pivot.x = this.tilewidth / 2;
+        this.pivot.y = this.tileheight / 2;
     },
 
     drawTile: function(ctx, x, y, tile, scale, flip, angle, alpha, ignoreoffscreen) {
@@ -39,7 +41,7 @@ var Tilesheet = Graphic.extend({
         x = this.applyScale(x) + ~~config.display.offset.x;
         y = this.applyScale(y) + ~~config.display.offset.y;
 
-        if(angle) {
+        if (angle) {
             // TODO -> FIX
             var rw = config.display.realwidth;
             var rh = config.display.realheight;
@@ -51,15 +53,15 @@ var Tilesheet = Graphic.extend({
             var h = rect.height;
 
             if (xx + w < 0 || xx > rw || yy + h < 0 || yy > rh) return;
-            if(config.fog.enabled &&
-               (xx < config.fog.area.x || xx + w > rw - config.fog.area.x ||
-               yy < config.fog.area.y || yy + h > rh - config.fog.area.y)) return;
+            if (config.fog.enabled &&
+                (xx < config.fog.area.x || xx + w > rw - config.fog.area.x ||
+                    yy < config.fog.area.y || yy + h > rh - config.fog.area.y)) return;
         }
 
         ctx.save();
 
 
-        if(alpha !== undefined && alpha < 1) {
+        if (alpha !== undefined && alpha < 1) {
             ctx.globalAlpha = Math.max(0, Math.min(alpha, 1));
         }
 
@@ -67,7 +69,8 @@ var Tilesheet = Graphic.extend({
         if (angle) {
             ctx.translate(x, y);
             ctx.rotate(angle);
-            x = 0; y = 0;
+            x = 0;
+            y = 0;
             ignoreoffscreen = true;
         }
 
@@ -79,7 +82,6 @@ var Tilesheet = Graphic.extend({
     getRect: function(tile, scale) {
         scale = scale || 1;
 
-
         var w = (tile >= 0) ? this.tilewidth : this.width;
         var h = (tile >= 0) ? this.tileheight : this.height;
 
@@ -88,6 +90,12 @@ var Tilesheet = Graphic.extend({
         var x = ~~ (tile * this.tilewidth) % this.width;
         var y = ~~ (tile * this.tilewidth / this.width) * this.tileheight;
 
+        // if(this.drawRegion) {
+        //     x = x+this.drawRegion.x;
+        //     y = y+this.drawRegion.y;
+        //     w = this.drawRegion.w;
+        //     h = this.drawRegion.h;
+        // }
 
         return {
             x: this.applyScale(x * scale),

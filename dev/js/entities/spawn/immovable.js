@@ -24,6 +24,6 @@ var Ent = Entity.extend({
 Ent.control = false;
 Ent.pauseWhileMorph = false;
 Ent.bgpos = {x: 60*1, y: 0};
-Ent.info = "Spawns a static block you can stand on";
+Ent.info = "Spawns a static block you can jump on";
 
 module.exports = Ent;

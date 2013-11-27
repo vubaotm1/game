@@ -1,7 +1,7 @@
 var Config = {
 
     debug: {
-        level: '4'
+        level: '5'
     },
 
     tick: 0,
@@ -23,7 +23,13 @@ var Config = {
         asset: 'tilesets.main',
         align: 'b-r',
         depth: 0,
-        tilesPerRow: 7
+        tilesPerRow: 7,
+        // base: {
+        //     x: 5,
+        //     y: 5,
+        //     w: 17,
+        //     h: 16
+        // }
     },
 
     image: {

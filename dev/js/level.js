@@ -312,8 +312,8 @@ var Level = Class.extend({
         }
 
         this.entities.sort(function(a, b) {
-            if (a.foreground) return 1;
-            if (b.foreground) return -1;
+            if (a.foreground || b.background) return 1;
+            if (b.foreground || a.background) return -1;
             if (a.pos.y < b.pos.y) return 1;
             if (a.pos.y > b.pos.y) return -1;
             if (a.pos.x > b.pos.x) return 1;

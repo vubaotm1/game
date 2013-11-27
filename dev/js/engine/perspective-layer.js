@@ -16,6 +16,8 @@ var PerspectiveLayer = Layer.extend({
 
     depth: 0,
 
+    // drawRegion: null,
+
     tilesPerRow: 0,
 
     init: function(data, w, h, tw, th) {
@@ -26,10 +28,13 @@ var PerspectiveLayer = Layer.extend({
         this.tilesPerRow = config.perspective.tilesPerRow;
 
         var d = [];
-        for(var i = 0; i < this.data.length; i++) {
-            var n = ~~(this.data[i] / (this.tilesPerRow + 1));
+        for (var i = 0; i < this.data.length; i++) {
+            var n = ~~ (this.data[i] / (this.tilesPerRow + 1));
             d[i] = this.data[i] + n * this.tilesPerRow;
         }
+
+        // this.drawRegion = data.properties.onlybase ? data.properties.base : null;
+        // console.log(this.drawRegion);
 
         this.data = d;
 
@@ -74,6 +79,18 @@ var PerspectiveLayer = Layer.extend({
         ew = Math.min(this.width - 1, ew);
         eh = Math.min(this.height - 1, eh);
 
+        // if (this.drawRegion) {
+        //     this.asset.drawRegion = {
+        //         x: this.drawRegion.x,
+        //         y: this.drawRegion.y,
+        //         w: this.drawRegion.w,
+        //         h: this.drawRegion.h
+        //     };
+        //     if (f) {
+        //         this.asset.drawRegion.x = 0;
+        //     }
+        // }
+
         var xf, xx, yy, tile;
         for (var x = ew; x >= sx; x--) {
             for (var y = eh; y >= sy; y--) {
@@ -85,12 +102,19 @@ var PerspectiveLayer = Layer.extend({
                 xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
                 yy = (y * this.tileheight + this.offsetY) * this.scale;
 
+                // if (this.drawRegion) {
+                //     xx = xx + this.drawRegion.x;
+                //     yy = yy + this.drawRegion.y;
+                // }
+
 
                 tile += f ? this.tilesPerRow : 0;
 
                 this.asset.drawTile(ctx, xx, yy, tile, this.scale);
             }
         }
+
+        this.asset.drawRegion = null;
     }
 });
 

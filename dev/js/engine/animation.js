@@ -17,14 +17,23 @@ var Animation = Class.extend({
 
     alpha: 1,
 
+    offset: {
+        x: 0,
+        y: 0
+    },
+
     init: function(tilesheet, scale, frametime, sequence, loop) {
-        if(!tilesheet) throw("Tilesheet not found!");
+        if (!tilesheet) throw ("Tilesheet not found!");
 
 
         this.flip = {
             x: false,
             y: false
         }
+        this.offset = {
+            x: 0,
+            y: 0
+        };
 
         this.scale = scale;
         this.tilesheet = tilesheet;
@@ -46,7 +55,7 @@ var Animation = Class.extend({
 
     update: function() {
         var time = (new Date()).getTime();
-        var currentFrame = ~~(((time - this._initTime) / 1000) / this.frameTime);
+        var currentFrame = ~~ (((time - this._initTime) / 1000) / this.frameTime);
         if (!this.loop && currentFrame > this.sequence.length - 1) {
             this.frame = this.sequence.length - 1;
             this.looped = true;
@@ -63,7 +72,7 @@ var Animation = Class.extend({
     },
 
     draw: function(ctx, x, y, angle) {
-        this.tilesheet.drawTile(ctx, x, y, this.tile, this.scale, this.flip, angle, this.alpha);
+        this.tilesheet.drawTile(ctx, x+this.offset.x, y+this.offset.y, this.tile, this.scale, this.flip, angle, this.alpha);
     }
 
 });

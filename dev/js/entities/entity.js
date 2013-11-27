@@ -13,6 +13,9 @@ var Entity = Class.extend({
     width: 16,
     height: 16,
 
+    foreground: false,
+    background: false,
+
     pos: {
         x: 100,
         y: 100
@@ -99,9 +102,18 @@ var Entity = Class.extend({
 
     triggered: function(by) { },
 
-    trigger: function() {
+    untriggered: function(by) { },
+
+    trigger: function(by) {
+        if(!this.targets) return;
         for(var i = 0; i < this.targets.length; i++)
-            this.targets[i].triggered(this);
+            this.targets[i].triggered(by || this);
+    },
+
+    untrigger: function() {
+        if(!this.targets) return;
+        for(var i = 0; i < this.targets.length; i++)
+            this.targets[i].untriggered(this);
     },
 
     update: function(game) {

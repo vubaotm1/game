@@ -251,6 +251,11 @@ var Physics = {
             var pjd = new b2PrismaticJointDef();
             var axis = options.fixed == "y" ? new b2Vec2(0, 1) : new b2Vec2(1, 0);
             pjd.Initialize(body, this.world.GetGroundBody(), new b2Vec2(0, 0), axis);
+            if(options.motor) {
+                pjd.enableMotor = true;
+                pjd.motorSpeed = options.motor.speed;
+                pjd.maxMotorForce = options.motor.maxForce;
+            }
             joint = this.world.CreateJoint(pjd);
         }
 
