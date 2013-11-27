@@ -86,21 +86,21 @@
                  "y":20
                 }, 
                 {
-                 "height":8,
+                 "height":42,
                  "name":"EndLevel",
                  "properties":
                     {
-
+                     "flip":"true"
                     },
                  "rotation":0,
                  "type":"action",
                  "visible":true,
-                 "width":48,
-                 "x":197,
-                 "y":63
+                 "width":56,
+                 "x":32,
+                 "y":55
                 }, 
                 {
-                 "height":5,
+                 "height":20,
                  "name":"Spawn",
                  "properties":
                     {
@@ -109,9 +109,9 @@
                  "rotation":0,
                  "type":"region",
                  "visible":true,
-                 "width":35,
-                 "x":139,
-                 "y":28
+                 "width":27,
+                 "x":27,
+                 "y":20
                 }],
          "opacity":1,
          "properties":
@@ -150,7 +150,7 @@
         {
          "firstgid":1,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/tilesets\/definitions.png",
-         "imageheight":45,
+         "imageheight":75,
          "imagewidth":112,
          "margin":0,
          "name":"definitions",
@@ -163,7 +163,7 @@
          "tilewidth":16
         }, 
         {
-         "firstgid":22,
+         "firstgid":36,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/info.png",
          "imageheight":300,
          "imagewidth":300,

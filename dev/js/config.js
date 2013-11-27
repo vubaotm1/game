@@ -28,7 +28,7 @@ var Config = {
 
     image: {
         asset: 'info',
-        firstgid: 22
+        firstgid: 36
     },
 
     physics: {

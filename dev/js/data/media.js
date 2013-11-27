@@ -69,6 +69,12 @@ var media = {
                 morphs: {'Spawn.Immovable': 2},
                 file: '4',
                 next: '5'
+            },
+            5: {
+                title: "",
+                morphs: {'Spawn.Immovable': 2},
+                file: '5',
+                next: '6'
             }
         }
     }

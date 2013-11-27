@@ -297,7 +297,7 @@
          "name":"info",
          "objects":[
                 {
-                 "gid":23,
+                 "gid":37,
                  "height":0,
                  "name":"",
                  "properties":
@@ -312,7 +312,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":24,
+                 "gid":38,
                  "height":0,
                  "name":"",
                  "properties":
@@ -327,7 +327,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":25,
+                 "gid":39,
                  "height":0,
                  "name":"",
                  "properties":
@@ -342,7 +342,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":26,
+                 "gid":40,
                  "height":0,
                  "name":"",
                  "properties":
@@ -357,7 +357,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":27,
+                 "gid":41,
                  "height":0,
                  "name":"",
                  "properties":
@@ -372,7 +372,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":28,
+                 "gid":42,
                  "height":0,
                  "name":"",
                  "properties":
@@ -387,7 +387,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":28,
+                 "gid":42,
                  "height":0,
                  "name":"",
                  "properties":
@@ -402,7 +402,7 @@
                  "y":178
                 }, 
                 {
-                 "gid":29,
+                 "gid":43,
                  "height":0,
                  "name":"",
                  "properties":
@@ -417,7 +417,7 @@
                  "y":207
                 }, 
                 {
-                 "gid":30,
+                 "gid":44,
                  "height":0,
                  "name":"",
                  "properties":
@@ -432,7 +432,7 @@
                  "y":205
                 }, 
                 {
-                 "gid":23,
+                 "gid":37,
                  "height":0,
                  "name":"",
                  "properties":
@@ -447,7 +447,7 @@
                  "y":207
                 }, 
                 {
-                 "gid":23,
+                 "gid":37,
                  "height":0,
                  "name":"",
                  "properties":
@@ -462,7 +462,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":31,
+                 "gid":45,
                  "height":0,
                  "name":"",
                  "properties":
@@ -477,7 +477,7 @@
                  "y":163
                 }, 
                 {
-                 "gid":41,
+                 "gid":55,
                  "height":0,
                  "name":"",
                  "properties":
@@ -492,7 +492,7 @@
                  "y":166
                 }, 
                 {
-                 "gid":40,
+                 "gid":54,
                  "height":0,
                  "name":"",
                  "properties":
@@ -507,7 +507,7 @@
                  "y":165
                 }, 
                 {
-                 "gid":38,
+                 "gid":52,
                  "height":0,
                  "name":"",
                  "properties":
@@ -522,7 +522,7 @@
                  "y":163
                 }, 
                 {
-                 "gid":28,
+                 "gid":42,
                  "height":0,
                  "name":"",
                  "properties":
@@ -537,7 +537,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":49,
+                 "gid":63,
                  "height":0,
                  "name":"",
                  "properties":
@@ -552,7 +552,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":51,
+                 "gid":65,
                  "height":0,
                  "name":"",
                  "properties":
@@ -567,7 +567,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":50,
+                 "gid":64,
                  "height":0,
                  "name":"",
                  "properties":
@@ -582,7 +582,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":44,
+                 "gid":58,
                  "height":0,
                  "name":"",
                  "properties":
@@ -597,7 +597,7 @@
                  "y":129
                 }, 
                 {
-                 "gid":37,
+                 "gid":51,
                  "height":0,
                  "name":"",
                  "properties":
@@ -612,7 +612,7 @@
                  "y":140
                 }, 
                 {
-                 "gid":23,
+                 "gid":37,
                  "height":0,
                  "name":"",
                  "properties":
@@ -627,7 +627,7 @@
                  "y":164
                 }, 
                 {
-                 "gid":34,
+                 "gid":48,
                  "height":0,
                  "name":"",
                  "properties":
@@ -642,7 +642,7 @@
                  "y":153
                 }, 
                 {
-                 "gid":32,
+                 "gid":46,
                  "height":0,
                  "name":"",
                  "properties":
@@ -677,7 +677,7 @@
         {
          "firstgid":1,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/tilesets\/definitions.png",
-         "imageheight":45,
+         "imageheight":75,
          "imagewidth":112,
          "margin":0,
          "name":"definitions",
@@ -690,7 +690,7 @@
          "tilewidth":16
         }, 
         {
-         "firstgid":22,
+         "firstgid":36,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/info.png",
          "imageheight":300,
          "imagewidth":300,

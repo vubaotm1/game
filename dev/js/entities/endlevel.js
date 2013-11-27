@@ -3,6 +3,8 @@ var Entity = require('./entity');
 var EndLevel = Entity.extend({
     done: false,
 
+    flip: false,
+
     init: function(x, y, options) {
         this.parent(x, y, 1, {
             width: options.width,
@@ -10,11 +12,13 @@ var EndLevel = Entity.extend({
             isSensor: true,
             bodytype: 'b2_staticBody'
         });
+
+        this.flip = options.properties && options.properties.flip;
     },
 
     update: function(game) {
         if (!this.done && this.body.m_userData.playerCollision) {
-            game.endLevel();
+            game.endLevel(this.flip);
             this.done = true;
         }
     },

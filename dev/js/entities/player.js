@@ -35,29 +35,31 @@ var Player = Entity.extend({
         this.addAnimation('stand', sheet, this.scale, .1, [0]);
         this.addAnimation('walk', sheet, this.scale, .1, [1, 2, 3]);
         this.addAnimation('jump', sheet, this.scale, .15, [4, 5]);
-        this.addAnimation('morph', sheet, this.scale, .08, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
+        this.addAnimation('morph', sheet, this.scale, .06, [9, 10, 11, 12, 13, 14, 15, 14, 13], false);
         this.addAnimation('endlevel', sheet, this.scale, .15, [16, 17, 18]);
         this.addAnimation('hit', sheet, this.scale, .02, [19, 20]);
         this.animation = this.animations['stand'];
         this.animations['walk'].flip.x = true;
     },
 
-    endLevel: function(level) {
+    endLevel: function(level, flip) {
         this.animation = this.animations['endlevel'];
-        this.animation.flip.x = true;
+        this.animation.flip.x = !flip;
 
 
         var pos = this.body.GetPosition();
         pos.y -= this.height/2;
 
+
+        var n = flip ? -1 : 1;
+
         this.body.SetPosition(pos);
 
         this.body.SetType(1);
-        this.body.SetLinearVelocity(new b2Vec2(30, -15));
+        this.body.SetLinearVelocity(new b2Vec2(n*30, -15));
     },
 
     kill: function(game, time) {
-        //if (this.isMorphing()) return;
         if(this.animation === this.animations['endlevel']) return;
         if(this.animation !== this.animations['hit']) {
             this.morphing = false;

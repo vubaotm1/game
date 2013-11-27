@@ -223,12 +223,12 @@ var Game = Class.extend({
         }
     },
 
-    endLevel: function() {
+    endLevel: function(flip) {
         this.level.camera.max.x = Infinity;
         this.level.camera.min.y = -Infinity;
         this.level.camera.max.y = Infinity;
         this.level.camera.min.x = -Infinity;
-        this.level.player.endLevel();
+        this.level.player.endLevel(this.level, flip);
 
 
         $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime)/1000)+'');

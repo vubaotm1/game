@@ -240,7 +240,7 @@
          "name":"info",
          "objects":[
                 {
-                 "gid":61,
+                 "gid":75,
                  "height":0,
                  "name":"",
                  "properties":
@@ -255,7 +255,7 @@
                  "y":158
                 }, 
                 {
-                 "gid":58,
+                 "gid":72,
                  "height":0,
                  "name":"",
                  "properties":
@@ -270,7 +270,7 @@
                  "y":158
                 }, 
                 {
-                 "gid":59,
+                 "gid":73,
                  "height":0,
                  "name":"",
                  "properties":
@@ -285,7 +285,7 @@
                  "y":158
                 }, 
                 {
-                 "gid":60,
+                 "gid":74,
                  "height":0,
                  "name":"",
                  "properties":
@@ -320,7 +320,7 @@
         {
          "firstgid":1,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/tilesets\/definitions.png",
-         "imageheight":45,
+         "imageheight":75,
          "imagewidth":112,
          "margin":0,
          "name":"definitions",
@@ -333,7 +333,7 @@
          "tilewidth":16
         }, 
         {
-         "firstgid":22,
+         "firstgid":36,
          "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/info.png",
          "imageheight":300,
          "imagewidth":300,
