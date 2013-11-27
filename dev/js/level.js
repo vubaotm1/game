@@ -298,6 +298,7 @@ var Level = Class.extend({
         if (Input.isPressed('morph')) {
             if (this.morphs[this.activemorph] && this.morphs[this.activemorph].count > 0) {
                 if(this.morph(this.morphs[this.activemorph].type)) {
+                    game.playSound('transform');
                     game.shake(300, 20);
                 }
             }
@@ -308,7 +309,7 @@ var Level = Class.extend({
 
     draw: function(ctx) {
         for (var i = 0; i < this.layers.length; i++) {
-            if (!this.layers[i].foreground) this.layers[i].draw(ctx);
+            if (!this.layers[i].foreground) this.layers[i].draw(ctx, this.stats);
         }
 
         this.entities.sort(function(a, b) {
@@ -326,7 +327,7 @@ var Level = Class.extend({
         }
 
         for (var i = 0; i < this.layers.length; i++) {
-            if (this.layers[i].foreground) this.layers[i].draw(ctx);
+            if (this.layers[i].foreground) this.layers[i].draw(ctx, this.stats);
         }
     }
 });

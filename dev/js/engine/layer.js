@@ -9,7 +9,7 @@ var Layer = Class.extend({
     tileheight: 1,
 
     scale: 1,
-
+    
     foreground: false,
 
     init: function(data, w, h, tw, th) {

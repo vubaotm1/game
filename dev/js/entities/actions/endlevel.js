@@ -18,6 +18,7 @@ var EndLevel = Entity.extend({
 
     update: function(game) {
         if (!this.done && this.body.m_userData.playerCollision) {
+            game.playSound('pabam');
             game.endLevel(this.flip);
             this.done = true;
         }

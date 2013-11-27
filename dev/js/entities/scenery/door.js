@@ -52,16 +52,18 @@ var Door = Entity.extend({
 
     },
 
-    triggered: function(by) {
+    triggered: function(by, game) {
         if (++this.triggerCount === this.neededTriggers) {
             this.open = true;
+            game.playSound('correct');
             this.joint.SetMotorSpeed(this.speed);
         }
     },
 
-    untriggered: function(by) {
+    untriggered: function(by, game) {
         if (--this.triggerCount < this.neededTriggers) {
             this.open = false;
+            game.playSound('wrong');
             this.joint.SetMotorSpeed(-this.speed);
         }
     }

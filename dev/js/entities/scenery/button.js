@@ -38,12 +38,14 @@ var Btn = Entity.extend({
         }
 
         if (!this.triggered && t) {
-            this.trigger(t);
+            this.trigger(t, game);
+            game.playSound('on');
             this.animation = this.animations['pressed'];
         }
 
         if (this.triggered && !t) {
-            this.untrigger();
+            this.untrigger(game);
+            game.playSound('off');
             this.animation = this.animations['unpressed'];
         }
 

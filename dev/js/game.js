@@ -28,6 +28,8 @@ var Game = Class.extend({
     shakeDuration: -1,
     shakeForce: 0,
 
+    soundMuted: false,
+
     init: function(context) {
         Input.bind("right", [Keys.D, Keys.RIGHT_ARROW]);
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
@@ -46,19 +48,23 @@ var Game = Class.extend({
 
         var self = this;
         $('#levels').on('click', '.level', function() {
+            self.playSound('click');
             var lvl = $(this).data('level');
-            self.stats.starttime = (new Date()).getTime();
+            self.resetStats();
             self.loadLevel(Assets.Data.levels[lvl]);
             showLevels(false);
             showGame();
         });
 
         $('.mute').click(function() {
-            $('.mute').toggleClass('muted');
+            var a = $('.mute')
+            a.toggleClass('muted');
+            self.soundMuted = a.hasClass('muted');
         });
 
 
         $('#menu .menu').click(function() {
+            self.playSound('click');
             $('#leveltitle').hide();
             showLevels(false);
             showIntro(true);
@@ -68,6 +74,7 @@ var Game = Class.extend({
 
         var b;
         $('.pause').click(function() {
+            self.playSound('click');
             var a = $('.pause');
             if (a.hasClass('paused')) {
                 self.pauseGame(false);
@@ -83,18 +90,21 @@ var Game = Class.extend({
         });
 
         $('.play').click(function() {
+            self.playSound('click');
             showLevels(false);
             showGame();
             self.pauseGame(false);
         });
 
         $('#play').click(function() {
+            self.playSound('click');
             showIntro(false);
             showLevels(true);
             self.pauseGame(true);
         });
 
         $('.restart').click(function() {
+            self.playSound('click');
             showLevels(false);
             $('#morphs').fadeOut(500);
             $('#canvas').fadeTo(300, .05, function() {
@@ -104,18 +114,21 @@ var Game = Class.extend({
         });
 
         $('.retry').click(function() {
+            self.playSound('click');
             showEnd(false);
             showGame();
             self.retryLevel();
         });
 
         $('#icons-top .menu').click(function() {
+            self.playSound('click');
             showGame(false);
             showLevels();
             self.pauseGame(true);
         });
 
         $('#morphs > div').on('click', 'div', function(e) {
+            self.playSound('click');
             self.level.setActiveMorph($(this).attr('id') - 1);
         });
 
@@ -132,14 +145,16 @@ var Game = Class.extend({
             $('#morphs > span').text(info);
         });
 
-        
+
 
         $('#btns .menu').click(function() {
+            self.playSound('click');
             showEnd(false);
             showLevels(true);
         });
 
-        $('#btns .next').click(function(){
+        $('#btns .next').click(function() {
+            self.playSound('click');
             showGame(false);
             showEnd(false);
             self.nextLevel();
@@ -149,28 +164,28 @@ var Game = Class.extend({
         this.initLevels();
 
         if (config.debug) {
+            self.resetStats();
             this.loadLevel(Assets.Data.levels[config.debug.level]);
             showIntro(false);
             showGame();
-            this.stats.starttime = (new Date()).getTime();
         }
 
 
         function showGame(show, paused) {
-            if(show == undefined || show) {
+            if (show == undefined || show) {
                 $('#leveltitle').fadeIn();
                 $('#icons-top .left').fadeIn();
                 $('#canvas').fadeTo(300, 1);
                 if (self.currentLevelData != Assets.Data.levels['0']) $('#morphs').delay(400).fadeIn();
             } else {
-                if(!paused) $('#icons-top .left').hide();
+                if (!paused) $('#icons-top .left').hide();
                 $('#canvas').fadeTo(300, 0.05);
                 $('#morphs').hide();
             }
         }
 
         function showEnd(show) {
-            if(show == undefined || show) {
+            if (show == undefined || show) {
                 $('#end').fadeIn();
             } else {
                 $('#end').hide();
@@ -179,7 +194,7 @@ var Game = Class.extend({
         }
 
         function showIntro(show) {
-            if(show == undefined || show) {
+            if (show == undefined || show) {
                 $('#intro').fadeIn();
             } else {
                 $('#intro').hide();
@@ -187,7 +202,7 @@ var Game = Class.extend({
         }
 
         function showLevels(show) {
-            if(show == undefined || show) {
+            if (show == undefined || show) {
                 $('#levelselect').fadeIn();
             } else {
                 $('#levelselect').hide();
@@ -204,6 +219,15 @@ var Game = Class.extend({
             lvlbtn.text("" + ++n);
             $('#levels').append(lvlbtn);
         }
+    },
+
+    playSound: function(sound, onlyOneInstance) {
+        if (this.soundMuted) return;
+        if (typeof(sound) === "string") {
+            sound = Object.$get(Assets.Sounds, sound);
+        }
+
+        if(!onlyOneInstance || (onlyOneInstance && sound.playState === 0)) sound.play();
     },
 
     showMessage: function(message, color, duration, options, nofade, callback) {
@@ -231,10 +255,10 @@ var Game = Class.extend({
         this.level.player.endLevel(this.level, flip);
 
 
-        $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime)/1000)+'');
-        $('#stats #restarts').text(this.stats.restarts+'');
-        $('#stats #deaths').text(this.stats.deaths+'');
-        $('#stats #transforms').text(this.stats.transforms+'');
+        $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime) / 1000) + '');
+        $('#stats #restarts').text(this.stats.restarts + '');
+        $('#stats #deaths').text(this.stats.deaths + '');
+        $('#stats #transforms').text(this.stats.transforms + '');
 
         $('#morphs').fadeOut();
         $('#icons-top .left').fadeOut();
@@ -297,7 +321,7 @@ var Game = Class.extend({
     },
 
     update: function() {
-        if(Input.isPressed('restart')) {
+        if (Input.isPressed('restart')) {
             var self = this;
             $('#morphs').fadeOut(500);
             $('#canvas').fadeTo(300, .05, function() {
@@ -308,7 +332,7 @@ var Game = Class.extend({
             });
         }
 
-        if(Input.isPressed(Keys.P)) {
+        if (Input.isPressed(Keys.P)) {
             config.physics.debug = !config.physics.debug;
         }
 
@@ -317,12 +341,18 @@ var Game = Class.extend({
 
         if (this.shakeDuration > 0) {
             this.shakeDuration = this.shakeDuration - config.tick;
-            var forceX = Math.random()*this.shakeForce/2 - this.shakeForce;
-            var forceY = Math.random()*this.shakeForce/2 - this.shakeForce;
-            config.display.shake = {x: forceX, y: forceY};
+            var forceX = Math.random() * this.shakeForce / 2 - this.shakeForce;
+            var forceY = Math.random() * this.shakeForce / 2 - this.shakeForce;
+            config.display.shake = {
+                x: forceX,
+                y: forceY
+            };
 
         } else {
-            config.display.shake = {x: 0, y: 0};
+            config.display.shake = {
+                x: 0,
+                y: 0
+            };
         }
     },
 

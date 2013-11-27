@@ -13,7 +13,7 @@ var Ent = Entity.extend({
         var bodyoptions = {
             density: 40,
             bottom: {
-                friction: 0.5
+                friction: 0.2
             },
             top: {
                 friction: 0.1

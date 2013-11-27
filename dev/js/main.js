@@ -1,4 +1,3 @@
-
 require('./lib/class.js');
 require('./lib/requestAnimFrame');
 
@@ -13,7 +12,9 @@ window.debug = {
     bounciness: 0.5
 }
 var dat = require('./lib/dat.gui');
-window.gui = new dat.GUI({autoPlace: true});
+window.gui = new dat.GUI({
+    autoPlace: true
+});
 
 gui.add(debug, 'draws').listen();
 gui.add(config.physics, 'debug');
@@ -22,22 +23,24 @@ gui.close();
 // GLOBALS
 
 
+
+
 var engine;
-$(function(){
-    engine = new (require('./engine/engine'))();
+$(function() {
+    engine = new(require('./engine/engine'))();
 });
 
-$(window).resize(function(){
-    if(engine) engine.resize.call(engine);
+$(window).resize(function() {
+    if (engine) engine.resize.call(engine);
 });
 
 $(document).keydown(Input._down.bind(Input));
 $(document).keyup(Input._up.bind(Input));
 $(document).mousedown(Input._down.bind(Input));
 $(document).mouseup(Input._up.bind(Input));
-$(document).bind("contextmenu",function(e){
-      return false;
-}); 
+$(document).bind("contextmenu", function(e) {
+    return false;
+});
 
 
 $('#github').click(function() {

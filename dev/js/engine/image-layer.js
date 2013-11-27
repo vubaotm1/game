@@ -7,12 +7,17 @@ var ImageLayer = Layer.extend({
 
     images: [],
 
+    needDeaths: 0,
+
+
     init: function(data, w, h, tw, th) {
         this.images = [];
 
         this.parent(data, w, h, tw, th);
 
         Object.$merge(data.properties, config.image);
+
+        this.needDeaths = data.properties.needDeaths || 0;
 
         this.asset = Object.$get(Assets.Graphics, data.properties.asset);
 
@@ -31,7 +36,8 @@ var ImageLayer = Layer.extend({
         }
     },
 
-    draw: function(ctx) {
+    draw: function(ctx, stats) {
+        if(stats.deaths < this.needDeaths) return;
         for(var i = 0; i < this.images.length; i++) {
             var img = this.images[i];
 

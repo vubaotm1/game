@@ -100,20 +100,20 @@ var Entity = Class.extend({
         this.animation = this.animations[name];
     },
 
-    triggered: function(by) { },
+    triggered: function(by, game) { },
 
-    untriggered: function(by) { },
+    untriggered: function(by, game) { },
 
-    trigger: function(by) {
+    trigger: function(by, game) {
         if(!this.targets) return;
         for(var i = 0; i < this.targets.length; i++)
-            this.targets[i].triggered(by || this);
+            this.targets[i].triggered(by || this, game);
     },
 
-    untrigger: function() {
+    untrigger: function(game) {
         if(!this.targets) return;
         for(var i = 0; i < this.targets.length; i++)
-            this.targets[i].untriggered(this);
+            this.targets[i].untriggered(this, game);
     },
 
     update: function(game) {

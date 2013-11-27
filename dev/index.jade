@@ -52,12 +52,11 @@ html
                     div
 
 
+        script(type="text/javascript", src="js/soundmanager2-nodebug-jsmin.js")
+        script(type="text/javascript", src="js/jquery-1.10.1.min.js")
+        script(type="text/javascript", src="js/jquery.color-2.1.2.min.js")
         if debug
-            script(type="text/javascript", src="/jquery-1.10.1.min.js")
-            script(type="text/javascript", src="/jquery.color-2.1.2.min.js")
             script(type="text/javascript", src="js/main.js")
             script(type="text/javascript", src="//localhost:35729/livereload.js")
         else
-            script(type="text/javascript", src="http://code.jquery.com/jquery-1.10.1.min.js")
-            script(type="text/javascript", src="http://code.jquery.com/color/jquery.color-2.1.2.js")
             script(type="text/javascript", src="js/main.min.js")

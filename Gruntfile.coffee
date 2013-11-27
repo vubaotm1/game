@@ -51,15 +51,22 @@ module.exports = (grunt) ->
                 files: [
                     expand: true
                     cwd: "./dev/media/"
-                    src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*","fonts/*"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*","music/*","fonts/*","swf/*"]
                     dest: "./build/media/"
                 ]
             release: 
                 files: [
                     expand: true
                     cwd: "./build/media/"
-                    src: ["**/*.jpg","**/*.json","**/*.png","sound/*","music/*","fonts/*"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*","music/*","fonts/*","swf/*"]
                     dest: "./dist/media/"
+                ]
+            libs:
+                files: [
+                    expand: true
+                    cwd: "./dev/js/lib/"
+                    src: ["./soundmanager2-nodebug-jsmin.js", "./jquery.color-2.1.2.min.js", "./jquery-1.10.1.min.js"]
+                    dest: "./build/js/"
                 ]
 
         clean:
@@ -89,7 +96,7 @@ module.exports = (grunt) ->
 
             js:
                 files: ["./dev/js/**/*.js"]
-                tasks: ["browserify2"]
+                tasks: ["browserify2", "copy:libs"]
 
             media: 
                 files: ["./dev/media/**/*"]

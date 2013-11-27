@@ -18,11 +18,22 @@ var Engine = Class.extend({
 
     init: function(gameConst) {
         this.initCanvas();
+        this.initSounds();
 
         p.initDebug(this.context, config.display.scale);
         p.dragNDrop(window);
 
         this.tick();
+    },
+
+    initSounds: function() {
+        soundManager.setup({
+            url: 'media/swf/',
+            flashVersion: 9,
+            onready: function() {
+                Assets.loadSounds();
+            }
+        });
     },
 
     initCanvas: function() {
@@ -45,7 +56,7 @@ var Engine = Class.extend({
     resize: function() {
         var w = window.innerWidth,
             h = window.innerHeight,
-            s = (w > 1260 && h > 700) ? 3: 2;
+            s = (w > 1260 && h > 700) ? 3 : 2;
 
         this.canvas.width = config.display.width * s;
         this.canvas.height = config.display.height * s;
@@ -54,9 +65,9 @@ var Engine = Class.extend({
 
         $('#ui').css('width', this.canvas.width);
         var uh = $('#ui').css('height').replace('px', '');
-        $('#ui').css('padding-top', ~~(h/2-uh/2));
-        $('#canvas').css('left', ~~(w/2 - this.canvas.width/2) + "px").css('top', ~~(h/2 - this.canvas.height/2) + "px");
-        config.message.top = ~~(h/2 - 50);
+        $('#ui').css('padding-top', ~~ (h / 2 - uh / 2));
+        $('#canvas').css('left', ~~ (w / 2 - this.canvas.width / 2) + "px").css('top', ~~ (h / 2 - this.canvas.height / 2) + "px");
+        config.message.top = ~~ (h / 2 - 50);
 
 
         if (!this.game) {
@@ -66,7 +77,7 @@ var Engine = Class.extend({
                 if (!this.game) {
                     this.game = new game(this.context);
                 }
-                
+
             }, this);
         }
 
@@ -112,7 +123,7 @@ var Engine = Class.extend({
 
     tick: function() {
         if (!this.game || this.game.paused) {
-            if(this.game) this.draw();
+            if (this.game) this.draw();
             return requestAnimFrame(this.tick.bind(this));
         }
 

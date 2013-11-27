@@ -24,6 +24,8 @@ var Player = Entity.extend({
 
     bodyType: 'Player',
 
+    couldJump: false,
+
     hitTime: 0,
 
     init: function(x, y, sheet) {
@@ -105,8 +107,13 @@ var Player = Entity.extend({
         }
 
         if (!this.morphing && this.animation != this.animations['endlevel'] && this.animation != this.animations['hit']) {
-            if (!Input.isDown(0)) this.handleMovement();
+            if (!Input.isDown(0)) this.handleMovement(game);
         }
+
+        if(!this.couldJump && this.canJump()) {
+            game.playSound('fall', true);
+        }
+        this.couldJump = this.canJump();
     },
 
     initMorph: function() {
@@ -122,7 +129,7 @@ var Player = Entity.extend({
         return this.body.m_userData.footContacts > 0;
     },
 
-    handleMovement: function() {
+    handleMovement: function(game) {
         var vel = this.body.GetLinearVelocity(),
             l = Input.isDown('left'),
             r = Input.isDown('right'),
@@ -156,6 +163,7 @@ var Player = Entity.extend({
         }
 
         if (u && this.canJump()) {
+            game.playSound('jump');
             impulse = this.body.GetMass() * JUMP;
             this.body.ApplyImpulse(new b2Vec2(0, impulse), this.body.GetWorldCenter());
         }

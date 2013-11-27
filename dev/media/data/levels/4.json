@@ -516,6 +516,7 @@
          "opacity":1,
          "properties":
             {
+             "needDeaths":"3",
              "type":"image"
             },
          "type":"objectgroup",
