@@ -29,8 +29,12 @@ var PerspectiveLayer = Layer.extend({
 
         var d = [];
         for (var i = 0; i < this.data.length; i++) {
-            var n = ~~ (this.data[i] / (this.tilesPerRow + 1));
-            d[i] = this.data[i] + n * this.tilesPerRow;
+            var n = this.data[i] - 1;
+            if(n < 0) {
+                d[i] = -1;
+            } else {
+                d[i] = ~~(n / this.tilesPerRow) * this.tilesPerRow * 2 + (n % this.tilesPerRow);
+            }
         }
 
         // this.drawRegion = data.properties.onlybase ? data.properties.base : null;
@@ -96,7 +100,7 @@ var PerspectiveLayer = Layer.extend({
             for (var y = eh; y >= sy; y--) {
                 xf = f ? ew - (x - sx) : x;
 
-                tile = this.data[xf + y * this.width] - 1;
+                tile = this.data[xf + y * this.width];
                 if (tile < 0) continue;
 
                 xx = (xf * this.tilewidth + (f ? -this.orrX * this.depth : this.offsetX)) * this.scale;
