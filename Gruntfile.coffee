@@ -68,6 +68,13 @@ module.exports = (grunt) ->
                     src: ["./soundmanager2-nodebug-jsmin.js", "./jquery.color-2.1.2.min.js", "./jquery-1.10.1.min.js"]
                     dest: "./build/js/"
                 ]
+            libsrelease:
+                files: [
+                    expand: true
+                    cwd: "./dev/js/lib/"
+                    src: ["./soundmanager2-nodebug-jsmin.js", "./jquery.color-2.1.2.min.js", "./jquery-1.10.1.min.js"]
+                    dest: "./dist/js/"
+                ]
 
         clean:
             build: ["./build/media"]
@@ -117,5 +124,5 @@ module.exports = (grunt) ->
 
     grunt.loadTasks "./tasks"
 
-    grunt.registerTask "release", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy:release", "cleanlevel:all"]
-    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "copy:build", "cleanlevel:all"]
+    grunt.registerTask "release", ["clean:release", "jade:release", "less:release", "browserify2", "uglify", "copy:release", "copy:libsrelease", "cleanlevel:all"]
+    grunt.registerTask "default", ["clean:build", "jade:build", "less:build", "browserify2", "copy:build", "copy:libs", "cleanlevel:all"]

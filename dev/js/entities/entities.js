@@ -13,6 +13,8 @@ module.exports = {
     Laser: require('./scenery/laser'),
     LaserBlock: require('./scenery/laserblock'),
 
+    Platform: require('./scenery/platform'),
+
 
     Player: require('./player'),
 

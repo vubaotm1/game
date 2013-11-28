@@ -9,7 +9,8 @@ window.Stats = require('./lib/stats');
 
 window.debug = {
     draws: 0,
-    bounciness: 0.5
+    bounciness: 0.5,
+    physdebug: true
 }
 var dat = require('./lib/dat.gui');
 window.gui = new dat.GUI({
@@ -17,7 +18,8 @@ window.gui = new dat.GUI({
 });
 
 gui.add(debug, 'draws').listen();
-gui.add(config.physics, 'debug');
+gui.add(config.physics, 'debug').listen();
+gui.add(debug, 'physdebug');
 gui.close();
 
 // GLOBALS

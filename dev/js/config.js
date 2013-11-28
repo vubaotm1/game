@@ -1,7 +1,7 @@
 var Config = {
 
     debug: {
-        level: '6'
+        level: '9'
     },
 
     tick: 0,
@@ -38,7 +38,7 @@ var Config = {
     },
 
     physics: {
-        debug: false
+        debug: true
     },
 
     fog: {

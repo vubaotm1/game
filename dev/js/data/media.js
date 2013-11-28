@@ -23,6 +23,11 @@ var media = {
                 file: 'laser',
                 tilewidth: 17,
                 tileheight: 16
+            },
+            platform: {
+                file: 'platform',
+                tilewidth: 38,
+                tileheight: 14
             }
         },
         debug: {
@@ -57,16 +62,18 @@ var media = {
     //         file: 'tada.wav'
     //     },
         pabam: {
-            file: 'pabam.mp3'
+            file: 'success.mp3'
         },
         click: {
-            file: 'ui_click.wav'
+            file: 'ui_click.mP3'
         },
         correct: {
-            file: 'correct.wav'
+            file: 'correct.mp3',
+            volume: 10
         },
         wrong: {
-            file: 'wrong.wav'
+            file: 'wrong.mp3',
+            volume: 10
         },
         on: {
             file: 'on.wav'
@@ -79,11 +86,11 @@ var media = {
         },
         fall: {
             file: 'fall.wav',
-            volume: 20
+            volume: 10
         },
         jump: {
             file: 'jump.wav',
-            volume: 20
+            volume: 10
         },
         sparkle: {
             file: 'sparkle.mp3'
@@ -146,10 +153,28 @@ var media = {
             6: {
                 title: "Buttons.. and doors",
                 morphs: {
-                    'Spawn.Immovable': 1
+                    'Spawn.Movable': 2
                 },
                 file: '6',
                 next: '7'
+            },
+            7: {
+                title: "The way around",
+                morphs: {
+                    'Spawn.Movable': 1,
+                    'Spawn.Immovable': 2
+                },
+                file: '7',
+                next: '8'
+            },
+            9: {
+                title: "",
+                morphs: {
+                    'Spawn.Movable': 1,
+                    'Spawn.Immovable': 2
+                },
+                file: '9',
+                next: '8'
             }
         }
     }
