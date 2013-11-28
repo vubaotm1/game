@@ -6,6 +6,8 @@ var Laser = Entity.extend({
 
     active: true,
 
+    background: true,
+
     axis: 'x',
     direction: 1,
 

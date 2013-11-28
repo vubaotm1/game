@@ -12,7 +12,7 @@ var Btn = Entity.extend({
     },
 
     init: function(x, y, options) {
-        y = y + options.height - this.height;
+        this.offset.y = this.height - options.height
 
         this.parent(x, y, 1, {
             width: options.width,

@@ -4,12 +4,12 @@ var config = require('../../config');
 var Door = Entity.extend({
 
     width: 17,
-    height: 34,
+    height: 32,
 
     background: true,
 
     offset: {
-        y: 5,
+        y: 6,
         x: 0
     },
 
@@ -17,11 +17,6 @@ var Door = Entity.extend({
     triggerCount: 0,
 
     speed: 10,
-
-    bottom: {
-        x: 0,
-        y: 0
-    },
 
     init: function(x, y, options) {
         this.parent(x, y, 1, {
@@ -33,8 +28,6 @@ var Door = Entity.extend({
         });
 
         this.neededTriggers = (options.properties && options.properties.neededTriggers) ? parseInt(options.properties.neededTriggers) : 1;
-
-        window.joint = this.joint;
 
         this.addAnimation('open', 'sprites.door', 1, .1, [1]);
         this.addAnimation('closed', 'sprites.door', 1, .1, [0]);
@@ -61,7 +54,7 @@ var Door = Entity.extend({
     },
 
     untriggered: function(by, game) {
-        if (--this.triggerCount < this.neededTriggers) {
+        if (--this.triggerCount < this.neededTriggers && this.open) {
             this.open = false;
             game.playSound('wrong');
             this.joint.SetMotorSpeed(-this.speed);

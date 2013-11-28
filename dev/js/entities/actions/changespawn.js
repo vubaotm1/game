@@ -17,6 +17,7 @@ var ChangeSpawn = Entity.extend({
         if(!this.done && this.body.m_userData.playerCollision) {
             game.level.setSpawn(this.pos.x, this.pos.y);
             this.done = true;
+            game.playSound('sparkle');
             game.showMessage('Spawnpoint set!', '#95FBAE', 1000, {top: "-=50"});
         }
     },

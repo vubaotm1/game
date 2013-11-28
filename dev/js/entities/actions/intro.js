@@ -14,13 +14,14 @@ var Intro = Entity.extend({
     },
 
     update: function(game) {
-        if(!this.done && this.body.m_userData.playerCollision) {
+        if (!this.done && this.body.m_userData.playerCollision) {
             $('#morphs').fadeIn(500);
+            $('#morphs div:first-child').addClass('flash');
             this.done = true;
         }
     },
 
-    draw: function(ctx) { }
+    draw: function(ctx) {}
 
 
 });
