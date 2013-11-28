@@ -71,6 +71,39 @@ canvas {
         box-shadow: 5px -5px 0px #68095F;
     }
 }
+
+.flash{
+
+  -moz-animation: flash 1s ease-out;
+  -moz-animation-iteration-count: infinite;
+
+  -webkit-animation: flash 1s ease-out;
+  -webkit-animation-iteration-count: infinite;
+
+  -ms-animation: flash 1s ease-out;
+  -ms-animation-iteration-count: infinite;
+
+}
+
+@-webkit-keyframes flash {
+    0% { background-color:none; color: none;}
+    50% { background-color:#E6EA37; color: #111;}        
+    100% {background-color:none; color: none;}
+}
+
+@-moz-keyframes flash {
+    0% { background-color:none; color: none;}
+    50% { background-color:#E6EA37; color: #111;}        
+    100% {background-color:none; color: none;}
+}
+
+@-ms-keyframes flash {
+    0% { background-color:none; color: none;}
+    50% { background-color:#E6EA37; color: #111;}        
+    100% {background-color:none; color: none;}
+}
+
+
 #icons-top {
     > div div {
         background-image: url('../media/img/UI.png');

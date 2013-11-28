@@ -221,13 +221,18 @@ var Game = Class.extend({
         }
     },
 
-    playSound: function(sound, onlyOneInstance) {
+    playSound: function(sound, onlyOneInstance, options) {
         if (this.soundMuted) return;
         if (typeof(sound) === "string") {
             sound = Object.$get(Assets.Sounds, sound);
         }
 
-        if(!onlyOneInstance || (onlyOneInstance && sound.playState === 0)) sound.play();
+        if(typeof(onlyOneInstance) === "object") {
+            options = onlyOneInstance;
+            onlyOneInstance = false;
+        }
+
+        if(!onlyOneInstance || (onlyOneInstance && sound.playState === 0)) sound.play(options);
     },
 
     showMessage: function(message, color, duration, options, nofade, callback) {

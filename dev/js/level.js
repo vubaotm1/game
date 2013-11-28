@@ -118,16 +118,34 @@ var Level = Class.extend({
         }
 
         this.setActiveMorph(0);
-    },  
+    },
 
     setActiveMorph: function(i) {
-        if(this.morphing) return;
+        if (this.morphing) return;
         this.activemorph = i;
         $('#morphs > div div').removeClass('active');
-        $('#morphs > div #' + (i + 1)).addClass('active');
+        var a =  $('#morphs > div #' + (i + 1));
+        a.addClass('active');
+        a.removeClass('flash');
         var info = this.morphs[i];
         info = (info && info.count > 0) ? info.info : 'Empty';
         $('#morphs > span').text(info);
+        if (info !== 'Empty') {
+            $('#morphs > span').addClass('flash');
+            a.addClass('flash');
+            window.setTimeout(function() {
+                $('#morphs > span').removeClass("flash");
+                a.removeClass('flash');
+            }, 1000);
+        }
+    },
+
+    activateFirstMorph: function() {
+        for(var i = 0, n = this.morphs.length; i < n; i++) {
+            if(this.morphs[i] && this.morphs[i].count > 0) {
+                this.setActiveMorph(i);
+            }
+        }
     },
 
     updateActiveMorph: function() {
@@ -135,19 +153,20 @@ var Level = Class.extend({
         if (!m) return;
 
         m.count = m.count - 1;
+        $('#morphs > div #' + (this.activemorph + 1) + ' > span').text(m.count);
         if (m.count <= 0) {
             m.count = 0;
             $('#morphs > div #' + (this.activemorph + 1)).data('info', 'Empty');
             $('#morphs > div #' + (this.activemorph + 1) + ' > figure').css('background-position', '0 0');
             $('#morphs > span').text('Empty');
+            this.activateFirstMorph();
         }
-        $('#morphs > div #' + (this.activemorph + 1) + ' > span').text(m.count);
     },
 
     morph: function(other) {
         if (typeof(other) == "string") other = Object.$get(Entities, other);
 
-        if(!this.player.initMorph()) return false;
+        if (!this.player.initMorph()) return false;
 
         this.stats.transforms++;
 
@@ -227,9 +246,9 @@ var Level = Class.extend({
             if (ent._target) {
                 var _targets = ent._target.split(",");
                 var targets = [];
-                
-                for(var n = 0; n < _targets.length; n++) {
-                    if(named[_targets[n]]) {
+
+                for (var n = 0; n < _targets.length; n++) {
+                    if (named[_targets[n]]) {
                         targets.push(named[_targets[n]]);
                     }
                 }
@@ -256,7 +275,7 @@ var Level = Class.extend({
                     var e = Object.$get(Entities, ent.name);
                     if (e && ent.type !== "region") {
                         var o = {};
-                        if(ent.properties && ent.properties.target || ent.properties.name) {
+                        if (ent.properties && ent.properties.target || ent.properties.name) {
                             o._target = ent.properties.target;
                             o._name = ent.properties.name;
                         }
@@ -290,14 +309,14 @@ var Level = Class.extend({
 
         this.camera.follow(this.player);
 
-        if(this.player.pos.x > this.camera.max.x || 
-            this.player.pos.x + this.player.width < this.camera.min.x || 
-            this.player.pos.y > this.camera.max.y || 
+        if (this.player.pos.x > this.camera.max.x ||
+            this.player.pos.x + this.player.width < this.camera.min.x ||
+            this.player.pos.y > this.camera.max.y ||
             this.player.pos.y + this.player.height < this.camera.min.y) this.player.kill(game);
- 
+
         if (Input.isPressed('morph')) {
             if (this.morphs[this.activemorph] && this.morphs[this.activemorph].count > 0) {
-                if(this.morph(this.morphs[this.activemorph].type)) {
+                if (this.morph(this.morphs[this.activemorph].type)) {
                     game.playSound('transform');
                     game.shake(300, 20);
                 }
@@ -313,8 +332,8 @@ var Level = Class.extend({
         }
 
         this.entities.sort(function(a, b) {
-            if (a.foreground || b.background) return 1;
-            if (b.foreground || a.background) return -1;
+            if (a.foreground || (b.background && !a.background)) return 1;
+            if (b.foreground || (a.background && !b.background)) return -1;
             if (a.pos.y < b.pos.y) return 1;
             if (a.pos.y > b.pos.y) return -1;
             if (a.pos.x > b.pos.x) return 1;

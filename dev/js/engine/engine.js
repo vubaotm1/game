@@ -16,6 +16,8 @@ var Engine = Class.extend({
 
     lastUpdate: 16,
 
+    profiles: 0,
+
     init: function(gameConst) {
         this.initCanvas();
         this.initSounds();
@@ -109,6 +111,9 @@ var Engine = Class.extend({
         if (!config.physics.debug) {
             this.game.draw();
         } else {
+            if(debug.physdebug) {
+                this.game.draw();
+            }
             p.draw();
         }
     },
@@ -128,11 +133,10 @@ var Engine = Class.extend({
         }
 
         Stats.begin();
+
         config.tick = (new Date()).getTime() - this.lastUpdate;
         this.lastUpdate = this.lastUpdate + config.tick;
-
         this.update();
-
         Input.update();
 
         requestAnimFrame(this.tick.bind(this));
