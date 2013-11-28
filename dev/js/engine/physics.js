@@ -210,8 +210,10 @@ var Physics = {
 
         body.SetFixedRotation(options.fixedrotation);
 
+        h = h - (options.top ? 0.2 : 0) - (options.bottom ? 0.2 : 0);
+
         var shape = new b2PolygonShape();
-        shape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(w / 2, h / 2), 0);
+        shape.SetAsOrientedBox(w / 2, h/2, new b2Vec2(w / 2, h / 2), 0);
 
         var fd = new b2FixtureDef();
         fd.shape = shape;
@@ -233,14 +235,14 @@ var Physics = {
         });
 
         if (options.top) {
-            shape.SetAsOrientedBox((w / 2) - 1.2, 0.3, new b2Vec2(w / 2, -0.3), 0);
+            shape.SetAsOrientedBox((w / 2), 0.2, new b2Vec2(w / 2, -0.2), 0);
             fd.restitution = options.top.restitution || 0;
             fd.friction = options.top.friction || 0;
             body.CreateFixture(fd);
         }
 
         if (options.bottom) {
-            shape.SetAsOrientedBox((w / 2), 0.4, new b2Vec2(w / 2, h - 0.3), 0);
+            shape.SetAsOrientedBox((w / 2), 0.2, new b2Vec2(w / 2, h), 0);
             fd.friction = options.bottom.friction || 0;
             body.CreateFixture(fd);
         }
@@ -249,12 +251,20 @@ var Physics = {
         if (options.fixed) {
             body.SetFixedRotation(false);
             var pjd = new b2PrismaticJointDef();
-            var axis = options.fixed == "y" ? new b2Vec2(0, 1) : new b2Vec2(1, 0);
+            var axis = options.fixed == "y" ? new b2Vec2(0, 1) : new b2Vec2(-1, 0);
             pjd.Initialize(body, this.world.GetGroundBody(), new b2Vec2(0, 0), axis);
+            if (options.limit) {
+                pjd.enableLimit = true;
+                pjd.lowerTranslation = options.limit.lower;
+                pjd.upperTranslation = options.limit.upper;
+            }
+
+
             if(options.motor) {
                 pjd.enableMotor = true;
                 pjd.motorSpeed = options.motor.speed;
                 pjd.maxMotorForce = options.motor.maxForce;
+
             }
             joint = this.world.CreateJoint(pjd);
         }
