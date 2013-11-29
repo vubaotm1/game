@@ -51,7 +51,7 @@ var Game = Class.extend({
             self.playSound('click');
             var lvl = $(this).data('level');
             self.resetStats();
-            self.loadLevel(Assets.Data.levels[lvl]);
+            self.loadLevel(Assets.Data.levels[lvl], lvl);
             showLevels(false);
             showGame();
         });
@@ -69,7 +69,7 @@ var Game = Class.extend({
             showLevels(false);
             showIntro(true);
             showGame(false);
-            self.loadLevel(Assets.Data.levels['intro']);
+            self.loadLevel(Assets.Data.levels['intro'], lvl);
         });
 
         var b;
@@ -216,7 +216,7 @@ var Game = Class.extend({
             if (isNaN(i)) continue;
             var lvlbtn = $('<div class="level"></div>');
             lvlbtn.data('level', i);
-            lvlbtn.text("" + ++n);
+            lvlbtn.text(++n);
             $('#levels').append(lvlbtn);
         }
     },
@@ -309,12 +309,12 @@ var Game = Class.extend({
         this.loadLevel(this.currentLevelData);
     },
 
-    loadLevel: function(level) {
+    loadLevel: function(level, lvl) {
         if (!level) return;
         this.level = new Level(level, this.stats);
         this.currentLevelData = level;
 
-        $('#leveltitle').text(level.title);
+        $('#leveltitle').text((lvl ? (parseInt(lvl)+1)+". " : "") + level.title);
 
         if (level == Assets.Data.levels['0']) this.level.setActiveMorph(2);
         this.pauseGame(false);
