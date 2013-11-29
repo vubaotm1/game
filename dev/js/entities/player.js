@@ -91,6 +91,7 @@ var Player = Entity.extend({
 
 
         this.parent();
+
         if (this.morphing) {
             if (this.animation != this.animations['morph']) {
                 this.animation = this.animations['morph'];
@@ -164,7 +165,7 @@ var Player = Entity.extend({
         }
 
         if (u && this.canJump()) {
-            game.playSound('jump');
+            game.playSound('jump', true);
             impulse = this.body.GetMass() * JUMP;
             this.body.ApplyImpulse(new b2Vec2(0, impulse), this.body.GetWorldCenter());
         }

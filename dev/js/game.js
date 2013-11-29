@@ -293,7 +293,7 @@ var Game = Class.extend({
 
     nextLevel: function() {
         this.resetStats();
-        this.loadLevel(Assets.Data.levels[this.currentLevelData.next]);
+        this.loadLevel(Assets.Data.levels[this.currentLevelData.next], this.currentLevelData.next);
     },
 
     showGame: function() {

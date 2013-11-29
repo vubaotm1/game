@@ -38,6 +38,7 @@ var LB = Entity.extend({
     triggered: function(by, game) {
         if (++this.triggerCount === this.neededTriggers) {
             this.trigger(by, game);
+            if (this.active) game.playSound('correct');
             this.active = false;
             this.animation = this.animations['inactive'+ this.getTriggerAnim()];
         } else {
@@ -48,6 +49,7 @@ var LB = Entity.extend({
     untriggered: function(game) {
         if (--this.triggerCount < this.neededTriggers) {
             this.untrigger(game);
+            if (!this.active) game.playSound('wrong');
             this.active = true;
             this.animation = this.animations['active' + this.getTriggerAnim()];
         } else {

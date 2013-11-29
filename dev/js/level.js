@@ -124,7 +124,7 @@ var Level = Class.extend({
         if (this.morphing) return;
         this.activemorph = i;
         $('#morphs > div div').removeClass('active');
-        var a =  $('#morphs > div #' + (i + 1));
+        var a = $('#morphs > div #' + (i + 1));
         a.addClass('active');
         a.removeClass('flash');
         var info = this.morphs[i];
@@ -141,8 +141,8 @@ var Level = Class.extend({
     },
 
     activateFirstMorph: function() {
-        for(var i = 0, n = this.morphs.length; i < n; i++) {
-            if(this.morphs[i] && this.morphs[i].count > 0) {
+        for (var i = 0, n = this.morphs.length; i < n; i++) {
+            if (this.morphs[i] && this.morphs[i].count > 0) {
                 this.setActiveMorph(i);
             }
         }
@@ -298,7 +298,7 @@ var Level = Class.extend({
     update: function(game) {
         var i;
         for (i = 1; i < 7; i++) {
-            if (Input.isPressed(Keys["_" + i])) {
+            if (Input.isPressed(Keys["_" + i]) || Input.isPressed(Keys["NUMPAD_" + i])) {
                 this.setActiveMorph(i - 1);
             }
         }
