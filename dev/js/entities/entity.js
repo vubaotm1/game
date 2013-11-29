@@ -44,6 +44,8 @@ var Entity = Class.extend({
 
     physicsInfo: null,
 
+    activatesButton: true,
+
     init: function(x, y, scale, bodyoptions) {
         this.hash = hashnum++;
 
@@ -51,6 +53,11 @@ var Entity = Class.extend({
             x: x,
             y: y
         };
+
+        // this.offset = {
+        //     x: 0,
+        //     y: 0
+        // };
 
         this.scale = scale;
 
@@ -73,7 +80,7 @@ var Entity = Class.extend({
             bodyoptions.ent = this;
         }
 
-        var b = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.x, this.width*this.scale, this.height*this.scale, bodyoptions);
+        var b = p['add'+this.bodyType+'Entity'](this.pos.x+this.offset.x, this.pos.y+this.offset.y, this.width*this.scale, this.height*this.scale, bodyoptions);
         
         if (b && b.body && b.joint) {
             this.body = b.body;

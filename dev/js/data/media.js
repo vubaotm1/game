@@ -16,8 +16,8 @@ var media = {
             },
             button: {
                 file: 'button',
-                tilewidth: 22,
-                tileheight: 21
+                tilewidth: 17,
+                tileheight: 16
             },
             laser: {
                 file: 'laser',
@@ -94,6 +94,9 @@ var media = {
         },
         sparkle: {
             file: 'sparkle.mp3'
+        },
+        fail: {
+            file: 'fail.wav'
         }
     },
     data: {
@@ -174,6 +177,15 @@ var media = {
                     'Spawn.Immovable': 2
                 },
                 file: '9',
+                next: '8'
+            },
+            t_0: {
+                title: "Test Laser/Floater/Platform/Buttons",
+                morphs: {
+                    'Spawn.Movable': 2,
+                    'Spawn.Floater': 1
+                },
+                file: 't_0',
                 next: '8'
             }
         }

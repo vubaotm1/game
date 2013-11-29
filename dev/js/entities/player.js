@@ -70,6 +70,7 @@ var Player = Entity.extend({
             this.animation.flip.x = true;
             this.hitTime = time || 300;
             game.shake(time || 300, 20);
+            game.playSound('fail');
         }
 
         this.hitTime = this.hitTime - config.tick;

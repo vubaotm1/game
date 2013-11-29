@@ -60,11 +60,19 @@
     };
 
     Object.$merge = function(obj, other, override) {
-        if(!obj || !other) return;
+        if (!obj || !other) return;
 
-        for(var prop in other) {
-            if(!obj[prop] || override) obj[prop] = other[prop];
+        for (var prop in other) {
+            if (!obj[prop] || override) obj[prop] = other[prop];
         }
+    };
+
+    Array.prototype.indexOf = function(v) {
+        for (var i = 0, l = this.length; i < l; i++) {
+            if (this[i] === v) {
+                return i;
+            }
+        }
+        return -1;
     }
 })();
-

@@ -26,6 +26,7 @@ module.exports = {
         Test: require('./spawn/test'),
         Movable: require('./spawn/movable'),
         Immovable: require('./spawn/immovable'),
+        Floater: require('./spawn/floater'),
         //Float: require('./spawn/float'),
         //Spring: require('./spawn/spring')
     }
