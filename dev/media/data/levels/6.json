@@ -320,7 +320,7 @@
                  "name":"Button",
                  "properties":
                     {
-                     "target":"door,door1"
+                     "target":"door1"
                     },
                  "rotation":0,
                  "type":"scenery",

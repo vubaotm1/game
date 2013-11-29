@@ -9,7 +9,6 @@ window.Stats = require('./lib/stats');
 
 window.debug = {
     draws: 0,
-    bounciness: 0.5,
     physdebug: true
 }
 var dat = require('./lib/dat.gui');

@@ -244,6 +244,7 @@ var Physics = {
         if (options.bottom) {
             shape.SetAsOrientedBox((w / 2), 0.2, new b2Vec2(w / 2, h), 0);
             fd.friction = options.bottom.friction || 0;
+            fd.restitution = options.bottom.restitution || 0;
             body.CreateFixture(fd);
         }
 

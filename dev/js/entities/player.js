@@ -89,8 +89,8 @@ var Player = Entity.extend({
             this.kill(game);
         }
 
-        this.parent();
 
+        this.parent();
         if (this.morphing) {
             if (this.animation != this.animations['morph']) {
                 this.animation = this.animations['morph'];

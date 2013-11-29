@@ -147,7 +147,7 @@ var media = {
             5: {
                 title: "New transform",
                 morphs: {
-                    'Spawn.Movable': 2,
+                    'Spawn.Movable': 1,
                     'Spawn.Immovable': 2
                 },
                 file: '5',
@@ -180,7 +180,7 @@ var media = {
                 next: '8'
             },
             t_0: {
-                title: "Test Laser/Floater/Platform/Buttons",
+                title: "Lasers are dangerous",
                 morphs: {
                     'Spawn.Movable': 2,
                     'Spawn.Floater': 1
