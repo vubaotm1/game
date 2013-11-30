@@ -144,7 +144,7 @@ var Level = Class.extend({
     activateFirstMorph: function() {
         for (var i = 0, n = this.morphs.length; i < n; i++) {
             if (this.morphs[i] && this.morphs[i].count > 0) {
-                this.setActiveMorph(i);
+                return this.setActiveMorph(i);
             }
         }
     },

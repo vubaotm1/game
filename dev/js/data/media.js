@@ -188,6 +188,16 @@ var media = {
                 file: '9',
                 next: '10'
             },
+            10: {
+                title: "The need of a bridge",
+                morphs: {
+                    'Spawn.Floater': 2,
+                    'Spawn.Movable': 1,
+                    'Spawn.Immovable': 1
+                },
+                file: '10',
+                next: '10'
+            },
             110: {
                 title: "Lasers are dangerous",
                 morphs: {

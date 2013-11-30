@@ -77,7 +77,7 @@ listener.EndContact = function(contact) {
         } else {
             if (bodyDataA) {
                 if(bodyDataA.collisions && fixtureDataB && fixtureDataB.ent) {
-                    bodyDataA.collisions.splice(bodyDataA.collisions.indexOf(fixtureDataV.ent), 1);
+                    bodyDataA.collisions.splice(bodyDataA.collisions.indexOf(fixtureDataB.ent), 1);
                 }
             }
         }

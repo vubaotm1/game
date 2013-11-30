@@ -105,17 +105,12 @@ var Engine = Class.extend({
     },
 
     draw: function() {
-        // debug.draws = 1;
         this.clear();
 
-        // if (!config.physics.debug) {
         this.game.draw();
-        // } else {
-        //     // if(debug.physdebug) {
-        //     //     this.game.draw();
-        //     // }
-        //     p.draw();
-        // }
+        if (config.physics.debug) {
+            p.draw();
+        }
     },
 
     togglePause: function() {
