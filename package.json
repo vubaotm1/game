@@ -1,6 +1,6 @@
 {
-  "name": "game-off-2013",
-  "description": "A game",
+  "name": "transcube",
+  "description": "A puzzle platformer",
   "version": "0.1.0",
   "author": {
     "name": "Jeroen Verfallie"

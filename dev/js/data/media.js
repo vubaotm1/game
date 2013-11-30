@@ -50,12 +50,6 @@ var media = {
         }
     },
     sfx: {
-    //     success0: {
-    //         file: 'success.wav'
-    //     },
-    //     success1: {
-    //         file: 'tada.wav'
-    //     },
         pabam: {
             file: 'success.mp3'
         },
