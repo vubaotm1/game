@@ -16,7 +16,7 @@ var Ent = Entity.extend({
                 friction: 0.2
             },
             top: {
-                friction: 0.1
+                friction: 0.2
             }
         };
 

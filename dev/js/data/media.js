@@ -147,8 +147,8 @@ var media = {
             5: {
                 title: "New transform",
                 morphs: {
-                    'Spawn.Movable': 1,
-                    'Spawn.Immovable': 2
+                    'Spawn.Immovable': 2,
+                    'Spawn.Movable': 1
                 },
                 file: '5',
                 next: '6'
@@ -164,28 +164,45 @@ var media = {
             7: {
                 title: "The way around",
                 morphs: {
-                    'Spawn.Movable': 1,
-                    'Spawn.Immovable': 2
+                    'Spawn.Immovable': 2,
+                    'Spawn.Movable': 1
                 },
                 file: '7',
                 next: '8'
             },
-            9: {
-                title: "",
+            8: {
+                title: "Lasers hurt",
                 morphs: {
-                    'Spawn.Movable': 1,
+                    'Spawn.Movable': 2
+                },
+                file: '8',
+                next: '9'
+            },
+            9: {
+                title: "Platforms move",
+                morphs: {
+                    'Spawn.Movable': 2,
                     'Spawn.Immovable': 2
                 },
                 file: '9',
-                next: '8'
+                next: '10'
             },
-            t_0: {
+            110: {
                 title: "Lasers are dangerous",
                 morphs: {
                     'Spawn.Movable': 2,
                     'Spawn.Floater': 1
                 },
                 file: 't_0',
+                next: '8'
+            },
+            111: {
+                title: "Lasers are dangerous",
+                morphs: {
+                    'Spawn.Movable': 2,
+                    'Spawn.Floater': 1
+                },
+                file: 't_1',
                 next: '8'
             }
         }

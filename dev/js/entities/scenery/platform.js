@@ -78,7 +78,7 @@ var Platform = Entity.extend({
             this.animations[anim].offset = this.animoffset;
         }
 
-        this.animation = this.animations['inactive' + this.getTriggerAnim()];
+        this.animation = this.animations[(this.active ? '' : 'in') + 'active' + this.getTriggerAnim()];
     },
 
     getTriggerAnim: function() {

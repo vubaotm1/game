@@ -56,7 +56,8 @@ var Laser = Entity.extend({
 
 
         this.distance = (this.axis === 'x' ? options.width : options.height) * this.direction;
-        this.sheet = Assets.Graphics.sprites.laser;
+
+        this.active = !(options.properties && options.properties.inactive);
     },
 
     triggered: function(by) {

@@ -18,6 +18,8 @@ var Door = Entity.extend({
 
     speed: 10,
 
+    activatesButton: false,
+
     init: function(x, y, options) {
         this.parent(x, y, 1, {
             fixed: 'y',

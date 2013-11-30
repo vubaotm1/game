@@ -1,7 +1,7 @@
 var Config = {
 
     debug: {
-        level: 't_0'
+        level: '9'
     },
 
     tick: 0,

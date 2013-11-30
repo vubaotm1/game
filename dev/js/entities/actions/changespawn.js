@@ -14,7 +14,7 @@ var ChangeSpawn = Entity.extend({
     },
 
     update: function(game) {
-        if(!this.done && this.body.m_userData.playerCollision) {
+        if(!this.done && this.body.m_userData.playerCollision && !game.level.player.killed) {
             game.level.setSpawn(this.pos.x, this.pos.y);
             this.done = true;
             game.playSound('sparkle');

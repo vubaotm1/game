@@ -28,6 +28,8 @@ var Player = Entity.extend({
 
     hitTime: 0,
 
+    killed: false,
+
     init: function(x, y, sheet) {
         this.parent(x, y, 1);
 
@@ -64,6 +66,7 @@ var Player = Entity.extend({
     kill: function(game, time) {
         if(this.animation === this.animations['endlevel']) return;
         if(this.animation !== this.animations['hit']) {
+            this.killed = true;
             this.morphing = false;
             game.level.morphing = false;
             this.animation = this.animations['hit'];
@@ -82,6 +85,7 @@ var Player = Entity.extend({
     respawn: function(x, y) {
         this.setPos(x, y);
         this.animation = this.animations['stand'];
+        //this.killed = false;
     },
 
     update: function(game) {
@@ -162,6 +166,8 @@ var Player = Entity.extend({
 
         if (!this.canJump()) {
             this.animation = this.animations['jump'];
+        } else {
+            this.killed = false;
         }
 
         if (u && this.canJump()) {
