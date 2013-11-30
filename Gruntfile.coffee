@@ -51,14 +51,14 @@ module.exports = (grunt) ->
                 files: [
                     expand: true
                     cwd: "./dev/media/"
-                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*","music/*","fonts/*","swf/*"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*.mp3","music/*.mp3","fonts/*","swf/*"]
                     dest: "./build/media/"
                 ]
             release: 
                 files: [
                     expand: true
                     cwd: "./build/media/"
-                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*","music/*","fonts/*","swf/*"]
+                    src: ["**/*.jpg","**/*.json","**/*.png","sounds/*.mp3","music/*.mp3","fonts/*","swf/*"]
                     dest: "./dist/media/"
                 ]
             libs:
