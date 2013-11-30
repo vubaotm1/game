@@ -65,7 +65,7 @@ var media = {
             file: 'success.mp3'
         },
         click: {
-            file: 'ui_click.mP3'
+            file: 'ui_click.mp3'
         },
         correct: {
             file: 'correct.mp3',
@@ -102,7 +102,8 @@ var media = {
     data: {
         levels: {
             intro: {
-                file: 'first'
+                file: 'first',
+                title: ''
             },
             0: {
                 title: "Know your keys",
@@ -197,9 +198,10 @@ var media = {
                 next: '8'
             },
             111: {
-                title: "Lasers are dangerous",
+                title: "Lasers are unforgiving",
                 morphs: {
                     'Spawn.Movable': 2,
+                    'Spawn.Immovable': 1,
                     'Spawn.Floater': 1
                 },
                 file: 't_1',

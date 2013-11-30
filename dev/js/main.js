@@ -5,21 +5,21 @@ var Input = require('./engine/input');
 var config = require('./config');
 // DEBUG STUFF
 
-window.Stats = require('./lib/stats');
+// window.Stats = require('./lib/stats');
 
-window.debug = {
-    draws: 0,
-    physdebug: true
-}
-var dat = require('./lib/dat.gui');
-window.gui = new dat.GUI({
-    autoPlace: true
-});
+// window.debug = {
+//     draws: 0,
+//     physdebug: true
+// }
+// var dat = require('./lib/dat.gui');
+// window.gui = new dat.GUI({
+//     autoPlace: true
+// });
 
-gui.add(debug, 'draws').listen();
-gui.add(config.physics, 'debug').listen();
-gui.add(debug, 'physdebug');
-gui.close();
+// gui.add(debug, 'draws').listen();
+// gui.add(config.physics, 'debug').listen();
+// gui.add(debug, 'physdebug');
+// gui.close();
 
 // GLOBALS
 

@@ -105,17 +105,17 @@ var Engine = Class.extend({
     },
 
     draw: function() {
-        debug.draws = 1;
+        // debug.draws = 1;
         this.clear();
 
-        if (!config.physics.debug) {
-            this.game.draw();
-        } else {
-            if(debug.physdebug) {
-                this.game.draw();
-            }
-            p.draw();
-        }
+        // if (!config.physics.debug) {
+        this.game.draw();
+        // } else {
+        //     // if(debug.physdebug) {
+        //     //     this.game.draw();
+        //     // }
+        //     p.draw();
+        // }
     },
 
     togglePause: function() {
@@ -132,7 +132,7 @@ var Engine = Class.extend({
             return requestAnimFrame(this.tick.bind(this));
         }
 
-        Stats.begin();
+        // Stats.begin();
 
         config.tick = (new Date()).getTime() - this.lastUpdate;
         this.lastUpdate = this.lastUpdate + config.tick;
@@ -142,7 +142,7 @@ var Engine = Class.extend({
         requestAnimFrame(this.tick.bind(this));
         this.draw();
 
-        Stats.end();
+        // Stats.end();
     }
 });
 

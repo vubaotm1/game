@@ -85,7 +85,7 @@ var Assets = {
                 volume: s.res.volume || 100,
                 
                 onload: function() {
-                    self._doneLoading(s.path + "");
+                    self._doneLoading(this.url);
                 }
             });
 

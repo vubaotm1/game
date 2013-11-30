@@ -66,7 +66,7 @@ var Graphic = Class.extend({
         if (sx) x = x * sx - (sx < 0 ? w : 0);
         if (sy) y = y * sy - (sy < 0 ? h : 0);
 
-        debug.draws++;
+        // debug.draws++;
         ctx.drawImage(
             data,
             xs, ys, w, h,
