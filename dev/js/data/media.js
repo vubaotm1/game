@@ -41,11 +41,6 @@ var media = {
             tilesize: 30
         },
         tilesets: {
-            scenery: {
-                file: 'scenery',
-                tilewidth: 16,
-                tileheight: 10
-            },
             main: {
                 file: 'main_tileset',
                 tileheight: 21,
@@ -76,27 +71,27 @@ var media = {
             volume: 10
         },
         on: {
-            file: 'on.wav'
+            file: 'on.mp3'
         },
         off: {
-            file: 'off.wav'
+            file: 'off.mp3'
         },
         transform: {
-            file: 'transform.wav'
+            file: 'transform.mp3'
         },
         fall: {
-            file: 'fall.wav',
+            file: 'fall.mp3',
             volume: 10
         },
         jump: {
-            file: 'jump.wav',
+            file: 'jump.mp3',
             volume: 10
         },
         sparkle: {
             file: 'sparkle.mp3'
         },
         fail: {
-            file: 'fail.wav'
+            file: 'fail.mp3'
         }
     },
     data: {
@@ -198,25 +193,25 @@ var media = {
                 file: '10',
                 next: '10'
             },
-            110: {
-                title: "Lasers are dangerous",
-                morphs: {
-                    'Spawn.Movable': 2,
-                    'Spawn.Floater': 1
-                },
-                file: 't_0',
-                next: '8'
-            },
-            111: {
-                title: "Lasers are unforgiving",
-                morphs: {
-                    'Spawn.Movable': 2,
-                    'Spawn.Immovable': 1,
-                    'Spawn.Floater': 1
-                },
-                file: 't_1',
-                next: '8'
-            }
+            // '_110': {
+            //     title: "Lasers are dangerous",
+            //     morphs: {
+            //         'Spawn.Movable': 2,
+            //         'Spawn.Floater': 1
+            //     },
+            //     file: 't_0',
+            //     next: '8'
+            // },
+            // '_111': {
+            //     title: "Lasers are unforgiving",
+            //     morphs: {
+            //         'Spawn.Movable': 2,
+            //         'Spawn.Immovable': 1,
+            //         'Spawn.Floater': 1
+            //     },
+            //     file: 't_1',
+            //     next: '8'
+            // }
         }
     }
 }
