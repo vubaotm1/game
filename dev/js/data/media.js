@@ -185,27 +185,63 @@ var media = {
                     'Spawn.Immovable': 1
                 },
                 file: '10',
-                next: '10'
+                next: '11'
             },
-            // '_110': {
-            //     title: "Lasers are dangerous",
-            //     morphs: {
-            //         'Spawn.Movable': 2,
-            //         'Spawn.Floater': 1
-            //     },
-            //     file: 't_0',
-            //     next: '8'
-            // },
-            // '_111': {
-            //     title: "Lasers are unforgiving",
-            //     morphs: {
-            //         'Spawn.Movable': 2,
-            //         'Spawn.Immovable': 1,
-            //         'Spawn.Floater': 1
-            //     },
-            //     file: 't_1',
-            //     next: '8'
-            // }
+            11: {
+                title: "Up we go with the elevator",
+                morphs: {
+                    'Spawn.Floater': 1,
+                    'Spawn.Movable': 1,
+                    'Spawn.Upfloater': 2
+                },
+                file: '11',
+                next: '12'
+            },
+            12: {
+                title: "Rise like a balloon",
+                morphs: {
+                    'Spawn.Upfloater': 1,
+                    'Spawn.Floater': 1
+                },
+                file: '12',
+                next: '13'
+            },
+            1003: {
+                title: "Protection is a must",
+                morphs: {
+                    'Spawn.Movable': 3
+                },
+                file: 't_3',
+                next: '13'
+            },
+            1002: {
+                title: "Building walls",
+                morphs: {
+                    'Spawn.Upfloater': 1,
+                    'Spawn.Immovable': 2
+                },
+                file: 't_2',
+                next: '13'
+            },
+            1000: {
+                title: "Lasers are dangerous",
+                morphs: {
+                    'Spawn.Movable': 2,
+                    'Spawn.Floater': 1
+                },
+                file: 't_0',
+                next: '8'
+            },
+            1001: {
+                title: "Lasers are unforgiving",
+                morphs: {
+                    'Spawn.Movable': 2,
+                    'Spawn.Immovable': 1,
+                    'Spawn.Floater': 1
+                },
+                file: 't_1',
+                next: '8'
+            }
         }
     }
 }

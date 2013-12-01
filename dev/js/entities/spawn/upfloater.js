@@ -11,9 +11,10 @@ var Ent = Entity.extend({
 
     speed: 3,
 
-    activatesButton: false,
+    //activatesButton: false,
     
     init: function(x, y) {
+        x+=2;
         var bodyoptions = {
             fixed: "y",
             density: 400, 

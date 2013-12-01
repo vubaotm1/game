@@ -160,6 +160,7 @@ var Game = Class.extend({
             this.loadLevel(config.debug.level);
             showIntro(false);
             showGame();
+            this.soundMuted = true;
         }
 
 

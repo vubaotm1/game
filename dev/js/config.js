@@ -1,8 +1,8 @@
 var Config = {
 
-    // debug: {
-    //     level: '10'
-    // },
+    debug: {
+        level: '1003'
+    },
 
     tick: 0,
 
