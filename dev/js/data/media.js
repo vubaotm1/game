@@ -206,6 +206,17 @@ var media = {
                 file: '12',
                 next: '13'
             },
+            1004: {
+                title: "Sequence of lasers",
+                morphs: {
+                    'Spawn.Movable': 2,
+                    'Spawn.Immovable': 1,
+                    'Spawn.Floater': 2,
+                    'Spawn.Upfloater': 1
+                },
+                file: 't_4',
+                next: '13'
+            },
             1003: {
                 title: "Protection is a must",
                 morphs: {

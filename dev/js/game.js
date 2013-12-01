@@ -31,6 +31,9 @@ var Game = Class.extend({
 
     soundMuted: false,
 
+    bgMusicCurrent: null,
+    bgMusic: true,
+
     init: function(context) {
         Input.bind("right", [Keys.D, Keys.RIGHT_ARROW]);
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
@@ -50,7 +53,7 @@ var Game = Class.extend({
         var self = this;
         $('#levels').on('click', '.level', function() {
             var lvl = parseInt($(this).data('level'));
-            if(lvl > parseInt(localStorage.getItem('unlocked'))) return;
+            if (lvl > parseInt(localStorage.getItem('unlocked'))) return;
 
             self.resetStats();
             self.loadLevel(lvl);
@@ -59,9 +62,20 @@ var Game = Class.extend({
         });
 
         $('.mute').click(function() {
-            var a = $('.mute')
+            var a = $(this)
             a.toggleClass('muted');
             self.soundMuted = a.hasClass('muted');
+        });
+
+        $('.music').click(function() {
+            var a = $(this);
+            a.toggleClass('muted');
+            self.bgMusic = !a.hasClass('muted');
+            if (self.bgMusic) {
+                self.playMusic();
+            } else {
+                if (self.bgMusicCurrent) self.bgMusicCurrent.stop();
+            }
         });
 
 
@@ -154,13 +168,13 @@ var Game = Class.extend({
         });
 
         this.initLevels();
+        this.playMusic();
 
         if (config.debug) {
             self.resetStats();
             this.loadLevel(config.debug.level);
             showIntro(false);
             showGame();
-            this.soundMuted = true;
         }
 
 
@@ -195,6 +209,9 @@ var Game = Class.extend({
         }
 
         function showLevels(show) {
+            if(b) {
+                b.remove();
+            }
             if (show === undefined || show) {
                 $('#levelselect').fadeIn();
             } else {
@@ -206,7 +223,7 @@ var Game = Class.extend({
     initLevels: function() {
         var n = 0,
             unlocked = localStorage.getItem('unlocked');
-        if(!unlocked) {
+        if (!unlocked) {
             localStorage.setItem('unlocked', 0);
             unlocked = 0;
         }
@@ -222,6 +239,39 @@ var Game = Class.extend({
             lvlbtn.text(++n);
             $('#levels').append(lvlbtn);
         }
+    },
+
+    playMusic: function() {
+        var self = this;
+        var sound = soundManager.createSound({
+            id: 'bg',
+            url: 'media/music/bg.mp3',
+            stream: true,
+            volume: 5
+        });
+
+        var alt = soundManager.createSound({
+            id: 'bg_alt',
+            url: 'media/music/bg_alt.mp3',
+            stream: true,
+            volume: 5
+        });
+
+        sound.next = alt;
+        alt.next = sound;
+
+        function loopSound(sound) {
+            if (!self.bgMusic) return;
+            if (self.bgMusicCurrent) self.bgMusicCurrent.stop();
+            sound.play({
+                onfinish: function() {
+                    loopSound(sound.next);
+                }
+            });
+            self.bgMusicCurrent = sound;
+        }
+
+        loopSound(self.bgMusicCurrent ? self.bgMusicCurrent.next : sound);
     },
 
     playSound: function(sound, onlyOneInstance, options) {

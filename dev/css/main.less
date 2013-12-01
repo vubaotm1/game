@@ -129,10 +129,23 @@ canvas {
             background-position: (-54px*4) 0;
         }
         &.mute {
-            right: 20px;
+            right: 85px;
             background-position: (-54px*3) 0;
             &.muted {
                 background-position: (-54px*5) 0;
+                &:hover {
+                    background-position-y: -54px;
+                }
+                &:active {
+                    background-position-y: -54*2px;
+                }
+            }
+        }
+        &.music {
+            right: 20px;
+            background-position: (-54px*7) 0;
+            &.muted {
+                background-position: (-54px*6) 0;
                 &:hover {
                     background-position-y: -54px;
                 }

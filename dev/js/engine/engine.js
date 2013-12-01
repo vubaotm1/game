@@ -32,6 +32,9 @@ var Engine = Class.extend({
         soundManager.setup({
             url: 'media/swf/',
             flashVersion: 9,
+            preferFlash: true,
+            useHTML5Audio: true,
+            useHighPerformance: false,
             onready: function() {
                 Assets.loadSounds();
             }

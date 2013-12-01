@@ -80,14 +80,20 @@ var Assets = {
             var sound = soundManager.createSound({
                 id: s.path,
                 url: 'media/sounds/' + s.res.file,
-                autoLoad: true,
+                autoLoad: !!!s.res.stream,
 
                 volume: s.res.volume || 100,
+                stream: !!s.res.stream,
+                multiShot: true,
                 
                 onload: function() {
-                    self._doneLoading(this.url);
+                    if(!this.stream) self._doneLoading(this.url);
                 }
             });
+
+            if(s.res.stream) {
+                self._doneLoading(sound.url);
+            }
 
             Object.$set(Assets.Sounds, s.path.replace('sfx.', ''), sound);
         }
