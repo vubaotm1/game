@@ -69,6 +69,8 @@ There are 22 levels in the Compo version. More levels, and level elements to fol
 
 ## Credits
 
+*Detailed credits on music and sounds soon*
+
 * Code and art by me.
 * External libraries, such as Box2dweb, jQuery and SoundManager2.
 * FreeSound.org for most of the sounds, modified or not.
