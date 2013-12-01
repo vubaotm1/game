@@ -71,3 +71,4 @@ A 2d puzzle platformer based on the concept of transforming into different "bloc
 * Code and art by me.
 * External libraries, such as Box2dweb, jQuery and SoundManager2.
 * FreeSound.org for most of the sounds, modified or not.
+* Incompetech.com for music.
