@@ -353,7 +353,7 @@ var Game = Class.extend({
 
     retryLevel: function() {
         this.resetStats();
-        this.loadLevel(this.currentLevelData);
+        this.loadLevel(this.currentLevelId);
     },
 
     resetStats: function() {
