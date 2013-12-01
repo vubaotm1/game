@@ -1,8 +1,8 @@
 var Config = {
 
-    debug: {
-        level: 'end'
-    },
+    // debug: {
+    //     level: 'end'
+    // },
 
     tick: 0,
 

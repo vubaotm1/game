@@ -394,9 +394,12 @@ var Game = Class.extend({
         this.currentLevelData = level;
         this.currentLevelId = id;
 
+        var s = "";
         if (!isNaN(id)) {
-            $('#leveltitle').text((parseInt(id) + 1) + ". " + level.title);
+            s = (parseInt(id) + 1) + ". ";
         }
+        $('#leveltitle').text(s + level.title);
+        
         if (id == '0') this.level.setActiveMorph(2);
         this.pauseGame(false);
     },
