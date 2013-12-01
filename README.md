@@ -1,4 +1,4 @@
-![TransCube](http://jeroenverfallie.github.io/game-off-2013/media/img/gh_logo.png)
+![TransCube](http://jeroenverfallie.github.io/ggo13-transcube/media/img/gh_logo.png)
 
 # TransCube
 
@@ -30,7 +30,7 @@ A 2d puzzle platformer based on the concept of transforming into different "bloc
   </tr>
 </table>
 
-![Screenshot](http://jeroenverfallie.github.io/game-off-2013/media/img/gh_screen.png)
+![Screenshot](http://jeroenverfallie.github.io/ggo13-transcube/media/img/gh_screen.png)
 
 ## Tools, code
 
