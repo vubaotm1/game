@@ -40,7 +40,7 @@ A 2d puzzle platformer based on the concept of transforming into different "bloc
 * Pickle: animations
 * Audactiy: sound edits
 * Bxfr: sound creation
-# Tiled: levels
+* Tiled: levels
 
 ## Compatibility
 
