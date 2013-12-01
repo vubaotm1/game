@@ -80,7 +80,7 @@ var Level = Class.extend({
         this.camera.min.y = -config.perspective.pHeight;
         this.camera.max.x = this.realwidth;
         this.camera.max.y = this.realheight;
-        this.camera.lookAhead.x = config.display.width/10;
+        this.camera.lookAhead.x = config.display.width / 10;
         this.camera.set(this.player);
 
     },

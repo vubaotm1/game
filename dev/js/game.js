@@ -209,7 +209,7 @@ var Game = Class.extend({
         }
 
         function showLevels(show) {
-            if(b) {
+            if (b) {
                 b.remove();
             }
             if (show === undefined || show) {
@@ -257,8 +257,16 @@ var Game = Class.extend({
             volume: 5
         });
 
+        var alt2 = soundManager.createSound({
+            id: 'bg_alt_2',
+            url: 'media/music/bg_alt_2.mp3',
+            stream: true,
+            volume: 5
+        });
+
         sound.next = alt;
-        alt.next = sound;
+        alt.next = alt2;
+        alt2.next = sound;
 
         function loopSound(sound) {
             if (!self.bgMusic) return;

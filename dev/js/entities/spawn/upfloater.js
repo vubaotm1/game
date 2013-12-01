@@ -18,6 +18,9 @@ var Ent = Entity.extend({
         var bodyoptions = {
             fixed: "y",
             density: 400, 
+            top: {
+                friction: 0.2
+            },
             motor: {
                 speed: this.speed,
                 maxForce: 10000000

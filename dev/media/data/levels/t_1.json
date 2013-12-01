@@ -139,7 +139,7 @@
                  "polyline":[
                         {
                          "x":96,
-                         "y":2
+                         "y":17
                         }, 
                         {
                          "x":96,
@@ -167,7 +167,7 @@
                         }, 
                         {
                          "x":112,
-                         "y":2
+                         "y":17
                         }],
                  "properties":
                     {
@@ -363,6 +363,29 @@
                  "width":0,
                  "x":128,
                  "y":135
+                }, 
+                {
+                 "height":0,
+                 "name":"",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-16,
+                         "y":0
+                        }],
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":288,
+                 "y":150
                 }],
          "opacity":1,
          "properties":
@@ -610,7 +633,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/tilesets\/definitions.png",
+         "image":"..\/..\/img\/tilesets\/definitions.png",
          "imageheight":75,
          "imagewidth":112,
          "margin":0,
@@ -625,7 +648,7 @@
         }, 
         {
          "firstgid":36,
-         "image":"R:\/games\/jam\/game-off-2013\/dev\/media\/img\/info.png",
+         "image":"..\/..\/img\/info.png",
          "imageheight":300,
          "imagewidth":300,
          "margin":0,
