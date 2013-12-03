@@ -37,6 +37,10 @@ There are 22 levels in the Compo version. More levels, and level elements to fol
 
 ![Screenshot](http://jeroenverfallie.github.io/ggo13-transcube/media/img/gh_screen.png)
 
+## Spoiler alert
+
+Here's a walkthrough/speedrun of all the level [On vimeo](https://vimeo.com/80929591)
+
 ## Tools, code
 
 * Sublime Text 3: code
