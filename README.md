@@ -1,5 +1,7 @@
 **Horrible bug I left in: When you click play, please click level 1, and not the "resume/restart" button that shouldn't be visible..** 
 
+*Needs cookies (localstorage) enabled..*
+
 ![TransCube](http://jeroenverfallie.github.io/ggo13-transcube/media/img/gh_logo.png)
 
 # TransCube
