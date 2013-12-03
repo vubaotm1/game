@@ -2,6 +2,8 @@
 
 # TransCube
 
+**Horrible bug I left in: When you click play, please click level 1, and not the "resume/restart" button that shouldn't be visible..** 
+
 A 2d puzzle platformer based on the concept of transforming into different "blocks", with their unique properties, and making you way to the end of the level with the provided transformations.  
 There are 22 levels in the Compo version. More levels, and level elements to follow in a fork of this repo.
 
