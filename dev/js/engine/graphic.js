@@ -92,7 +92,7 @@ var Graphic = Class.extend({
         this.image.src = this.path;
     },
 
-    _onload: function(event) {
+    _onload: function() {
         this.loaded = true;
 
         this.width = this.image.width;
@@ -109,7 +109,7 @@ var Graphic = Class.extend({
         }
     },
 
-    _onerror: function(event) {
+    _onerror: function() {
         throw ('An error happened while loading ' + this.path);
     },
 

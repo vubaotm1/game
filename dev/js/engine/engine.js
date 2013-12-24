@@ -20,6 +20,17 @@ var Engine = Class.extend({
 
     init: function(gameConst) {
         this.initCanvas();
+
+        if (!this.game) {
+            Assets.loadAll(media);
+            Assets.onReady(function() {
+                if (!this.game) {
+                    this.game = new game(this.context);
+                }
+
+            }, this);
+        }
+
         this.initSounds();
 
         p.initDebug(this.context, config.display.scale);
@@ -74,23 +85,13 @@ var Engine = Class.extend({
         $('#canvas').css('left', ~~ (w / 2 - this.canvas.width / 2) + "px").css('top', ~~ (h / 2 - this.canvas.height / 2) + "px");
         config.message.top = ~~ (h / 2 - 50);
 
-
-        if (!this.game) {
-            config.display.scale = s;
-            Assets.loadAll(media);
-            Assets.onReady(function() {
-                if (!this.game) {
-                    this.game = new game(this.context);
-                }
-
-            }, this);
-        }
-
         if (this.game && config.display.scale != s) {
             p.resizeDebug(s);
             config.display.scale = s;
             Assets.resizeAll();
         }
+
+        config.display.scale = s;
     },
 
     update: function() {

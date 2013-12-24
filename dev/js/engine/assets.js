@@ -35,7 +35,7 @@ var Assets = {
             this._stack.total = 0;
         }
 
-        $('#leveltitle').text(this.completion != 100 ? "Loading.. " + this.completion + "% done!" : '');
+        $('#leveltitle').text(this.completion != 100 ? 'Loading.. ' + this.completion + '% done!' : '');
         console.info(path + ' loaded - Completion: %c' + this.completion + ' %', 'color: green; font-size: 14px;');
 
     },
@@ -55,11 +55,11 @@ var Assets = {
 
     _loadImage: function(path, resource) {
         if (resource.file.indexOf('.') == -1) {
-            resource.file += "." + config.defaultExt.img;
+            resource.file += '.' + config.defaultExt.img;
         }
 
         var p = path.replace('img.', '');
-        path = this._getPath(path, resource.file)
+        path = this._getPath(path, resource.file);
 
         var obj;
         if (resource.tilesize || (resource.tileheight && resource.tilewidth)) {
@@ -111,7 +111,7 @@ var Assets = {
     _loadData: function(path, resource) {
         var self = this;
         if (resource.file.indexOf('.') == -1) {
-            resource.file += "." + config.defaultExt.data;
+            resource.file += '.' + config.defaultExt.data;
         }
 
         var p = path.replace('data.', '');

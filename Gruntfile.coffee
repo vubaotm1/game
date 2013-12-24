@@ -22,6 +22,10 @@ module.exports = (grunt) ->
             options:
                 paths: ["./dev/css"]
             build:
+                options:
+                    dumpLineNumbers: true
+                    sourceMap: true
+                    sourceMapRootpath: "/game-off-2013/"
                 files:
                     "./build/css/main.css": "./dev/css/main.less"
 
@@ -35,6 +39,7 @@ module.exports = (grunt) ->
 
         browserify2:
             build:
+                debug: true
                 entry: "./dev/js/main.js"
                 compile: "./build/js/main.js"
 
