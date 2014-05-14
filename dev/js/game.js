@@ -212,6 +212,14 @@ var Game = Class.extend({
             if (b) {
                 b.remove();
             }
+
+
+            if (self.currentLevelId != 'intro') {
+                $('#menu .play:hidden').show();
+            } else {
+                $('#menu .play').hide();
+            }
+
             if (show === undefined || show) {
                 $('#levelselect').fadeIn();
             } else {
@@ -399,7 +407,7 @@ var Game = Class.extend({
             s = (parseInt(id) + 1) + ". ";
         }
         $('#leveltitle').text(s + level.title);
-        
+
         if (id == '0') this.level.setActiveMorph(2);
         this.pauseGame(false);
     },
