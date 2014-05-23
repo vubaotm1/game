@@ -78,7 +78,7 @@ Here's a walkthrough/speedrun of all the level [On vimeo](https://vimeo.com/8092
 
 ## Credits
 
-![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by/3.0/88x31.png) 
+![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by-sa/3.0/88x31.png) 
 
 * Code and art by me.
 * External libraries, such as Box2dweb, jQuery and SoundManager2.
