@@ -1,4 +1,4 @@
-![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by/3.0/88x31.png) 
+
 
 
 *Needs cookies (localstorage) enabled..*
@@ -78,7 +78,7 @@ Here's a walkthrough/speedrun of all the level [On vimeo](https://vimeo.com/8092
 
 ## Credits
 
-*Detailed credits on music and sounds soon*
+![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by/3.0/88x31.png) 
 
 * Code and art by me.
 * External libraries, such as Box2dweb, jQuery and SoundManager2.
