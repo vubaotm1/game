@@ -1,4 +1,5 @@
-**Horrible bug I left in: When you click play, please click level 1, and not the "resume/restart" button that shouldn't be visible..** 
+![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by/3.0/88x31.png) 
+
 
 *Needs cookies (localstorage) enabled..*
 
