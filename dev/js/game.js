@@ -216,7 +216,9 @@ var Game = Class.extend({
 
             if (self.currentLevelId != 'intro') {
                 $('#menu .play:hidden').show();
+                $('#menu .restart').show();
             } else {
+                $('#menu .restart').hide();
                 $('#menu .play').hide();
             }
 
