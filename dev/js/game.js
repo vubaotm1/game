@@ -340,8 +340,11 @@ var Game = Class.extend({
 
         var self = this;
 
+        var time = ~~(((new Date()).getTime() - this.stats.starttime) / 1000);
 
-        $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime) / 1000) + '');
+        ga('send', 'event', 'finish level', this.currentLevelId, time);
+
+        $('#stats #time').text(time + '');
         $('#stats #restarts').text(this.stats.restarts + '');
         $('#stats #deaths').text(this.stats.deaths + '');
         $('#stats #transforms').text(this.stats.transforms + '');
@@ -403,6 +406,7 @@ var Game = Class.extend({
     },
 
     loadLevel: function(id) {
+        ga('send', 'event', 'enter level', id);
         var level = Assets.Data.levels[id];
         if (!level) return;
 
