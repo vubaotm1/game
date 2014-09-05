@@ -34,6 +34,8 @@ var Game = Class.extend({
     bgMusicCurrent: null,
     bgMusic: true,
 
+    waitingForNext: true,
+
     init: function(context) {
         Input.bind("right", [Keys.D, Keys.RIGHT_ARROW]);
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
