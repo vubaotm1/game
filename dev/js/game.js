@@ -39,8 +39,9 @@ var Game = Class.extend({
         Input.bind("left", [Keys.Q, Keys.A, Keys.LEFT_ARROW]);
         Input.bind("up", [Keys.Z, Keys.SPACE, Keys.UP_ARROW, Keys.W]);
         Input.bind("down", [Keys.S, Keys.DOWN_ARROW]);
-        Input.bind("morph", [Keys.E, Keys.ENTER]);
+        Input.bind("morph", [Keys.E]);
         Input.bind("restart", [Keys.R]);
+        Input.bind("nextLevel", [Keys.N, Keys.ENTER]);
 
 
         $('#ui').fadeIn(1000);
@@ -228,6 +229,13 @@ var Game = Class.extend({
                 $('#levelselect').hide();
             }
         }
+
+        this.ui = {
+            showEnd: showEnd,
+            showGame: showGame,
+            showLevels: showLevels,
+            showIntro: showIntro
+        };
     },
 
     initLevels: function() {
@@ -330,6 +338,8 @@ var Game = Class.extend({
         this.level.camera.min.x = -Infinity;
         this.level.player.endLevel(this.level, flip);
 
+        var self = this;
+
 
         $('#stats #time').text(~~(((new Date()).getTime() - this.stats.starttime) / 1000) + '');
         $('#stats #restarts').text(this.stats.restarts + '');
@@ -347,6 +357,7 @@ var Game = Class.extend({
             var h = a.height();
 
             $('#end').css('top', config.message.top - b / 2 + h).fadeIn(400);
+            self.waitingForNext = true;
         });
 
 
@@ -412,6 +423,7 @@ var Game = Class.extend({
 
         if (id == '0') this.level.setActiveMorph(2);
         this.pauseGame(false);
+        this.waitingForNext = false;
     },
 
     shake: function(duration, force) {
@@ -420,7 +432,7 @@ var Game = Class.extend({
     },
 
     update: function() {
-        if (Input.isPressed('restart')) {
+        if (Input.isPressed('restart') && !this.waitingForNext) {
             var self = this;
             $('#morphs').fadeOut(500);
             $('#canvas').fadeTo(300, .05, function() {
@@ -429,6 +441,13 @@ var Game = Class.extend({
                 $('#canvas').fadeTo(300, 1);
                 if (self.currentLevelId != '0') $('#morphs').delay(400).fadeIn();
             });
+        }
+
+        if(Input.isPressed('nextLevel') && this.waitingForNext) {
+            this.ui.showGame(false);
+            this.ui.showEnd(false);
+            this.nextLevel();
+            this.ui.showGame();
         }
 
         if (config.debug && Input.isPressed(Keys.P)) {
