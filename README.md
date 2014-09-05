@@ -29,10 +29,13 @@ There are 22 levels in the Compo version. More levels, and level elements to fol
     <td>Select transformation</td><td>1-6 (numpad or top) or CLICK</td>
   </tr>
   <tr>
-    <td>Transform</td><td>E, ENTER</td>
+    <td>Transform</td><td>E</td>
   </tr>
   <tr>
     <td>Restart</td><td>R</td>
+  </tr>
+  <tr>
+    <td>Next level</td><td>N, ENTER</td>
   </tr>
 </table>
 
