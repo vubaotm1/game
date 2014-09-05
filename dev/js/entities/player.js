@@ -118,7 +118,7 @@ var Player = Entity.extend({
 
         if(!this.couldJump && this.canJump()) {
             game.playSound('fall', true);
-            config.display.clearColor = 'rgba(38,28,37,1)';
+            // config.display.clearColor = 'rgba(38,28,37,1)';
         }
         this.couldJump = this.canJump();
     },
@@ -172,7 +172,7 @@ var Player = Entity.extend({
         }
 
         if (u && this.canJump()) {
-            config.display.clearColor = 'rgba(38,28,37,.4)';
+            // config.display.clearColor = 'rgba(38,28,37,.4)';
             game.playSound('jump', true);
             impulse = this.body.GetMass() * JUMP;
             this.body.ApplyImpulse(new b2Vec2(0, impulse), this.body.GetWorldCenter());
