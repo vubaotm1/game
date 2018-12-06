@@ -79,6 +79,6 @@ Here's a walkthrough/speedrun of all the level [On vimeo](https://vimeo.com/8092
 ![Code](http://i.imgur.com/tgqFxva.png)  ![Art](http://i.creativecommons.org/l/by-sa/3.0/88x31.png) 
 
 * Code and art by me.
-* External libraries, such as Box2dweb, jQuery and SoundManager2.
+* External libraries, such as Box2dweb, Google Analytics, jQuery and SoundManager2.
 * FreeSound.org for most of the sounds, modified or not.
 * Incompetech.com for music.
