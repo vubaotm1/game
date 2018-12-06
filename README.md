@@ -1,8 +1,3 @@
-
-
-
-*Needs cookies (localstorage) enabled..*
-
 ![TransCube](http://jeroenverfallie.github.io/ggo13-transcube/media/img/gh_logo.png)
 
 # TransCube
